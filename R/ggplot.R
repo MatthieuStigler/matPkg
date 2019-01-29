@@ -6,7 +6,7 @@ mat_col_facet <-  function(pl, pal = c("#FFD400", "#267000"), side = c("top", "s
                        "top" = "strip-t",
                        "side" = "strip-r")
 
-  g <- ggplot_gtable(ggplot_build(pl))
+  g <- ggplot2::ggplot_gtable(ggplot2::ggplot_build(pl))
 
   strips <- which(grepl(strip_nam, g$layout$name))
   if(length(strips) != length(pal)) warning("Not same length?")

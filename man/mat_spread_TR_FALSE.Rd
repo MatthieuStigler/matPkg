@@ -6,6 +6,9 @@
 \usage{
 mat_spread_TR_FALSE(df, col, n_col = n)
 }
+\arguments{
+\item{df}{data}
+}
 \description{
 Spread data with TRUE/FALSE (from count)
 }

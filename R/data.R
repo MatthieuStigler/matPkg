@@ -1,7 +1,7 @@
 #' @export
 mat_df_trim_quant <- function(df, .value_var, ..., .probs =c(0.02, 0.98), na.rm = TRUE, .rem_quants = TRUE) {
-  by_vars <- quos(...)
-  value_vari <- enquo(.value_var)
+  by_vars <- rlang::quos(...)
+  value_vari <- rlang::enquo(.value_var)
 
   res <- df %>%
     # nest(-!!!by_vars) %>%
@@ -20,43 +20,48 @@ mat_df_trim_quant <- function(df, .value_var, ..., .probs =c(0.02, 0.98), na.rm 
 
 
 #' @export
-mat_add_total_row <- function(x) {
-  x %>%
-    bind_rows(summarise_all(x, funs(if(is.numeric(.)) sum(., na.rm=TRUE) else if(is.logical(.)) NA else "Total")))
+mat_add_total_row <- function(df) {
+  df %>%
+    bind_rows(summarise_all(df, funs(if(is.numeric(.)) sum(., na.rm=TRUE) else if(is.logical(.)) NA else "Total")))
 }
 
 
 
 #' Spread data with TRUE/FALSE (from count)
+#' @param df data
 #' @export
 mat_spread_TR_FALSE <- function(df, col, n_col = n) {
-  col_here <- enquo(col)
-  n_col_here <- enquo(n_col)
+  col_here <- rlang::enquo(col)
+  n_col_here <- rlang::enquo(n_col)
 
   df %>%
     spread(!!col_here, !!n_col_here, fill = 0) %>%
-    mutate(perc = 100 * `TRUE` /(`TRUE`+ `FALSE`))
+    mutate(perc = 100 * .data$`TRUE` /(.data$`TRUE`+ .data$`FALSE`))
 
 }
 
 #' Remove columns with only one value
+#' @param x data
 #' @export
-mat_remo_cols_1val <-  function(x) select(x, -which(map_int(x, n_distinct)==1))
+mat_remo_cols_1val <-  function(x) select(x, -which(map_int(x, dplyr::n_distinct)==1))
 
 #' Add percentage column
 #' @export
 #' @examples
+#'  library(tibble)
+#'  library(magrittr)
+#'  library(dplyr)
 #'   df <- tibble(group = rep(letters[1:2], each = 2),
 #'   n = c(3, 2,3, 5))
-#'   df %>% add_perc()
-#'   df %>% add_perc(group)
-#'   df %>% rename(N=n) %>% add_perc(.name = N)
-#'   df %>% rename(N=n) %>% add_perc(group, .name = N)
+#'   df %>% mat_add_perc()
+#'   df %>% mat_add_perc(group)
+#'   df %>% rename(N=n) %>% mat_add_perc(.name = N)
+#'   df %>% rename(N=n) %>% mat_add_perc(group, .name = N)
 mat_add_perc <- function(x, ..., .name =n) {
-  group_var <- quos(...)
-  .name2 = enquo(.name)
+  group_var <- rlang::quos(...)
+  .name2 = rlang::enquo(.name)
 
-  if(is_grouped_df(x)) {
+  if(dplyr::is_grouped_df(x)) {
     warning("Data already grouped, not over-writing!")
     res <- x %>%
       mutate(perc = 100 * !!.name2/sum(!!.name2))
@@ -76,9 +81,13 @@ mat_add_perc <- function(x, ..., .name =n) {
 
 
 #' Use one_of() quietly
+#' @param df data
 #' @export
 #' @examples
+#' library(magrittr)
+#' library(tibble)
+#' library(dplyr)
 #' iris %>% as_tibble() %>%
-#' select(one_of_quiet(c("Sepal.Length", "caca")))
-mat_one_of_quiet <- function(x) quietly(one_of)(x, .vars= tidyselect::peek_vars())$result
+#' select(mat_one_of_quiet(c("Sepal.Length", "caca")))
+mat_one_of_quiet <- function(df) quietly(one_of)(df, .vars= tidyselect::peek_vars())$result
 

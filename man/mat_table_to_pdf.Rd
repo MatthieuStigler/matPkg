@@ -2,8 +2,7 @@
 % Please edit documentation in R/table_to_pdf.R
 \name{mat_table_to_pdf}
 \alias{mat_table_to_pdf}
-\title{Convert a table to direct pdf
-export}
+\title{Convert a table to direct pdf}
 \usage{
 mat_table_to_pdf(x, filename = "input.tex", clean = TRUE,
   quiet = TRUE,
@@ -11,5 +10,4 @@ mat_table_to_pdf(x, filename = "input.tex", clean = TRUE,
 }
 \description{
 Convert a table to direct pdf
-export
 }

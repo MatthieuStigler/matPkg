@@ -10,10 +10,13 @@ mat_add_perc(x, ..., .name = n)
 Add percentage column
 }
 \examples{
+ library(tibble)
+ library(magrittr)
+ library(dplyr)
   df <- tibble(group = rep(letters[1:2], each = 2),
   n = c(3, 2,3, 5))
-  df \%>\% add_perc()
-  df \%>\% add_perc(group)
-  df \%>\% rename(N=n) \%>\% add_perc(.name = N)
-  df \%>\% rename(N=n) \%>\% add_perc(group, .name = N)
+  df \%>\% mat_add_perc()
+  df \%>\% mat_add_perc(group)
+  df \%>\% rename(N=n) \%>\% mat_add_perc(.name = N)
+  df \%>\% rename(N=n) \%>\% mat_add_perc(group, .name = N)
 }

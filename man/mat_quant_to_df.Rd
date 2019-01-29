@@ -6,10 +6,14 @@
 \usage{
 mat_quant_to_df(x)
 }
+\arguments{
+\item{x}{output from quantile}
+}
 \description{
 Convert quantile() output to df
 }
 \examples{
+library(magrittr)
 X <- runif(100)
 quantile(X, probs=0.975) \%>\% mat_quant_to_df()
 }

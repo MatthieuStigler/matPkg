@@ -1,16 +1,18 @@
 
 #' @export
-as.data.frame.density <- function(d, ...) data.frame(x=d$x, y=d$y, ...)
+as.data.frame.density <- function(x, ...) data.frame(x=x$x, y=x$y, ...)
 
 #' Convert quantile() output to df
+#' @param x output from quantile
 #' @examples
+#' library(magrittr)
 #' X <- runif(100)
 #' quantile(X, probs=0.975) %>% mat_quant_to_df()
 #' @export
 mat_quant_to_df <- function(x) {
   x %>%
     bind_rows() %>%
-    set_colnames(paste("q_", str_replace_all(colnames(.), "%|\\.", ""), sep=""))
+    magrittr::set_colnames(paste("q_", stringr::str_replace_all(colnames(.), "%|\\.", ""), sep=""))
 }
 
 #' @export
@@ -39,12 +41,12 @@ mat_cor_to_df <- function(x, long=TRUE)  {
   if(long) x[!lower.tri(x)] <- 999
   res <- as_tibble(x) %>%
     mutate(variable= factor(rownames_x, ordered= TRUE, levels = rownames_x)) %>%
-    select(variable, everything())
+    select(.data$variable, tidyselect::everything())
   if(long) {
     res <- res %>%
-      gather(variable2, value, -variable) %>%
-      filter(value!=999) %>%
-      mutate(variable2 = factor(variable2, ordered= TRUE, levels = rownames_x))
+      gather(.data$variable2, .data$value, -.data$variable) %>%
+      filter(.data$value!=999) %>%
+      mutate(variable2 = factor(.data$variable2, ordered= TRUE, levels = rownames_x))
   }
   res
 }

@@ -6,6 +6,9 @@
 \usage{
 mat_remo_cols_1val(x)
 }
+\arguments{
+\item{x}{data}
+}
 \description{
 Remove columns with only one value
 }
