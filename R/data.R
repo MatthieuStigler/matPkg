@@ -29,6 +29,8 @@ mat_add_total_row <- function(df) {
 
 #' Spread data with TRUE/FALSE (from count)
 #' @param df data
+#' @param col col to spread
+#' @param n_col name of n column
 #' @export
 mat_spread_TR_FALSE <- function(df, col, n_col = n) {
   col_here <- rlang::enquo(col)
@@ -46,6 +48,9 @@ mat_spread_TR_FALSE <- function(df, col, n_col = n) {
 mat_remo_cols_1val <-  function(x) select(x, -which(map_int(x, dplyr::n_distinct)==1))
 
 #' Add percentage column
+#' @param df data
+#' @param \ldots variables to group for
+#' @param .name Name of n
 #' @export
 #' @examples
 #'  library(tibble)
@@ -57,16 +62,16 @@ mat_remo_cols_1val <-  function(x) select(x, -which(map_int(x, dplyr::n_distinct
 #'   df %>% mat_add_perc(group)
 #'   df %>% rename(N=n) %>% mat_add_perc(.name = N)
 #'   df %>% rename(N=n) %>% mat_add_perc(group, .name = N)
-mat_add_perc <- function(x, ..., .name =n) {
+mat_add_perc <- function(df, ..., .name =n) {
   group_var <- rlang::quos(...)
   .name2 = rlang::enquo(.name)
 
-  if(dplyr::is_grouped_df(x)) {
+  if(dplyr::is_grouped_df(df)) {
     warning("Data already grouped, not over-writing!")
-    res <- x %>%
+    res <- df %>%
       mutate(perc = 100 * !!.name2/sum(!!.name2))
   } else {
-    res <- x %>%
+    res <- df %>%
       group_by(!!! group_var) %>%
       mutate(perc = 100 * !!.name2/sum(!!.name2)) %>%
       ungroup()

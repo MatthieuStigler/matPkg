@@ -17,5 +17,6 @@ mat_lm_means_tidy <-  function(x, val_name = value, clean = TRUE) {
 }
 
 #' Tidy columns: . to _
+#' @param df data
 #' @export
-mat_tidy_clean <- function(x) setNames(x, stringr::str_replace(colnames(x), "\\.", "_"))
+mat_tidy_clean <- function(df) setNames(df, stringr::str_replace(colnames(df), "\\.", "_"))

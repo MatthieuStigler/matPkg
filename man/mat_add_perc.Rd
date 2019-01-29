@@ -4,7 +4,14 @@
 \alias{mat_add_perc}
 \title{Add percentage column}
 \usage{
-mat_add_perc(x, ..., .name = n)
+mat_add_perc(df, ..., .name = n)
+}
+\arguments{
+\item{df}{data}
+
+\item{.name}{Name of n}
+
+\item{\ldots}{variables to group for}
 }
 \description{
 Add percentage column

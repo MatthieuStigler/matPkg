@@ -4,7 +4,10 @@
 \alias{mat_tidy_clean}
 \title{Tidy columns: . to _}
 \usage{
-mat_tidy_clean(x)
+mat_tidy_clean(df)
+}
+\arguments{
+\item{df}{data}
 }
 \description{
 Tidy columns: . to _

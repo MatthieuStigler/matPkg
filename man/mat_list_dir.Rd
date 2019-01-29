@@ -6,6 +6,11 @@
 \usage{
 mat_list_dir(path, pattern = "\\\\.tif", recursive = TRUE)
 }
+\arguments{
+\item{path}{dir path}
+
+\item{pattern, recursive}{passed to list.files}
+}
 \description{
 List files in a directory
 }

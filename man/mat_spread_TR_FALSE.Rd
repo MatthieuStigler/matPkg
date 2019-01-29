@@ -8,6 +8,10 @@ mat_spread_TR_FALSE(df, col, n_col = n)
 }
 \arguments{
 \item{df}{data}
+
+\item{col}{col to spread}
+
+\item{n_col}{name of n column}
 }
 \description{
 Spread data with TRUE/FALSE (from count)

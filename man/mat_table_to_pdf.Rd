@@ -8,6 +8,15 @@ mat_table_to_pdf(x, filename = "input.tex", clean = TRUE,
   quiet = TRUE,
   plus = "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}")
 }
+\arguments{
+\item{x}{the table input}
+
+\item{filename}{output name}
+
+\item{clean, quiet}{passed to tools::texi2pdf}
+
+\item{plus}{additional lattex stuff}
+}
 \description{
 Convert a table to direct pdf
 }
