@@ -16,3 +16,6 @@ use_package("magrittr", "Imports")
 use_roxygen_md()
 
 use_readme_md()
+
+
+use_git()
