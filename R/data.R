@@ -9,10 +9,10 @@ mat_df_trim_quant <- function(df, .value_var, ..., .probs =c(0.02, 0.98), na.rm 
     mutate(q_L = quantile(!!value_vari, probs = .probs[1], na.rm = na.rm),
            q_H = quantile(!!value_vari, probs = .probs[2], na.rm = na.rm)) %>%
     ungroup() %>%
-    filter(  q_L < !!value_vari & !!value_vari < q_H)
+    filter(  .data$q_L < !!value_vari & !!value_vari < .data$q_H)
 
   if(.rem_quants) res <-  res %>%
-    select(-q_L, -q_H)
+    select(-.data$q_L, -.data$q_H)
   res
 
 }

@@ -23,18 +23,18 @@ li_comp_cols <-  function(list, log = FALSE) {
   if(is.null(names(list))) names(list) <-  letters[1:length(list)]
   same_cols <- tibble(data =list,
                       dataset = names(list)) %>%
-    mutate(col_df = map(data, ~tibble(name = colnames(.), class = map_chr(., class) ))) %>%
-    unnest(col_df) %>%
+    mutate(col_df = map(.data$data, ~tibble(name = colnames(.), class = map_chr(., class) ))) %>%
+    unnest(.data$col_df) %>%
     spread(.data$name, class)
 
 
   same_cols2 <- same_cols %>%
-    gather(variable, class, -dataset) %>%
+    gather(.data$variable, class, -.data$dataset) %>%
     group_by(.data$variable) %>%
     mutate(all_there = sum(!is.na(class)),
            n_class = length(unique(class))) %>%
     ungroup() %>%
-    spread(dataset, class) %>%
+    spread(.data$dataset, class) %>%
     arrange(.data$all_there, desc(.data$n_class), .data$variable)  %>%
     select(-.data$all_there, -.data$n_class)
 
@@ -64,7 +64,7 @@ safely_unnest <-  function(x, col_name) {
   x %>%
     bind_cols(purrr::transpose(pull(., !!col_name)) %>%  as_tibble) %>%
     select(-!!col_name) %>%
-    mutate(error = map_chr(error, ~if(length(.)==0) NA_character_ else to_1(.)))
+    mutate(error = map_chr(.data$error, ~if(length(.)==0) NA_character_ else to_1(.)))
 }
 
 

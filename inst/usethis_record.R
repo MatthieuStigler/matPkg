@@ -18,6 +18,7 @@ use_package("purrr", "Imports")
 use_package("rlang", "Imports")
 use_package("tidyselect", "Imports")
 use_package("stringr", "Imports")
+use_package("nlme", "Imports")
 
 ## for the example
 # use_package("tidyverse", "Suggests")
