@@ -4,7 +4,7 @@
 NULL
 #' @importFrom dplyr mutate arrange select mutate_at bind_cols bind_rows filter
 NULL
-#' @importFrom dplyr group_by ungroup summarise_all desc pull funs
+#' @importFrom dplyr group_by ungroup summarise_all desc pull funs vars
 NULL
 
 #' @importFrom tidyr gather spread nest unnest
@@ -23,4 +23,7 @@ NULL
 NULL
 
 #' @importFrom rlang .data
+NULL
+
+#' @importFrom ggplot2 ggplot aes geom_col facet_grid geom_errorbar
 NULL
