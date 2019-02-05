@@ -22,18 +22,45 @@ mat_lm_means_tidy <-  function(x, val_name = value, clean = TRUE) {
 mat_tidy_clean <- function(df) setNames(df, stringr::str_replace(colnames(df), "\\.", "_"))
 
 
-mat_tidy_coef_plot <- function(df, x_var, fill_var, fac_1, fac_2=.) {
+#' For broom coef tidy output: bar plot for coefs
+#'
+#' @param df data
+#' @param x_var var used in x axis (y is estimate)
+#' @param fill_var var used to have multiple x
+#' @param fac_1,fac_2 vars for facetting
+#' @export
+mat_tidy_coef_plot <- function(df, x_var, fill_var, fac_1=NULL, fac_2=NULL) {
   x_var <- rlang::enquo(x_var)
   fill_var <- rlang::enquo(fill_var)
   fac_1 <- rlang::enquo(fac_1)
   fac_2 <- rlang::enquo(fac_2)
 
 
-  df %>%
-    ggplot(aes(x = !!x_var, y = estimate, fill = !!fill_var)) +
+  ## from: https://stackoverflow.com/questions/53218152/ggplot2-facet-grid-with-conditional-facets-and-tidy-evaluation
+  if (rlang::quo_is_null(fac_1)) {
+    rows <- vars()
+  } else {
+    rows <- vars(!!fac_1)
+  }
+
+  if (rlang::quo_is_null(fac_2)) {
+    cols <- vars()
+  } else {
+    cols <- vars(!!fac_2)
+  }
+
+  pl <- df %>%
+    ggplot(aes(x = !!x_var, y = .data$estimate, fill = !!fill_var)) +
     geom_col(position = "dodge") +
-    geom_errorbar(aes(ymin =  conf.low, ymax =  conf.high, colour = I("black")),
-                  position = "dodge")+
-    facet_grid(!!fac_1~!!fac_2, scales = "free")
+    geom_errorbar(aes(ymin =  .data$conf.low, ymax =  .data$conf.high, colour = I("black")),
+                  position = "dodge")
+  if(!rlang::quo_is_null(fac_1)|!rlang::quo_is_null(fac_2)) {
+    pl <-  pl +
+      facet_grid(rows=rows,
+                 cols = cols,
+                 scales = "free")
+  }
+  pl
+
 
 }
