@@ -13,7 +13,7 @@ mat_cdl_cols <- function(CDL_raster) {
     un_vals <- unique(CDL_raster)
   }
   tibble(Value=un_vals) %>%
-    left_join(select(matPkg:::CDL_colors, .data$Value, .data$Category, .data$CDL_cols), by = "Value") %>%
+    left_join(select(matPkg::CDL_colors, .data$Value, .data$Category, .data$CDL_cols), by = "Value") %>%
     arrange(Value)
 
 }
