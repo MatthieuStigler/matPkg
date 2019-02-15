@@ -31,3 +31,5 @@ use_readme_md()
 use_git()
 
 use_mit_license("matPkg")
+
+use_build_ignore("data_raw", escape = TRUE)

@@ -1,0 +1,256 @@
+Value,Category,CDL_cols,class_name,crop_group,crop_group_col
+1,Corn,#FFD400,Corn,Corn,#FFD400
+2,Cotton,#FF2626,Cotton,Cotton,#FF2626
+3,Rice,#00A8E3,Rice,Rice,#00A8E3
+4,Sorghum,#FF9E0A,Other wheat,Grains,#FF9E0A
+5,Soy,#267000,Soy,Soy,#267000
+6,Sunflower,#FFFF00,Sunflower,Other Crops,#A800E3
+7,NA,#000000,Pasture/Grass,NA,NA
+8,NA,#000000,Pasture/Grass,NA,NA
+9,NA,#000000,Pasture/Grass,NA,NA
+10,Peanuts,#70A600,Peanuts,Other Crops,#A800E3
+11,Tobacco,#00B04A,Misc small,Other Crops,#A800E3
+12,Sweet Corn,#DEA60A,Sweet Corn,Corn/Double,#FFD400
+13,Pop or Orn Corn,#DEA60A,Pop or Orn Corn,Corn/Double,#FFD400
+14,Mint,#7DD4FF,Herbs,Other Crops,#A800E3
+15,NA,#000000,Pasture/Grass,NA,NA
+16,NA,#000000,Pasture/Grass,NA,NA
+17,NA,#000000,Pasture/Grass,NA,NA
+18,NA,#000000,Pasture/Grass,NA,NA
+19,NA,#000000,Pasture/Grass,NA,NA
+20,NA,#000000,Pasture/Grass,NA,NA
+21,Barley,#E3007D,Barley,Grains,#FF9E0A
+22,Durum Wheat,#8A6154,Durum,Wheat,#A67000
+23,Spring Wheat,#D9B56B,Spring Wheat,Wheat,#A67000
+24,Winter Wheat,#A67000,Wheat,Wheat,#A67000
+25,Other Small Grains,#D79EBD,Small grains,Grains,#FF9E0A
+26,Dbl Crop WinWht/Soybeans,#707000,Dbl Crop WinWht/Soybeans,Soy/Double,#707000
+27,Rye,#AB007D,Rye,Grains,#FF9E0A
+28,Oats,#A1598A,Oats,Grains,#FF9E0A
+29,Millet,#70004A,Millet,Grains,#FF9E0A
+30,Speltz,#D79EBD,Small grains,Grains,#FF9E0A
+31,Canola,#D1FF00,Canola,Other Crops,#A800E3
+32,Flaxseed,#7D99FF,Flaxseed,Other Crops,#A800E3
+33,Safflower,#D7D700,Safflower,Other Crops,#A800E3
+34,Rape Seed,#D1FF00,Rape Seed,Other Crops,#A800E3
+35,Mustard,#00B04A,Misc small,Other Crops,#A800E3
+36,Alfalfa,#FFA6E3,Alfalfa,Cover/forage,#FFA6E3
+37,Other Hay/Non Alfalfa,#A6F38C,Other Hay/Non Alfalfa,Cover/forage,#FFA6E3
+38,Camelina,#00B04A,Misc small,Other Crops,#A800E3
+39,Buckwheat,#D79EBD,Small grains,Grains,#FF9E0A
+40,NA,#000000,Pasture/Grass,NA,NA
+41,Sugarbeets,#A800E3,Sugarbeets,Other Crops,#A800E3
+42,Dry Beans,#A60000,Dry Beans,Other Crops,#A800E3
+43,Potatoes,#702600,Potatoes,Other Crops,#A800E3
+44,Other Crops,#00B04A,Misc small,Other Crops,#A800E3
+45,Sugarcane,#B07DFF,Sugarcane,Other Crops,#A800E3
+46,Sweet Potatoes,#702600,Potatoes,Other Crops,#A800E3
+47,Misc Vegs & Fruits,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+48,Watermelons,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+49,Onions,#FFCC66,Onions,Other Crops,#A800E3
+50,Cucumbers,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+51,Chick Peas,#00B04A,Misc small,Other Crops,#A800E3
+52,Lentils,#00DEB0,Lentils,Other Crops,#A800E3
+53,Peas,#54FF00,Peas,Other Crops,#A800E3
+54,Tomatoes,#F3A378,Tomatoes,Other Crops,#A800E3
+55,Caneberries,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+56,Hops,#00B04A,Misc small,Other Crops,#A800E3
+57,Herbs,#7DD4FF,Herbs,Other Crops,#A800E3
+58,Clover/Wildflowers,#E8C0FF,Clover/Wildflowers,Cover/forage,#FFA6E3
+59,Sod/Grass Seed,#B0FFDE,Sod/Grass Seed,Other Crops,#A800E3
+60,Switchgrass,#00B04A,Misc small,Fallow/grass,#7DB0B0
+61,Fallow/Idle Cropland,#C0C078,Fallow/Idle Cropland,Fallow/grass,#7DB0B0
+62,Pasture/Grass,#000000,Pasture/Grass,Fallow/grass,#7DB0B0
+63,Forest,#94CC94,Forest,Forest,#94CC94
+64,Shrubland,#C7D79E,Shrubland,Fallow/grass,#7DB0B0
+65,Barren,#CCC0A3,Barren,Fallow/grass,#7DB0B0
+66,Cherries,#FF00FF,Cherries,Other Crops,#A800E3
+67,Peaches,#FF8FAB,Tree Fruits,Other Crops,#A800E3
+68,Apples,#BA004F,Apples,Other Crops,#A800E3
+69,Grapes,#70458A,Grapes,Other Crops,#A800E3
+70,Christmas Trees,#007878,Christmas Trees,Other Crops,#A800E3
+71,Other Tree Crops,#B09970,Other Tree Crops,Other Crops,#A800E3
+72,Citrus,#FFFF7D,Citrus,Other Crops,#A800E3
+73,NA,#000000,Pasture/Grass,NA,NA
+74,Pecans,#B5705C,Pecans,Other Crops,#A800E3
+75,Almonds,#00A682,Almonds,Other Crops,#A800E3
+76,Walnuts,#E8D7B0,Walnuts,Other Crops,#A800E3
+77,Pears,#B09970,Other Tree Crops,Other Crops,#A800E3
+78,NA,#000000,Pasture/Grass,NA,NA
+79,NA,#000000,Pasture/Grass,NA,NA
+80,NA,#000000,Pasture/Grass,NA,NA
+81,Clouds/No Data,#F3F3F3,Clouds/No Data,Clouds/No Data,#F3F3F3
+82,Developed,#999999,Developed,Developed,#999999
+83,Water,#4A70A3,Water,Water,#4A70A3
+84,NA,#000000,Pasture/Grass,NA,NA
+85,NA,#000000,Pasture/Grass,NA,NA
+86,NA,#000000,Pasture/Grass,NA,NA
+87,Wetlands,#7DB0B0,Wetland,Wetlands,#7DB0B0
+88,Nonag/Undefined,#E8FFC0,Nonag/Undefined,Other Crops,#A800E3
+89,NA,#000000,Pasture/Grass,NA,NA
+90,NA,#000000,Pasture/Grass,NA,NA
+91,NA,#000000,Pasture/Grass,NA,NA
+92,Aquaculture,#00FFFF,Aquaculture,Other Crops,#A800E3
+93,NA,#000000,Pasture/Grass,NA,NA
+94,NA,#000000,Pasture/Grass,NA,NA
+95,NA,#000000,Pasture/Grass,NA,NA
+96,NA,#000000,Pasture/Grass,NA,NA
+97,NA,#000000,Pasture/Grass,NA,NA
+98,NA,#000000,Pasture/Grass,NA,NA
+99,NA,#000000,Pasture/Grass,NA,NA
+100,NA,#000000,Pasture/Grass,NA,NA
+101,NA,#000000,Pasture/Grass,NA,NA
+102,NA,#000000,Pasture/Grass,NA,NA
+103,NA,#000000,Pasture/Grass,NA,NA
+104,NA,#000000,Pasture/Grass,NA,NA
+105,NA,#000000,Pasture/Grass,NA,NA
+106,NA,#000000,Pasture/Grass,NA,NA
+107,NA,#000000,Pasture/Grass,NA,NA
+108,NA,#000000,Pasture/Grass,NA,NA
+109,NA,#000000,Pasture/Grass,NA,NA
+110,NA,#000000,Pasture/Grass,NA,NA
+111,Open Water,#4A70A3,Water,Water,#4A70A3
+112,Perennial Ice/Snow,#D4E3FA,Perennial Ice/Snow,Other Crops,#A800E3
+113,NA,#000000,Pasture/Grass,NA,NA
+114,NA,#000000,Pasture/Grass,NA,NA
+115,NA,#000000,Pasture/Grass,NA,NA
+116,NA,#000000,Pasture/Grass,NA,NA
+117,NA,#000000,Pasture/Grass,NA,NA
+118,NA,#000000,Pasture/Grass,NA,NA
+119,NA,#000000,Pasture/Grass,NA,NA
+120,NA,#000000,Pasture/Grass,NA,NA
+121,Developed/Open Space,#999999,Developed,Developed,#999999
+122,Developed/Low Intensity,#999999,Developed,Developed,#999999
+123,Developed/Med Intensity,#999999,Developed,Developed,#999999
+124,Developed/High Intensity,#999999,Developed,Developed,#999999
+125,NA,#000000,Pasture/Grass,NA,NA
+126,NA,#000000,Pasture/Grass,NA,NA
+127,NA,#000000,Pasture/Grass,NA,NA
+128,NA,#000000,Pasture/Grass,NA,NA
+129,NA,#000000,Pasture/Grass,NA,NA
+130,NA,#000000,Pasture/Grass,NA,NA
+131,Barren,#CCC0A3,Barren,Fallow/grass,#7DB0B0
+132,NA,#000000,Pasture/Grass,NA,NA
+133,NA,#000000,Pasture/Grass,NA,NA
+134,NA,#000000,Pasture/Grass,NA,NA
+135,NA,#000000,Pasture/Grass,NA,NA
+136,NA,#000000,Pasture/Grass,NA,NA
+137,NA,#000000,Pasture/Grass,NA,NA
+138,NA,#000000,Pasture/Grass,NA,NA
+139,NA,#000000,Pasture/Grass,NA,NA
+140,NA,#000000,Pasture/Grass,NA,NA
+141,Deciduous Forest,#94CC94,Forest,Forest,#94CC94
+142,Evergreen Forest,#94CC94,Forest,Forest,#94CC94
+143,Mixed Forest,#94CC94,Forest,Forest,#94CC94
+144,NA,#000000,Pasture/Grass,NA,NA
+145,NA,#000000,Pasture/Grass,NA,NA
+146,NA,#000000,Pasture/Grass,NA,NA
+147,NA,#000000,Pasture/Grass,NA,NA
+148,NA,#000000,Pasture/Grass,NA,NA
+149,NA,#000000,Pasture/Grass,NA,NA
+150,NA,#000000,Pasture/Grass,NA,NA
+151,NA,#000000,Pasture/Grass,NA,NA
+152,Shrubland,#C7D79E,Shrubland,Fallow/grass,#7DB0B0
+153,NA,#000000,Pasture/Grass,NA,NA
+154,NA,#000000,Pasture/Grass,NA,NA
+155,NA,#000000,Pasture/Grass,NA,NA
+156,NA,#000000,Pasture/Grass,NA,NA
+157,NA,#000000,Pasture/Grass,NA,NA
+158,NA,#000000,Pasture/Grass,NA,NA
+159,NA,#000000,Pasture/Grass,NA,NA
+160,NA,#000000,Pasture/Grass,NA,NA
+161,NA,#000000,Pasture/Grass,NA,NA
+162,NA,#000000,Pasture/Grass,NA,NA
+163,NA,#000000,Pasture/Grass,NA,NA
+164,NA,#000000,Pasture/Grass,NA,NA
+165,NA,#000000,Pasture/Grass,NA,NA
+166,NA,#000000,Pasture/Grass,NA,NA
+167,NA,#000000,Pasture/Grass,NA,NA
+168,NA,#000000,Pasture/Grass,NA,NA
+169,NA,#000000,Pasture/Grass,NA,NA
+170,NA,#000000,Pasture/Grass,NA,NA
+171,NA,#000000,Pasture/Grass,NA,NA
+172,NA,#000000,Pasture/Grass,NA,NA
+173,NA,#000000,Pasture/Grass,NA,NA
+174,NA,#000000,Pasture/Grass,NA,NA
+175,NA,#000000,Pasture/Grass,NA,NA
+176,Grassland/Pasture,#E8FFC0,Grassland/Pasture,Fallow/grass,#7DB0B0
+177,NA,#000000,Pasture/Grass,NA,NA
+178,NA,#000000,Pasture/Grass,NA,NA
+179,NA,#000000,Pasture/Grass,NA,NA
+180,NA,#000000,Pasture/Grass,NA,NA
+181,NA,#000000,Pasture/Grass,NA,NA
+182,NA,#000000,Pasture/Grass,NA,NA
+183,NA,#000000,Pasture/Grass,NA,NA
+184,NA,#000000,Pasture/Grass,NA,NA
+185,NA,#000000,Pasture/Grass,NA,NA
+186,NA,#000000,Pasture/Grass,NA,NA
+187,NA,#000000,Pasture/Grass,NA,NA
+188,NA,#000000,Pasture/Grass,NA,NA
+189,NA,#000000,Pasture/Grass,NA,NA
+190,Woody Wetlands,#7DB0B0,Wetland,Wetlands,#7DB0B0
+191,NA,#000000,Pasture/Grass,NA,NA
+192,NA,#000000,Pasture/Grass,NA,NA
+193,NA,#000000,Pasture/Grass,NA,NA
+194,NA,#000000,Pasture/Grass,NA,NA
+195,Herbaceous Wetlands,#7DB0B0,Wetland,Wetlands,#7DB0B0
+196,NA,#000000,Pasture/Grass,NA,NA
+197,NA,#000000,Pasture/Grass,NA,NA
+198,NA,#000000,Pasture/Grass,NA,NA
+199,NA,#000000,Pasture/Grass,NA,NA
+200,NA,#000000,Pasture/Grass,NA,NA
+201,NA,#000000,Pasture/Grass,NA,NA
+202,NA,#000000,Pasture/Grass,NA,NA
+203,NA,#000000,Pasture/Grass,NA,NA
+204,Pistachios,#00FF8C,Pistachios,Other Crops,#A800E3
+205,Triticale,#D79EBD,Small grains,Other Crops,#A800E3
+206,Carrots,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+207,Asparagus,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+208,Garlic,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+209,Cantaloupes,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+210,Prunes,#FF8FAB,Tree Fruits,Other Crops,#A800E3
+211,Olives,#334A33,Olives,Other Crops,#A800E3
+212,Oranges,#E37026,Oranges,Other Crops,#A800E3
+213,Honeydew Melons,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+214,Broccoli,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+215,NA,#000000,Pasture/Grass,NA,NA
+216,Peppers,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+217,Pomegranates,#B09970,Other Tree Crops,Other Crops,#A800E3
+218,Nectarines,#FF8FAB,Tree Fruits,Other Crops,#A800E3
+219,Greens,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+220,Plums,#FF8FAB,Tree Fruits,Other Crops,#A800E3
+221,Strawberries,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+222,Squash,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+223,Apricots,#FF8FAB,Tree Fruits,Other Crops,#A800E3
+224,Vetch,#00B04A,Misc small,Other Crops,#A800E3
+225,Dbl Crop WinWht/Corn,#FFD400,Corn,Corn/Double,#FFD400
+226,Dbl Crop Oats/Corn,#FFD400,Corn,Other Crops,#A800E3
+227,Lettuce,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+228,NA,#000000,Pasture/Grass,NA,NA
+229,Pumpkins,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+230,Dbl Crop Lettuce/Durum Wht,#8A6154,Durum,Other Crops,#A800E3
+231,Dbl Crop Lettuce/Cantaloupe,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+232,Dbl Crop Lettuce/Cotton,#FF2626,Dbl Crop Lettuce/Cotton,Other Crops,#A800E3
+233,Dbl Crop Lettuce/Barley,#E3007D,Dbl Crop Lettuce/Barley,Other Crops,#A800E3
+234,Dbl Crop Durum Wht/Sorghum,#FF9E0A,Other wheat,Grains,#FF9E0A
+235,Dbl Crop Barley/Sorghum,#FF9E0A,Other wheat,Grains,#FF9E0A
+236,Dbl Crop WinWht/Sorghum,#A67000,Wheat,Grains,#FF9E0A
+237,Dbl Crop Barley/Corn,#FFD400,Corn,Corn/Double,#FFD400
+238,Dbl Crop WinWht/Cotton,#A67000,Wheat,Grains,#FF9E0A
+239,Dbl Crop Soybeans/Cotton,#267000,Soy,Soy/Double,#707000
+240,Dbl Crop Soybeans/Oats,#267000,Soy,Soy/Double,#707000
+241,Dbl Crop Corn/Soybeans,#FFD400,Corn,Corn/Double,#FFD400
+242,Blueberries,#000099,Blueberries,Other Crops,#A800E3
+243,Cabbage,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+244,Cauliflower,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+245,Celery,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+246,Radishes,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+247,Turnips,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+248,Eggplants,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+249,Gourds,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+250,Cranberries,#FF6666,Misc Vegs & Fruits,Misc Vegs & Fruits,#FF6666
+251,NA,#FFD400,Corn,NA,NA
+252,NA,#267000,Soy,NA,NA
+253,NA,#A67000,Wheat,NA,NA
+254,Dbl Crop Barley/Soybeans,#267000,Soy,Soy/Double,#707000
+255,NA,#000000,Pasture/Grass,NA,NA
