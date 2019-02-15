@@ -4,7 +4,7 @@
 NULL
 #' @importFrom dplyr mutate arrange select mutate_at bind_cols bind_rows filter
 NULL
-#' @importFrom dplyr group_by ungroup summarise_all desc pull funs vars
+#' @importFrom dplyr group_by ungroup summarise_all desc pull funs vars left_join inner_join
 NULL
 
 #' @importFrom tidyr gather spread nest unnest
