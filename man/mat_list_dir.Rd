@@ -14,3 +14,6 @@ mat_list_dir(path, pattern = "\\\\.tif", recursive = TRUE)
 \description{
 List files in a directory
 }
+\examples{
+mat_list_dir(path = ".", pattern = "R")
+}
