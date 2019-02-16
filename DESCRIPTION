@@ -23,6 +23,7 @@ Imports:
     tools,
     stringr,
     raster,
-    sf
+    sf,
+    nlme
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
