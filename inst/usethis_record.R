@@ -20,6 +20,7 @@ use_package("tidyselect", "Imports")
 use_package("stringr", "Imports")
 use_package("nlme", "Imports")
 use_package("raster", "Imports")
+use_package("sf", "Imports")
 
 ## for the example
 # use_package("tidyverse", "Suggests")

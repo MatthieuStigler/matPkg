@@ -22,6 +22,7 @@ Imports:
     tidyselect,
     tools,
     stringr,
-    raster
+    raster,
+    sf
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
