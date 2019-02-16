@@ -2,9 +2,12 @@
 % Please edit documentation in R/as.data.frame.R
 \name{mat_quant_to_df}
 \alias{mat_quant_to_df}
+\alias{quant_to_df}
 \title{Convert quantile() output to df}
 \usage{
 mat_quant_to_df(x)
+
+quant_to_df(x)
 }
 \arguments{
 \item{x}{output from quantile}

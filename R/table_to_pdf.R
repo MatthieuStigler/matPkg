@@ -1,8 +1,10 @@
 #' Convert a table to direct pdf
-#' @param x the table input
-#' @param filename output name
-#' @param clean,quiet passed to tools::texi2pdf
-#' @param plus additional lattex stuff
+#'
+#' Use tools::texi2pdf
+#'@param x the table input
+#'@param filename output name
+#'@param clean,quiet passed to tools::texi2pdf
+#'@param plus additional lattex stuff
 #'@export
 mat_table_to_pdf <- function(x, filename = "input.tex", clean=TRUE, quiet=TRUE,
                          plus= "\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}") {
@@ -40,4 +42,5 @@ mat_table_to_pdf <- function(x, filename = "input.tex", clean=TRUE, quiet=TRUE,
 }
 
 #' @export
+#' @rdname mat_table_to_pdf
 table_to_pdf <-  function(x) .Deprecated("mat_table_to_pdf")

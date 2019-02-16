@@ -1,4 +1,20 @@
-
+#' Colour facets og ggplot
+#'
+#' @param pl plot
+#' @param pal palette
+#' @param side top or side?
+#' @examples
+#' library(ggplot2)
+#' # facet on side:
+#' pl <- ggplot(aes(x=Sepal.Length, y=Sepal.Width), data = iris) +
+#'   geom_point()+
+#'   facet_grid(Species~.)
+#'plot(mat_col_facet(pl, pal = c("red", "blue", "pink"), side = "side"))
+#'
+#'## facet on top:
+#'pl2 <- pl +
+#'  facet_grid(. ~Species)
+#'  plot(mat_col_facet(pl2, pal = c("red", "blue", "pink"), side = "top"))
 #' @export
 mat_col_facet <-  function(pl, pal = c("#FFD400", "#267000"), side = c("top", "side")) {
 
@@ -9,6 +25,7 @@ mat_col_facet <-  function(pl, pal = c("#FFD400", "#267000"), side = c("top", "s
   g <- ggplot2::ggplot_gtable(ggplot2::ggplot_build(pl))
 
   strips <- which(grepl(strip_nam, g$layout$name))
+  if(length(strips) ==0) stop("Strip not found... change side?")
   if(length(strips) != length(pal)) warning("Not same length?")
   for (i in seq_along(strips)) {
     k <- which(grepl('rect', g$grobs[[strips[i]]]$grobs[[1]]$childrenOrder))

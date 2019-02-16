@@ -1,3 +1,13 @@
+#' Trim a df by quantiles
+#'
+#' @param df The df
+#' @param .value_var the column of values
+#' @param \ldots the group_by variables
+#' @param .probs quantile probs
+#' @param .rem_quants remove the quantile (i.e. trim only)?
+#' @param na.rm Remove NA when computing quantile?
+#' @examples
+#' mat_df_trim_quant(iris, Petal.Width, Species)
 #' @export
 mat_df_trim_quant <- function(df, .value_var, ..., .probs =c(0.02, 0.98), na.rm = TRUE, .rem_quants = TRUE) {
   by_vars <- rlang::quos(...)
@@ -17,9 +27,15 @@ mat_df_trim_quant <- function(df, .value_var, ..., .probs =c(0.02, 0.98), na.rm 
 
 }
 
-
-
+#' Add row of total
+#'
+#' Add either sum, or Total (if not numeric)
+#' @param df the data-frame
 #' @export
+#' @examples
+#' data(iris)
+#' iris$Species <- as.character(iris$Species)
+#' mat_add_total_row(iris[1:5,])
 mat_add_total_row <- function(df) {
   df %>%
     bind_rows(summarise_all(df, funs(if(is.numeric(.)) sum(., na.rm=TRUE) else if(is.logical(.)) NA else "Total")))

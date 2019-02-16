@@ -1,10 +1,21 @@
-
-
+#' Compute means by lm, tidy, unnest
+#'
+#' This returns a clean df of means for each group
+#' @param df_nest a nested df
+#' @param val_name name of value column
+#' @param clean Clean the broom colnames?
+#' @examples
+#' library(magrittr)
+#' library(magrittr)
+#' data(iris_tb)
+#' iris_tb %>%
+#'   tidyr::nest(-Species) %>%
+#'   mat_lm_means_tidy(Petal.Width)
 #' @export
-mat_lm_means_tidy <-  function(x, val_name = value, clean = TRUE) {
+mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE) {
   val_name_pr <-  rlang::enquo(val_name)
 
-  res <- x %>%
+  res <- df_nest %>%
     mutate(reg = map(.data$data, ~lm(value ~ 1, data = rename(., value = !!val_name_pr))),
            n = map_int(.data$data, nrow)) %>%
     ungroup() %>%

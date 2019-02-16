@@ -12,3 +12,12 @@
 #' data(CDL_colors)
 #' CDL_colors
 "CDL_colors"
+
+
+#' iris as tibble
+#'
+#' Same
+#' @name iris_tb
+#' @docType data
+#' @format A tibble
+"iris_tb"

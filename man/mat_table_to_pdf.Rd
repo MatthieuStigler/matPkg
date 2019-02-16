@@ -2,11 +2,14 @@
 % Please edit documentation in R/table_to_pdf.R
 \name{mat_table_to_pdf}
 \alias{mat_table_to_pdf}
+\alias{table_to_pdf}
 \title{Convert a table to direct pdf}
 \usage{
 mat_table_to_pdf(x, filename = "input.tex", clean = TRUE,
   quiet = TRUE,
   plus = "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}")
+
+table_to_pdf(x)
 }
 \arguments{
 \item{x}{the table input}
@@ -18,5 +21,5 @@ mat_table_to_pdf(x, filename = "input.tex", clean = TRUE,
 \item{plus}{additional lattex stuff}
 }
 \description{
-Convert a table to direct pdf
+Use tools::texi2pdf
 }

@@ -16,6 +16,7 @@ mat_quant_to_df <- function(x) {
 }
 
 #' @export
+#' @rdname mat_quant_to_df
 quant_to_df <-  function(x) .Deprecated("mat_quant_to_df")
 
 
@@ -35,6 +36,18 @@ if(FALSE){
 }
 
 
+#' Convert correlation object to df
+#'
+#' @param x object from cor
+#' @param long into long format?
+#' @examples
+#' library(magrittr)
+#' library(dplyr)
+#' data(iris_tb)
+#' iris_tb %>%
+#'   select(-Species) %>%
+#'   cor()  %>%
+#'   mat_cor_to_df()
 #' @export
 mat_cor_to_df <- function(x, long=TRUE)  {
   rownames_x <- rownames(x)
@@ -44,7 +57,7 @@ mat_cor_to_df <- function(x, long=TRUE)  {
     select(.data$variable, tidyselect::everything())
   if(long) {
     res <- res %>%
-      gather(.data$variable2, .data$value, -.data$variable) %>%
+      gather("variable2", "value", -.data$variable) %>%
       filter(.data$value!=999) %>%
       mutate(variable2 = factor(.data$variable2, ordered= TRUE, levels = rownames_x))
   }
