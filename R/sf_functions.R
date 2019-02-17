@@ -7,5 +7,5 @@
 #' @importFrom sf st_read
 #' @export
 mat_st_read <-  function(dsn, ..., quiet = TRUE, stringsAsFactors = FALSE) {
-  st_read(dsn, ..., quiet = quiet, stringsAsFactors)
+  st_read(dsn, ..., quiet = quiet, stringsAsFactors = stringsAsFactors)
 }
