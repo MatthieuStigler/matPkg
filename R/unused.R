@@ -18,33 +18,6 @@ as.tbl.data.table <- function(x) as_tibble(setDT(x))
 # }
 
 
-li_comp_cols <-  function(list, log = FALSE) {
-
-  if(is.null(names(list))) names(list) <-  letters[1:length(list)]
-  same_cols <- tibble(data =list,
-                      dataset = names(list)) %>%
-    mutate(col_df = map(.data$data, ~tibble(name = colnames(.), class = map_chr(., class) ))) %>%
-    unnest(.data$col_df) %>%
-    spread(.data$name, class)
-
-
-  same_cols2 <- same_cols %>%
-    gather(.data$variable, class, -.data$dataset) %>%
-    group_by(.data$variable) %>%
-    mutate(all_there = sum(!is.na(class)),
-           n_class = length(unique(class))) %>%
-    ungroup() %>%
-    spread(.data$dataset, class) %>%
-    arrange(.data$all_there, desc(.data$n_class), .data$variable)  %>%
-    select(-.data$all_there, -.data$n_class)
-
-  if(log) same_cols2 <- same_cols2 %>%
-    mutate_at(-1, funs(ifelse(is.na(.), ., TRUE)))
-
-  same_cols2
-}
-
-mat_li_comp_cols <-  li_comp_cols
 
 quietly_unnest <-  function(x, col_name) {
   col_name <- rlang::enquo(col_name)

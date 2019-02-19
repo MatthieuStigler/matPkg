@@ -112,3 +112,42 @@ mat_add_perc <- function(df, ..., .name =n) {
 #' select(mat_one_of_quiet(c("Sepal.Length", "caca")))
 mat_one_of_quiet <- function(df) quietly(one_of)(df, .vars= tidyselect::peek_vars())$result
 
+
+#' Compare list of names
+#'
+#' @param list_df List of df
+#' @param logi return TRUE instead of class
+#' @examples
+#' freeny_2 <-  dplyr::rename(freeny, price.index2 = price.index)
+#' li <- list(freeny, freeny_2)
+#' mat_li_comp_cols(list =li)
+#'@export
+mat_li_comp_cols <-  function(list_df, logi = FALSE) {
+
+  if(is.null(names(list_df))) names(list_df) <-  letters[1:length(list_df)]
+  same_cols <- tibble(data =list_df,
+                      dataset = names(list_df)) %>%
+    mutate(col_df = map(.data$data, ~tibble(name = colnames(.), class = map_chr(., ~class(.)[1]) ))) %>%
+    unnest(.data$col_df) %>%
+    spread(.data$name, class)
+
+
+  same_cols2 <- same_cols %>%
+    gather("variable", "class", -.data$dataset) %>%
+    group_by(.data$variable) %>%
+    mutate(all_there = sum(!is.na(class)),
+           n_class = length(unique(class))) %>%
+    ungroup() %>%
+    spread(.data$dataset, class) %>%
+    arrange(.data$all_there, desc(.data$n_class), .data$variable)  %>%
+    select(-.data$all_there, -.data$n_class)
+
+  if(logi) same_cols2 <- same_cols2 %>%
+    mutate_at(-1, funs(ifelse(is.na(.), ., TRUE)))
+
+  same_cols2
+}
+
+li_comp_cols <-  function(x) .Deprecated("mat_li_comp_cols")
+
+
