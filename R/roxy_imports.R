@@ -16,7 +16,7 @@ NULL
 #' @importFrom stats quantile setNames
 NULL
 
-#' @importFrom purrr safely quietly map_int map map_dbl map_chr map_lgl
+#' @importFrom purrr safely quietly map_int map map_dbl map_chr map_lgl map2
 NULL
 
 #' @importFrom tidyselect one_of
