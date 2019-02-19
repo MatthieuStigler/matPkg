@@ -4,12 +4,15 @@
 \alias{mat_list_dir}
 \title{List files in a directory}
 \usage{
-mat_list_dir(path, pattern = "\\\\.tif", recursive = TRUE)
+mat_list_dir(path, pattern = "\\\\.tif", recursive = TRUE,
+  add_ext = FALSE)
 }
 \arguments{
 \item{path}{dir path}
 
 \item{pattern, recursive}{passed to list.files}
+
+\item{add_ext}{Add column with extension?}
 }
 \description{
 List files in a directory
