@@ -21,6 +21,8 @@ use_package("stringr", "Imports")
 use_package("nlme", "Imports")
 use_package("raster", "Imports")
 use_package("sf", "Imports")
+use_package("rmarkdown", "Imports")
+use_package("knitr", "Imports")
 
 ## for the example
 # use_package("tidyverse", "Suggests")

@@ -16,7 +16,7 @@ NULL
 #' @importFrom stats quantile setNames
 NULL
 
-#' @importFrom purrr safely quietly map_int map map_dbl map_chr map_lgl map2
+#' @importFrom purrr safely quietly map_int map map_dbl map_chr map_lgl map2_lgl map2
 NULL
 
 #' @importFrom tidyselect one_of
@@ -26,4 +26,7 @@ NULL
 NULL
 
 #' @importFrom ggplot2 ggplot aes geom_col facet_grid geom_errorbar
+NULL
+
+#' @importFrom stringr str_extract str_replace str_replace_all
 NULL
