@@ -16,7 +16,7 @@ mat_st_read <-  function(dsn, ..., quiet = TRUE, stringsAsFactors = FALSE) {
 mat_st_to_df <- function(shp) {
   shp %>%
     sf::st_set_geometry(NULL) %>%
-    as_data_frame()
+    as_tibble()
 
 }
 
