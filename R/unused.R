@@ -1,4 +1,4 @@
-as.tbl.data.table <- function(x) as_tibble(setDT(x))
+as.tbl.data.table <- function(x) as_tibble(data.table::setDT(x))
 
 # add_sum <- function(x, ..., .name =n) {
 #   group_var <- quos(...)

@@ -23,6 +23,7 @@ use_package("raster", "Imports")
 use_package("sf", "Imports")
 use_package("rmarkdown", "Imports")
 use_package("knitr", "Imports")
+use_package("data.table", "Imports")
 
 ## for the example
 # use_package("tidyverse", "Suggests")

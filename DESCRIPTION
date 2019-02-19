@@ -1,15 +1,16 @@
 Package: matPkg
-Title: What the Package Does (One Line, Title Case)
+Title: Mat functions
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
+    person(given = "Me",
            family = "Last",
            role = c("aut", "cre"),
            email = "first.last@example.com")
-Description: What the package does (one paragraph).
+Description: My own custom functions.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 2.13)
 Imports: 
     tidyr,
     broom,
@@ -26,6 +27,7 @@ Imports:
     sf,
     nlme,
     rmarkdown,
-    knitr
+    knitr,
+    data.table
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1

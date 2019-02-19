@@ -14,6 +14,6 @@ mat_cdl_cols <- function(CDL_raster) {
   }
   tibble(Value=un_vals) %>%
     left_join(select(matPkg::CDL_colors, .data$Value, .data$Category, .data$CDL_cols), by = "Value") %>%
-    arrange(Value)
+    arrange(.data$Value)
 
 }

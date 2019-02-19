@@ -1,4 +1,4 @@
-
+globalVariables(c("n", ".", "value"))
 
 #' @importFrom magrittr "%>%"
 NULL
