@@ -10,18 +10,24 @@ mat_parse_yaml <- function(file_path, encoding = getOption("encoding")){
   input_lines <- read_utf8(file_path, encoding)
   # input_lines <- rmarkdown:::read_lines_utf8(file_path, encoding)
   if (identical(tolower(tools::file_ext(file_path)), "r"))
-    input_lines <- knitr::spin(text = input_lines, knit = FALSE,
-                               envir = envir)
+    input_lines <- knitr::spin(text = input_lines, knit = FALSE)
   yaml_front_matter <- parse_yaml_front_matter(input_lines)
   yaml_front_matter
 
 }
 
+
+#' List yaml of R scripts
+#'
+#' @param dir_path directory of files
+#' @examples
+#' mat_list_Rfiles("R")
+#' @export
 mat_list_Rfiles <- function(dir_path) {
   dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE)
 
   dir_df %>%
-    mutate(number_char = str_extract(filename, "([0-9]_)+") %>%
+    mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
              str_replace("_$", ""),
            number = .data$number_char %>%
              str_replace("_", "\\.") %>%
@@ -29,7 +35,7 @@ mat_list_Rfiles <- function(dir_path) {
              as.numeric(),
            yaml = map(.data$full_path, mat_parse_yaml),
            has_yaml=map_lgl(.data$yaml, ~ !rlang::is_empty(.)),
-           has_runMat  = map2_lgl(.data$has_yaml, yaml, ~if(.x)  "runMat" %in% names(.y) else FALSE ),
-           runMat_val = map2_lgl(.data$has_runMat, yaml, ~if(.x)  .y$runMat else FALSE )) %>%
+           has_runMat  = map2_lgl(.data$has_yaml, .data$yaml, ~if(.x)  "runMat" %in% names(.y) else FALSE ),
+           runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
     select(-.data$full_path, .data$full_path)
 }

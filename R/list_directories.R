@@ -13,7 +13,7 @@ mat_list_dir <- function(path, pattern = "\\.tif", recursive = TRUE, add_ext = F
   res <- tibble(full_path=li) %>%
     mutate(filename= basename(.data$full_path))
   if(add_ext) res <-  res %>%
-    mutate(ext = tools::file_ext(filename))
+    mutate(ext = tools::file_ext(.data$filename))
 
   ## return
   res %>%
