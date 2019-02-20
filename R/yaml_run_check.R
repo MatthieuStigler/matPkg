@@ -20,13 +20,14 @@ mat_parse_yaml <- function(file_path, encoding = getOption("encoding")){
 #' List yaml of R scripts
 #'
 #' @param dir_path directory of files
+#' @param no_old Avoid scripts in directory old?
 #' @examples
 #' mat_list_Rfiles("R")
 #' @export
-mat_list_Rfiles <- function(dir_path) {
+mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
   dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE)
 
-  dir_df %>%
+  res <- dir_df %>%
     mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
              str_replace("_$", ""),
            number = .data$number_char %>%
@@ -38,6 +39,9 @@ mat_list_Rfiles <- function(dir_path) {
            has_runMat  = map2_lgl(.data$has_yaml, .data$yaml, ~if(.x)  "runMat" %in% names(.y) else FALSE ),
            runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
     select(-.data$full_path, .data$full_path)
+  if(no_old) res <-  res %>%
+    filter(!stringr::str_detect(.data$full_path, "old/"))
+  res
 }
 
 #' Run files from a df-df

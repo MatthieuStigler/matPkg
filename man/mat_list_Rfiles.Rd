@@ -4,10 +4,12 @@
 \alias{mat_list_Rfiles}
 \title{List yaml of R scripts}
 \usage{
-mat_list_Rfiles(dir_path)
+mat_list_Rfiles(dir_path, no_old = TRUE)
 }
 \arguments{
 \item{dir_path}{directory of files}
+
+\item{no_old}{Avoid scripts in directory old?}
 }
 \description{
 List yaml of R scripts
