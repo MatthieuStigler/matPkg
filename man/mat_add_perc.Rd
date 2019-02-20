@@ -4,12 +4,14 @@
 \alias{mat_add_perc}
 \title{Add percentage column}
 \usage{
-mat_add_perc(df, ..., .name = n)
+mat_add_perc(df, ..., .name = n, warn_grouped = TRUE)
 }
 \arguments{
 \item{df}{data}
 
 \item{.name}{Name of n}
+
+\item{warn_grouped}{Should warn that already grouped? Default TRUE}
 
 \item{\ldots}{variables to group for}
 }

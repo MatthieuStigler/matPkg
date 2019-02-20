@@ -67,6 +67,7 @@ mat_remo_cols_1val <-  function(x) select(x, -which(map_int(x, dplyr::n_distinct
 #' @param df data
 #' @param \ldots variables to group for
 #' @param .name Name of n
+#' @param warn_grouped Should warn that already grouped? Default TRUE
 #' @export
 #' @examples
 #'  library(tibble)
@@ -78,12 +79,12 @@ mat_remo_cols_1val <-  function(x) select(x, -which(map_int(x, dplyr::n_distinct
 #'   df %>% mat_add_perc(group)
 #'   df %>% rename(N=n) %>% mat_add_perc(.name = N)
 #'   df %>% rename(N=n) %>% mat_add_perc(group, .name = N)
-mat_add_perc <- function(df, ..., .name =n) {
+mat_add_perc <- function(df, ..., .name =n, warn_grouped = TRUE) {
   group_var <- rlang::quos(...)
   .name2 = rlang::enquo(.name)
 
   if(dplyr::is_grouped_df(df)) {
-    warning("Data already grouped, not over-writing!")
+    if(warn_grouped) warning("Data already grouped, not over-writing!")
     res <- df %>%
       mutate(perc = 100 * !!.name2/sum(!!.name2))
   } else {
