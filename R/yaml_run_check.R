@@ -39,3 +39,16 @@ mat_list_Rfiles <- function(dir_path) {
            runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
     select(-.data$full_path, .data$full_path)
 }
+
+#' Run files from a df-df
+#'
+#' @param df the df of files, from mat_list_Rfiles()
+#' @export
+mat_run_Rfiles <- function(df) {
+  df %>%
+    mutate(try = map(.data$full_path, ~purrr::safely(base::source)(.))) %>%
+    mutate(error=map(.data$try, ~.[["error"]]),
+           has_error= map_lgl(.data$error, ~!is.null(.)),
+           error=map_chr(.data$error, ~ifelse(is.null(.), NA, .) %>% as.character)) %>%
+    select("filename", "try", "has_error", "error")
+}
