@@ -6,5 +6,9 @@
 \alias{matPkg-package}
 \title{matPkg: Internal functions I use}
 \description{
-to do... can I get a list of functions?
+to do... can I get a list of functions? Just document them!
+}
+\details{
+Should run:
+remotes::install_github("MatthieuStigler/matPkg", upgrade = "never")
 }
