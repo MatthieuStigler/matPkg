@@ -4,11 +4,19 @@
 \alias{mat_st_to_df}
 \title{mat_st_to_df}
 \usage{
-mat_st_to_df(shp)
+mat_st_to_df(shp, add_xy = FALSE)
 }
 \arguments{
 \item{shp}{shp}
+
+\item{add_xy}{Logical. Add xy coordinates?}
 }
 \description{
 mat_st_to_df
+}
+\examples{
+library(sf)
+shp <- st_sf(a=c(3,2), geometry=st_sfc(st_point(1:2), st_point(2:3)))
+mat_st_to_df(shp)
+mat_st_to_df(shp, add_xy = TRUE)
 }

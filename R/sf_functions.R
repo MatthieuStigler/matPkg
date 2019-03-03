@@ -12,11 +12,27 @@ mat_st_read <-  function(dsn, ..., quiet = TRUE, stringsAsFactors = FALSE) {
 
 #' mat_st_to_df
 #' @param shp shp
+#' @param add_xy Logical. Add xy coordinates?
+#' @examples
+#' library(sf)
+#' shp <- st_sf(a=c(3,2), geometry=st_sfc(st_point(1:2), st_point(2:3)))
+#' mat_st_to_df(shp)
+#' mat_st_to_df(shp, add_xy = TRUE)
 #'@export
-mat_st_to_df <- function(shp) {
-  shp %>%
+mat_st_to_df <- function(shp, add_xy = FALSE) {
+
+  res <-   shp %>%
     sf::st_set_geometry(NULL) %>%
     as_tibble()
+
+  if(add_xy) {
+    if(!all(sf::st_geometry_type(shp)=="POINT")) warning("Needs all points?")
+    coords_df <-  as_tibble(sf::st_coordinates(shp)) %>%
+      select("X", "Y")
+    res <- res %>%
+      dplyr::bind_cols(coords_df)
+  }
+  res
 
 }
 
