@@ -17,3 +17,11 @@ mat_cdl_cols <- function(CDL_raster) {
     arrange(.data$Value)
 
 }
+
+#' Extent to df
+#' @param x extent of raster
+#' @param row.names,optional,\ldots unused (but passed)
+#' @export
+as.data.frame.Extent <- function(x, row.names, optional, ...){
+  data.frame(xmin=x@xmin, xmax=x@xmax, ymin=x@ymin, ymax=x@ymax, ...)
+}
