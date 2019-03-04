@@ -24,6 +24,7 @@ use_package("sf", "Imports")
 use_package("rmarkdown", "Imports")
 use_package("knitr", "Imports")
 use_package("data.table", "Imports")
+use_package("methods", "Imports")
 
 ## for the example
 # use_package("tidyverse", "Suggests")

@@ -28,6 +28,7 @@ Imports:
     nlme,
     rmarkdown,
     knitr,
-    data.table
+    data.table,
+    methods
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1

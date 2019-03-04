@@ -57,3 +57,15 @@ mat_st_df_to_pt <- function(df, lat_var, lng_var, crs=NULL) {
                select(res_t, -"geometry"))
   res
 }
+
+#' Extent to sf
+#'
+#' @param x raster Extent object
+#' @export
+#' @importFrom methods as
+st_as_sf.Extent <- function(x) {
+  x %>%
+    as("SpatialPolygons") %>%
+    sf::st_as_sf %>%
+    sf::st_set_crs(sf::st_crs(x))
+}
