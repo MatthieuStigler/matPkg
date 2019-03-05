@@ -12,3 +12,13 @@ st_as_sf.Extent(x)
 \description{
 Extent to sf
 }
+\examples{
+library(raster)
+library(sf)
+r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=100)
+r2 <- raster(nrows=108, ncols=21, xmn=50, xmx=150)
+st2 <- rbind(st_as_sf(extent(r1)),
+             st_as_sf(extent(r2)))
+             plot(st2, border = 1:2)
+
+}
