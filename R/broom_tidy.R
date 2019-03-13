@@ -75,3 +75,33 @@ mat_tidy_coef_plot <- function(df, x_var, fill_var, fac_1=NULL, fac_2=NULL) {
 
 
 }
+
+
+#' Use tidy() with robust vcov directly
+#' @param x object for which hopfully there is a coeftst/vcov method
+#' @param conf.int return confindence interval? Determined by level
+#' @param df,parm,level,vcov. arguments to \code{\link{coeftest}}
+#' @param \ldots passed to vcov (well to coeftest who does the jo)
+#' @examples
+#' library(sandwich)
+#' reg <-  lm(freeny)
+#' standard_me <- mat_tidy_robust(reg)
+#' standard_br <- broom::tidy(reg, conf.int = TRUE)
+#' all.equal(as.data.frame(standard_me), as.data.frame(standard_br))
+
+#' mat_tidy_robust(reg, vcov. = vcovHC(reg))
+#' mat_tidy_robust(reg, vcov. = vcovHC)
+#' @export
+mat_tidy_robust <-  function(x, vcov. = NULL, conf.int = TRUE, df = NULL, parm = NULL, level = 0.95, ...) {
+  res <- lmtest::coeftest(x=x, vcov. = vcov., df = df, ...) %>%
+    broom::tidy()
+
+  if(conf.int) {
+    ci <- lmtest::coefci(x=x, parm = parm, level = level, vcov. = vcov., df = df, ...) %>%
+      as_tibble()
+    colnames(ci) <- c("conf.low",  "conf.high")
+    res  <- res %>%
+      dplyr::bind_cols(ci)
+  }
+  res
+}

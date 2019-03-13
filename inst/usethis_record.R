@@ -25,9 +25,10 @@ use_package("rmarkdown", "Imports")
 use_package("knitr", "Imports")
 use_package("data.table", "Imports")
 use_package("methods", "Imports")
+use_package("lmtest", "Imports")
 
 ## for the example
-# use_package("tidyverse", "Suggests")
+use_package("sandwich", "Suggests")
 
 use_roxygen_md()
 
