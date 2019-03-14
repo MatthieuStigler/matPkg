@@ -10,9 +10,10 @@ is_true <-  function(x) map_lgl(x, isTRUE)
 
 #' Check 0 rows
 #' @param df data
+#' @param message_ok the ok message
 #' @examples
 #' mat_check_0row(df=subset(iris, Species=="aaa"))
 #'@export
-mat_check_0row <-  function(df) {
-  if(nrow(df)==0) "OK" else stop("Does not have z rows!")
+mat_check_0row <-  function(df, message_ok ="OK") {
+  if(nrow(df)==0) message_ok else stop("Does not have z rows!")
 }

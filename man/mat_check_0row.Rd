@@ -4,10 +4,12 @@
 \alias{mat_check_0row}
 \title{Check 0 rows}
 \usage{
-mat_check_0row(df)
+mat_check_0row(df, message_ok = "OK")
 }
 \arguments{
 \item{df}{data}
+
+\item{message_ok}{the ok message}
 }
 \description{
 Check 0 rows
