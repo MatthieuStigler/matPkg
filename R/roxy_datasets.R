@@ -21,3 +21,11 @@
 #' @docType data
 #' @format A tibble
 "iris_tb"
+
+#' Reshuffled quick stats, dirty data example
+#'
+#' Same
+#' @name quick_stats
+#' @docType data
+#' @format A tibble
+"quick_stats"
