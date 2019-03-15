@@ -75,12 +75,18 @@ mat_show_cols_1val <-  function(df, nval_max = 1) {
 
 #' Remove columns with only one value
 #' @param df data
+#' @param \ldots variables to keep
 #' @examples
 #' data(quick_stats)
 #' mat_show_cols_1val(quick_stats)
 #' mat_remo_cols_1val(quick_stats)
+#' mat_remo_cols_1val(quick_stats, geo_level)
 #' @export
-mat_remo_cols_1val <-  function(df) select(df, -which(map_int(df, dplyr::n_distinct)==1))
+mat_remo_cols_1val <-  function(df, ...) {
+  keep_var <- rlang::enquos(...)
+  df %>%
+    select(-which(map_int(df, dplyr::n_distinct)==1), !!!keep_var)
+}
 
 #' Add percentage column
 #' @param df data

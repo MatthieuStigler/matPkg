@@ -7,12 +7,14 @@
 \usage{
 mat_show_cols_1val(df, nval_max = 1)
 
-mat_remo_cols_1val(df)
+mat_remo_cols_1val(df, ...)
 }
 \arguments{
 \item{df}{data}
 
 \item{nval_max}{how many values allowed?}
+
+\item{\ldots}{variables to keep}
 }
 \description{
 Remove columns with only one value
@@ -21,4 +23,5 @@ Remove columns with only one value
 data(quick_stats)
 mat_show_cols_1val(quick_stats)
 mat_remo_cols_1val(quick_stats)
+mat_remo_cols_1val(quick_stats, geo_level)
 }
