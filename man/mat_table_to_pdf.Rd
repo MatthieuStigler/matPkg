@@ -23,3 +23,12 @@ table_to_pdf(x)
 \description{
 Use tools::texi2pdf
 }
+\examples{
+\dontrun{
+tab <-  data.frame(variable= c("A", "B"), stat = c("mean"), value = 1:2)
+tab_xt <- print(xtable::xtable(tab), print.results = FALSE)
+
+mat_table_to_pdf(tab_xt, filename = "filename_test")
+file.remove("filename_test.pdf")
+}
+}

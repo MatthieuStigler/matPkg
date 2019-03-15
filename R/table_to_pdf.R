@@ -5,6 +5,14 @@
 #'@param filename output name
 #'@param clean,quiet passed to tools::texi2pdf
 #'@param plus additional lattex stuff
+#'@examples
+#'\dontrun{
+#'tab <-  data.frame(variable= c("A", "B"), stat = c("mean"), value = 1:2)
+#'tab_xt <- print(xtable::xtable(tab), print.results = FALSE)
+#'
+#'mat_table_to_pdf(tab_xt, filename = "filename_test")
+#'file.remove("filename_test.pdf")
+#'}
 #'@export
 mat_table_to_pdf <- function(x, filename = "input.tex", clean=TRUE, quiet=TRUE,
                          plus= "\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}") {
