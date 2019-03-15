@@ -58,10 +58,29 @@ mat_spread_TR_FALSE <- function(df, col, n_col = n) {
 
 }
 
-#' Remove columns with only one value
-#' @param x data
+
+#' @param nval_max how many values allowed?
 #' @export
-mat_remo_cols_1val <-  function(x) select(x, -which(map_int(x, dplyr::n_distinct)==1))
+#' @rdname mat_remo_cols_1val
+mat_show_cols_1val <-  function(df, nval_max = 1) {
+  df %>%
+    select(which(map_int(df, dplyr::n_distinct) %in%  seq_len(nval_max))) %>%
+    dplyr::distinct() %>%
+    gather("var", "val", dplyr::everything()) %>%
+    mutate("has_na" = is.na(.data$val)) %>%
+    dplyr::arrange(.data$has_na, .data$var) %>%
+    select(-.data$has_na)
+}
+
+
+#' Remove columns with only one value
+#' @param df data
+#' @examples
+#' data(quick_stats)
+#' mat_show_cols_1val(quick_stats)
+#' mat_remo_cols_1val(quick_stats)
+#' @export
+mat_remo_cols_1val <-  function(df) select(df, -which(map_int(df, dplyr::n_distinct)==1))
 
 #' Add percentage column
 #' @param df data
