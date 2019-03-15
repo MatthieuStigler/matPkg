@@ -22,6 +22,9 @@ Remove columns with only one value
 \examples{
 data(quick_stats)
 mat_show_cols_1val(quick_stats)
+mat_show_cols_1val(quick_stats, nval_max = 2)
+
+## now remove
 mat_remo_cols_1val(quick_stats)
 mat_remo_cols_1val(quick_stats, geo_level)
 }

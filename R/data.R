@@ -69,7 +69,8 @@ mat_show_cols_1val <-  function(df, nval_max = 1) {
     gather("var", "val", dplyr::everything()) %>%
     mutate("has_na" = is.na(.data$val)) %>%
     dplyr::arrange(.data$has_na, .data$var) %>%
-    select(-.data$has_na)
+    select(-.data$has_na) %>%
+    distinct()
 }
 
 
@@ -79,6 +80,9 @@ mat_show_cols_1val <-  function(df, nval_max = 1) {
 #' @examples
 #' data(quick_stats)
 #' mat_show_cols_1val(quick_stats)
+#' mat_show_cols_1val(quick_stats, nval_max = 2)
+#'
+#' ## now remove
 #' mat_remo_cols_1val(quick_stats)
 #' mat_remo_cols_1val(quick_stats, geo_level)
 #' @export
