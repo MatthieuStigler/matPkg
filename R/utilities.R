@@ -17,3 +17,19 @@ is_true <-  function(x) map_lgl(x, isTRUE)
 mat_check_0row <-  function(df, message_ok ="OK") {
   if(nrow(df)==0) message_ok else stop("Does not have z rows!")
 }
+
+
+#' Show method called on object
+#' @param generic the generic
+#' @param \ldots the object on which to use the generic
+#' @export
+#' @examples
+#' data(iris_tb)
+#' mat_find_method(print, iris)
+#' mat_find_method(print, iris_tb)
+mat_find_method <- function(generic, ...) {
+  ch <- deparse(substitute(generic))
+  f <- X <- function(x, ...) UseMethod("X")
+  for(m in utils::methods(ch)) assign(sub(ch, "X", m, fixed = TRUE), "body<-"(f, value = m))
+  X(...)
+}
