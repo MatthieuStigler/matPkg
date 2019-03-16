@@ -30,7 +30,7 @@ mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE) {
 #' Tidy columns: . to _
 #' @param df data
 #' @export
-mat_tidy_clean <- function(df) setNames(df, stringr::str_replace(colnames(df), "\\.", "_"))
+mat_tidy_clean <- function(df) setNames(df, stringr::str_replace_all(colnames(df), "\\.", "_"))
 
 
 #' For broom coef tidy output: bar plot for coefs
