@@ -4,7 +4,7 @@ globalVariables(c("n", ".", "value"))
 NULL
 #' @importFrom dplyr mutate arrange select mutate_at bind_cols bind_rows filter rename
 NULL
-#' @importFrom dplyr group_by ungroup summarise_all desc pull funs vars left_join inner_join
+#' @importFrom dplyr group_by ungroup summarise_all desc pull funs vars left_join inner_join n
 NULL
 
 #' @importFrom tidyr gather spread nest unnest

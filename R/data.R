@@ -60,17 +60,36 @@ mat_spread_TR_FALSE <- function(df, col, n_col = n) {
 
 
 #' @param nval_max how many values allowed?
+#' @param wide logical TRUE, if nval_max > 1, show in wide format?
+#' @param show_na default TRUE. Should show all NA?
 #' @export
 #' @rdname mat_remo_cols_1val
-mat_show_cols_1val <-  function(df, nval_max = 1) {
-  df %>%
+mat_show_cols_1val <-  function(df, nval_max = 1, wide = TRUE, show_na = TRUE) {
+  res <- df %>%
     select(which(map_int(df, dplyr::n_distinct) %in%  seq_len(nval_max))) %>%
     dplyr::distinct() %>%
     gather("var", "val", dplyr::everything()) %>%
     mutate("has_na" = is.na(.data$val)) %>%
     dplyr::arrange(.data$has_na, .data$var) %>%
     select(-.data$has_na) %>%
-    distinct()
+    dplyr::distinct()
+  if(wide) {
+    res <-  res %>%
+      group_by(.data$var) %>%
+      mutate(n_rep = paste("val", 1:n(), sep = "_"),
+             n_tot = n(),
+             n_na = sum(is.na(.data$val))) %>%
+      ungroup() %>%
+      spread(.data$n_rep, .data$val) %>%
+      arrange(dplyr::desc(.data$n_tot), .data$n_na, .data$var) %>%
+      select(-.data$n_tot, -.data$n_na)
+
+  }
+  if(!show_na) {
+    res <-  res %>%
+      dplyr::filter_at(vars(dplyr::starts_with("val")), dplyr::any_vars(!is.na(.)))
+  }
+  res
 }
 
 
@@ -81,6 +100,7 @@ mat_show_cols_1val <-  function(df, nval_max = 1) {
 #' data(quick_stats)
 #' mat_show_cols_1val(quick_stats)
 #' mat_show_cols_1val(quick_stats, nval_max = 2)
+#' mat_show_cols_1val(quick_stats, nval_max = 5, show_na = FALSE)
 #'
 #' ## now remove
 #' mat_remo_cols_1val(quick_stats)

@@ -5,7 +5,7 @@
 \alias{mat_remo_cols_1val}
 \title{Remove columns with only one value}
 \usage{
-mat_show_cols_1val(df, nval_max = 1)
+mat_show_cols_1val(df, nval_max = 1, wide = TRUE, show_na = TRUE)
 
 mat_remo_cols_1val(df, ...)
 }
@@ -13,6 +13,10 @@ mat_remo_cols_1val(df, ...)
 \item{df}{data}
 
 \item{nval_max}{how many values allowed?}
+
+\item{wide}{logical TRUE, if nval_max > 1, show in wide format?}
+
+\item{show_na}{default TRUE. Should show all NA?}
 
 \item{\ldots}{variables to keep}
 }
@@ -23,6 +27,7 @@ Remove columns with only one value
 data(quick_stats)
 mat_show_cols_1val(quick_stats)
 mat_show_cols_1val(quick_stats, nval_max = 2)
+mat_show_cols_1val(quick_stats, nval_max = 5, show_na = FALSE)
 
 ## now remove
 mat_remo_cols_1val(quick_stats)
