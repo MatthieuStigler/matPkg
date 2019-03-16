@@ -12,3 +12,10 @@ mat_tidy_clean(df)
 \description{
 Tidy columns: . to _
 }
+\examples{
+reg <- lm(freeny)
+out_1 <- broom::tidy(reg)
+out_2 <- broom::glance(reg)
+mat_tidy_clean(out_1)
+mat_tidy_clean(out_2)
+}
