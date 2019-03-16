@@ -152,15 +152,14 @@ mat_add_perc <- function(df, ..., .name =n, warn_grouped = TRUE) {
 
 
 #' Use one_of() quietly
-#' @param df data
+#' @param \ldots One or more character vectors.
 #' @export
 #' @examples
 #' library(magrittr)
-#' library(tibble)
 #' library(dplyr)
-#' iris %>% as_tibble() %>%
-#' select(mat_one_of_quiet(c("Sepal.Length", "caca")))
-mat_one_of_quiet <- function(df) quietly(one_of)(df, .vars= tidyselect::peek_vars())$result
+#' iris_tb  %>%
+#'   select(mat_one_of_quiet(c("Sepal.Length", "caca")))
+mat_one_of_quiet <- function(...) quietly(one_of)(..., .vars= tidyselect::peek_vars())$result
 
 
 #' Compare list of names

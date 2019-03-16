@@ -4,18 +4,17 @@
 \alias{mat_one_of_quiet}
 \title{Use one_of() quietly}
 \usage{
-mat_one_of_quiet(df)
+mat_one_of_quiet(...)
 }
 \arguments{
-\item{df}{data}
+\item{\ldots}{One or more character vectors.}
 }
 \description{
 Use one_of() quietly
 }
 \examples{
 library(magrittr)
-library(tibble)
 library(dplyr)
-iris \%>\% as_tibble() \%>\%
-select(mat_one_of_quiet(c("Sepal.Length", "caca")))
+iris_tb  \%>\%
+  select(mat_one_of_quiet(c("Sepal.Length", "caca")))
 }
