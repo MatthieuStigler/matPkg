@@ -59,6 +59,18 @@ mat_run_Rfiles <- function(df) {
     # select("filename", "try", "has_error", "error")
 }
 
+#' Show memory usage, by object
+#' @export
+#' @examples
+#' mat_show_mem()
+mat_show_mem <-  function() {
+  tibble(obj = ls(.GlobalEnv)) %>%
+    mutate(obj_size = map(.data$obj, ~pryr::object_size(get(.))),
+           size = map_dbl(.data$obj_size, ~.),
+           unit = map_chr(.data$obj_size, ~class(.)),
+           class_1 = map_chr(.data$obj, ~ class(get(.))[1])) %>%
+    arrange(desc(.data$size))
+}
 
 
 ## utilities (from: )
@@ -76,19 +88,10 @@ source_throw <- function(path) {
   as_tibble(sys)
 }
 
-show_mem <-  function() {
-  tibble(obj = ls(.GlobalEnv)) %>%
-    mutate(obj_size = map(.data$obj, ~pryr::object_size(get(.))),
-           size = map_dbl(.data$obj_size, ~.),
-           unit = map_chr(.data$obj_size, ~class(.)),
-           class_1 = map_chr(.data$obj, ~ class(get(.))[1])) %>%
-    arrange(desc(.data$size))
-}
-
 if(FALSE) {
   library(matPkg)
   library(tidyverse)
-  show_mem()
+  mat_show_mem()
   dir <- mat_list_Rfiles("inst/r_scripts_fake")
   dir
   out <- mat_run_Rfiles(dir)
