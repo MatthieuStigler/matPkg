@@ -50,9 +50,49 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
 #' @export
 mat_run_Rfiles <- function(df) {
   df %>%
-    mutate(try = map(.data$full_path, ~purrr::safely(base::source)(.))) %>%
+    mutate(try = map(.data$full_path, ~purrr::safely(source_throw)(.))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
            has_error= map_lgl(.data$error, ~!is.null(.)),
-           error=map_chr(.data$error, ~ifelse(is.null(.), NA, .) %>% as.character)) %>%
-    select("filename", "try", "has_error", "error")
+           error=map_chr(.data$error, ~ifelse(is.null(.), NA, .) %>% as.character),
+           timing = map2(.data$try, .data$has_error, ~if(.y) df_null else .x$result)) %>%
+    unnest(.data$timing)
+    # select("filename", "try", "has_error", "error")
+}
+
+
+
+## utilities (from: )
+df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.child" = NA, "sys.child" = NA)
+
+as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
+
+source_throw <- function(path) {
+  env_random <-  new.env()
+  sys <- system.time(sys.source(path, envir = env_random))
+  ls_env <- ls(envir = env_random)
+  rm(list = ls_env, envir = env_random)
+  rm(env_random)
+  gc()
+  as_tibble(sys)
+}
+
+show_mem <-  function() {
+  tibble(obj = ls(.GlobalEnv)) %>%
+    mutate(obj_size = map(.data$obj, ~pryr::object_size(get(.))),
+           size = map_dbl(.data$obj_size, ~.),
+           unit = map_chr(.data$obj_size, ~class(.)),
+           class_1 = map_chr(.data$obj, ~ class(get(.))[1])) %>%
+    arrange(desc(.data$size))
+}
+
+if(FALSE) {
+  library(matPkg)
+  library(tidyverse)
+  show_mem()
+  dir <- mat_list_Rfiles("inst/r_scripts_fake")
+  dir
+  out <- mat_run_Rfiles(dir)
+  out
+  rm(heavy_vec)
+
 }

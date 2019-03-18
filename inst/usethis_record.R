@@ -26,6 +26,7 @@ use_package("knitr", "Imports")
 use_package("data.table", "Imports")
 use_package("methods", "Imports")
 use_package("lmtest", "Imports")
+use_package("pryr", "Imports")
 
 ## for the example
 use_package("sandwich", "Suggests")
