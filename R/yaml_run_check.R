@@ -85,7 +85,9 @@ source_throw <- function(path) {
   rm(list = ls_env, envir = env_random)
   rm(env_random)
   gc()
-  as_tibble(sys)
+  t(data.matrix(sys)) %>%
+    as.data.frame() %>%
+    as_tibble()
 }
 
 if(FALSE) {
@@ -96,6 +98,9 @@ if(FALSE) {
   dir
   out <- mat_run_Rfiles(dir)
   out
+  out %>%
+    filter(has_error) %>%
+    select(filename, error)
   rm(heavy_vec)
 
 }
