@@ -47,14 +47,32 @@ mat_add_total_row <- function(df) {
 #' @param df data
 #' @param col col to spread
 #' @param n_col name of n column
+#' @examples
+#' library(dplyr)
+#' iris %>%
+#'   count(is_low_6=Sepal.Length<6, Species) %>%
+#'   mat_spread_TR_FALSE(is_low_6)
 #' @export
 mat_spread_TR_FALSE <- function(df, col, n_col = n) {
   col_here <- rlang::enquo(col)
   n_col_here <- rlang::enquo(n_col)
 
-  df %>%
-    spread(!!col_here, !!n_col_here, fill = 0) %>%
-    mutate(perc = 100 * .data$`TRUE` /(.data$`TRUE`+ .data$`FALSE`))
+  T_name <- paste(rlang::quo_name(col_here), "TRUE", sep="_")
+  F_name <- paste(rlang::quo_name(col_here), "FALSE", sep="_")
+
+  df_w <- df %>%
+    mutate(!!col_here := factor(as.character(!!col_here), levels = c("TRUE", "FALSE"))) %>%
+    spread(!!col_here, !!n_col_here, fill = 0)
+  if(nrow(df_w) == nrow(df) & length(unique(pull(df, !!col_here)))!=1) warning("Problem spreading: should remove variable?")
+
+  if(!"TRUE" %in% colnames(df_w)) df_w <- df_w %>%
+    mutate(`TRUE`=0)
+  if(!"FALSE" %in% colnames(df_w)) df_w <- df_w %>%
+    mutate(`FALSE`=0)
+  df_w %>%
+    mutate(perc = 100 * .data$`TRUE` /(.data$`TRUE`+ .data$`FALSE`)) %>%
+    rename(!! T_name := .data$`TRUE`,
+           !! F_name := .data$`FALSE`)
 
 }
 
@@ -177,6 +195,7 @@ mat_li_comp_cols <-  function(list_df, logi = FALSE) {
   same_cols <- tibble(data =list_df,
                       dataset = names(list_df)) %>%
     mutate(col_df = map(.data$data, ~tibble(name = colnames(.), class = map_chr(., ~class(.)[1]) ))) %>%
+    select(-.data$data) %>%
     unnest(.data$col_df) %>%
     spread(.data$name, class)
 

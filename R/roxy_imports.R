@@ -22,7 +22,7 @@ NULL
 #' @importFrom tidyselect one_of
 NULL
 
-#' @importFrom rlang .data
+#' @importFrom rlang .data :=
 NULL
 
 #' @importFrom ggplot2 ggplot aes geom_col facet_grid geom_errorbar

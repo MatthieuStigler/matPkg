@@ -16,3 +16,9 @@ mat_spread_TR_FALSE(df, col, n_col = n)
 \description{
 Spread data with TRUE/FALSE (from count)
 }
+\examples{
+library(dplyr)
+iris \%>\%
+  count(is_low_6=Sepal.Length<6, Species) \%>\%
+  mat_spread_TR_FALSE(is_low_6)
+}
