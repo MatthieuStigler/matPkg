@@ -218,4 +218,18 @@ mat_li_comp_cols <-  function(list_df, logi = FALSE) {
 
 li_comp_cols <-  function(x) .Deprecated("mat_li_comp_cols")
 
+#' Slice by group
+#' @param df data
+#' @param N (max) number per group
+#' @param \ldots group variables
+#' @export
+#' @examples
+#' mat_slice_by(iris, N = 10, Species)
+mat_slice_by <- function(df, N=100, ...) {
+  group_var <- rlang::enquos(...)
+  df %>%
+    group_by(!!!group_var) %>%
+    dplyr::slice(1:N) %>%
+    ungroup()
+}
 
