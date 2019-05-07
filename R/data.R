@@ -184,7 +184,7 @@ mat_vars_uniques <- function(df, wide=TRUE, ...) {
   }
   df <- df %>%
     dplyr::select_if(~!is.numeric(.)) %>%
-    {tibble(variable = colnames(.), class = map(., ~tibble(values=unique(.)) %>%
+    {tibble(variable = colnames(.), class = map(., ~tibble(values=as.character(unique(.))) %>%
                                               mutate(n_row = 1:n())))} %>%
     unnest(class)
   if(wide) df <- df %>%
