@@ -183,10 +183,10 @@ mat_vars_uniques <- function(df, wide=TRUE, ...) {
       select(!!!group_vars)
   }
   df <- df %>%
-    dplyr::select_if(~!is.numeric(.)) %>%
+    dplyr::distinct() %>%
     {tibble(variable = colnames(.), class = map(., ~tibble(values=as.character(unique(.))) %>%
                                               mutate(n_row = 1:n())))} %>%
-    unnest(class)
+    tidyr::unnest(class)
   if(wide) df <- df %>%
         spread(.data$variable, .data$values )
 
