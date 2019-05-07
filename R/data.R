@@ -164,6 +164,33 @@ mat_add_perc <- function(df, ..., .name =n, warn_grouped = TRUE) {
 }
 
 
+#' Add row number
+#'
+#'@param df data
+#'@param \ldots group by variables
+#'@export
+#'@examples
+#'df <- data.frame(group = rep(letters[1:2], each=3), values= 1:6)
+#'mat_add_row_num(df)
+#'mat_add_row_num(df, group)
+
+mat_add_row_num <- function(df, ...) {
+  group_vars <- rlang::enquos(...)
+  if(length(group_vars)!=0) {
+    if(dplyr::is_grouped_df(df)) stop("Data already grouped, stop.")
+    df  <-  df %>%
+      dplyr::group_by(!!!group_vars)
+  }
+
+  df %>%
+    dplyr::mutate(n_row = 1:n()) %>%
+    dplyr::ungroup()
+
+}
+
+
+
+
 #' Table of values of variables
 #'
 #' @param df data-frame
