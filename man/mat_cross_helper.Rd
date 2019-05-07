@@ -4,7 +4,7 @@
 \alias{mat_cross_helper}
 \title{Crossing with helpers}
 \usage{
-mat_cross_helper(df, args, wide = FALSE)
+mat_cross_helper(df, args, wide = FALSE, remove_NA = TRUE)
 }
 \arguments{
 \item{df}{data}
@@ -12,6 +12,8 @@ mat_cross_helper(df, args, wide = FALSE)
 \item{args}{a list, names, with values. Special are .each, and .all}
 
 \item{wide}{to wide?}
+
+\item{remove_NA}{Are NAs in unequal data lenghts to be removed?}
 }
 \description{
 Crossing with helpers

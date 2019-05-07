@@ -3,6 +3,7 @@
 #' @param df data
 #' @param args a list, names, with values. Special are .each, and .all
 #' @param wide to wide?
+#' @param remove_NA Are NAs in unequal data lenghts to be removed?
 #' @export
 #' @examples
 #' mat_cross_helper(warpbreaks, list(wool=c("A"),
@@ -10,7 +11,7 @@
 #' mat_cross_helper(warpbreaks, list(wool=c("A"),
 #'                            tension = c(".each")))
 
-mat_cross_helper <- function(df, args, wide = FALSE) {
+mat_cross_helper <- function(df, args, wide = FALSE, remove_NA=TRUE) {
 
   vars <- names(args)
   if(any(is.na(vars))) stop("Give me names")
@@ -27,9 +28,9 @@ mat_cross_helper <- function(df, args, wide = FALSE) {
   ## replace now
   args_df_add <- args_df %>%
     mutate(values_new = map2(.data$variable, value , ~ check_replace(.y, filter(vals_table, .data$variable==.x) %>%
-                                                                 pull(.data$values)) %>%
+                                                                 pull(.data$values), remove_NA=remove_NA) %>%
                                tibble::enframe(value = "values_new"))) %>%
-    unnest(.data$values_new) %>%
+    tidyr::unnest(.data$values_new) %>%
     select(-.data$name)
 
   ## to list
@@ -54,8 +55,9 @@ mat_cross_helper <- function(df, args, wide = FALSE) {
   res
 }
 
-
-check_replace <- function(x_target, x_values ) {
+# Internal function, replace .all and .each
+check_replace <- function(x_target, x_values, remove_NA=TRUE) {
+  if(remove_NA) x_values <- x_values[!is.na(x_values)]
   if(x_target ==".each") {
     x <- x_values
   } else if(x_target ==".all") {
