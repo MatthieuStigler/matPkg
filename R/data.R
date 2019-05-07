@@ -164,8 +164,35 @@ mat_add_perc <- function(df, ..., .name =n, warn_grouped = TRUE) {
 }
 
 
+#' Table of values of variables
+#'
+#' @param df data-frame
+#' @param wide Wide the dataset?
+#' @param \ldots variables to keep
+#' @export
+#' @examples
+#' mat_vars_uniques(iris)
+#' data_test <- tidyr::crossing(a=letters[1:3], b=c("blue", "green"))
+#' mat_vars_uniques(data_test)
+#' mat_vars_uniques(df=data_test, wide=FALSE)
 
+mat_vars_uniques <- function(df, wide=TRUE, ...) {
+  group_vars <- rlang::enquos(...)
+  if(length(group_vars)!=0) {
+    df  <-  df %>%
+      select(!!!group_vars)
+  }
+  df <- df %>%
+    dplyr::select_if(~!is.numeric(.)) %>%
+    {tibble(variable = colnames(.), class = map(., ~tibble(values=unique(.)) %>%
+                                              mutate(n_row = 1:n())))} %>%
+    unnest(class)
+  if(wide) df <- df %>%
+        spread(.data$variable, .data$values )
 
+  df %>%
+    select(-.data$n_row)
+}
 
 
 
