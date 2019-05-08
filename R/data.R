@@ -221,7 +221,7 @@ mat_add_row_num <- function(df, ..., col_name = "n_row") {
 #' mat_vars_uniques(data_test)
 #' mat_vars_uniques(df=data_test, wide=FALSE)
 
-mat_vars_uniques <- function(df, wide=TRUE, ...) {
+mat_vars_uniques <- function(df, ..., wide=TRUE) {
   group_vars <- rlang::enquos(...)
   if(length(group_vars)!=0) {
     df  <-  df %>%

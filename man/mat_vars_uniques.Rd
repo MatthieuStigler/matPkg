@@ -4,7 +4,7 @@
 \alias{mat_vars_uniques}
 \title{Table of values of variables}
 \usage{
-mat_vars_uniques(df, wide = TRUE, ...)
+mat_vars_uniques(df, ..., wide = TRUE)
 }
 \arguments{
 \item{df}{data-frame}
