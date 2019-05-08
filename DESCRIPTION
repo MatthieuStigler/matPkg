@@ -1,8 +1,8 @@
 Package: matPkg
 Title: Mat functions
-Version: 0.0.0.9000
+Version: 0.1.0.9000
 Authors@R: 
-    person(given = "Me",
+    person(given = "Matthieu",
            family = "Last",
            role = c("aut", "cre"),
            email = "first.last@example.com")
