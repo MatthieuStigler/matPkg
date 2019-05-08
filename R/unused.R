@@ -31,14 +31,14 @@ quietly_unnest <-  function(x, col_name) {
   # n_mess = map_int(messages, length
 }
 
-safely_unnest <-  function(x, col_name) {
-  col_name <- rlang::enquo(col_name)
-
-  x %>%
-    bind_cols(purrr::transpose(pull(., !!col_name)) %>%  as_tibble) %>%
-    select(-!!col_name) %>%
-    mutate(error = map_chr(.data$error, ~if(length(.)==0) NA_character_ else to_1(.)))
-}
+# safely_unnest <-  function(x, col_name) {
+#   col_name <- rlang::enquo(col_name)
+#
+#   x %>%
+#     bind_cols(purrr::transpose(pull(., !!col_name)) %>%  as_tibble) %>%
+#     select(-!!col_name) %>%
+#     mutate(error = map_chr(.data$error, ~if(length(.)==0) NA_character_ else to_1(.)))
+# }
 
 
 to_1 <-  function(x) paste(unique(x), collapse = " AND ")
