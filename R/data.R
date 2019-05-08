@@ -168,13 +168,15 @@ mat_add_perc <- function(df, ..., .name =n, warn_grouped = TRUE) {
 #'
 #'@param df data
 #'@param \ldots group by variables
+#'@param col_name Name of the new col, defaults to n_row
 #'@export
 #'@examples
 #'df <- data.frame(group = rep(letters[1:2], each=3), values= 1:6)
 #'mat_add_row_num(df)
 #'mat_add_row_num(df, group)
 
-mat_add_row_num <- function(df, ...) {
+mat_add_row_num <- function(df, ..., col_name = "n_row") {
+  col_namei = rlang::enquo(col_name)
   group_vars <- rlang::enquos(...)
   if(length(group_vars)!=0) {
     if(dplyr::is_grouped_df(df)) stop("Data already grouped, stop.")
@@ -183,10 +185,11 @@ mat_add_row_num <- function(df, ...) {
   }
 
   df %>%
-    dplyr::mutate(n_row = 1:n()) %>%
+    dplyr::mutate(!!col_namei := 1:n()) %>%
     dplyr::ungroup()
 
 }
+
 
 
 

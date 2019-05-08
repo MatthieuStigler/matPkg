@@ -4,10 +4,12 @@
 \alias{mat_add_row_num}
 \title{Add row number}
 \usage{
-mat_add_row_num(df, ...)
+mat_add_row_num(df, ..., col_name = "n_row")
 }
 \arguments{
 \item{df}{data}
+
+\item{col_name}{Name of the new col, defaults to n_row}
 
 \item{\ldots}{group by variables}
 }
