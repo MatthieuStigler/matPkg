@@ -163,6 +163,21 @@ mat_add_perc <- function(df, ..., .name =n, warn_grouped = TRUE) {
   res
 }
 
+#' Change column names
+#'
+#' @param df data
+#' @param pattern,replacement See str_replace
+#' @export
+#' @examples
+#' library(dplyr)
+#' iris %>%
+#'   mat_cols_change("Sepal", "pal") %>%
+#'   head()
+mat_cols_change <- function(df, pattern, replacement) {
+  colnames(df) <-  str_replace(colnames(df), pattern, replacement)
+  df
+}
+
 
 #' Add row number
 #'
