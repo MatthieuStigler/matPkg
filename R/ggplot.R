@@ -19,8 +19,8 @@
 mat_col_facet <-  function(pl, pal = c("#FFD400", "#267000"), side = c("top", "side")) {
 
   strip_nam <-  switch(match.arg(side),
-                       "top" = "strip-t",
-                       "side" = "strip-r")
+                       "top" = "strip-t|strip-b",
+                       "side" = "strip-r|strip-l")
 
   g <- ggplot2::ggplot_gtable(ggplot2::ggplot_build(pl))
 
