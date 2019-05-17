@@ -34,8 +34,11 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
              str_replace("_", "\\.") %>%
              str_replace_all("_", "") %>%
              as.numeric(),
-           yaml = map(.data$full_path, mat_parse_yaml),
-           has_yaml=map_lgl(.data$yaml, ~ !rlang::is_empty(.)),
+           yaml = map(.data$full_path, ~purrr::safely(mat_parse_yaml)(.))) %>%
+  mat_safely_unnest(col_name=.data$yaml, result_name="yaml") %>%
+    # rename(has_error_parse=.data$has_error,
+    #        error_parse=error) %>%
+    mutate(has_yaml=map_lgl(.data$yaml, ~ !rlang::is_empty(.)),
            has_runMat  = map2_lgl(.data$has_yaml, .data$yaml, ~if(.x)  "runMat" %in% names(.y) else FALSE ),
            runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
     select(-.data$full_path, .data$full_path)
