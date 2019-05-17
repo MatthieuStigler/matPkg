@@ -15,5 +15,6 @@ mat_list_Rfiles(dir_path, no_old = TRUE)
 List yaml of R scripts
 }
 \examples{
-mat_list_Rfiles("R")
+mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
+
 }
