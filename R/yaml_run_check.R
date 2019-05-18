@@ -51,16 +51,23 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
 #' Run files from a df-df
 #'
 #' @param df the df of files, from mat_list_Rfiles()
+#' @param echo print shich file done, and gc?
+#' @examples
+#' files_df <- mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
+#' mat_run_Rfiles(files_df, echo=TRUE)
 #' @export
-mat_run_Rfiles <- function(df) {
+mat_run_Rfiles <- function(df, echo=FALSE) {
   df %>%
-    mutate(try = map(.data$full_path, ~purrr::safely(source_throw)(.))) %>%
+    mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
            has_error= map_lgl(.data$error, ~!is.null(.)),
            error=map_chr(.data$error, ~ifelse(is.null(.), NA, .) %>% as.character),
            timing = map2(.data$try, .data$has_error, ~if(.y) df_null else .x$result)) %>%
-    unnest(.data$timing)
-    # select("filename", "try", "has_error", "error")
+    unnest(.data$timing) %>%
+    select("filename", "has_error", "error",
+           "user.self", "sys.self", "elapsed", "user.child", "sys.child",
+           tidyselect::everything())
+
 }
 
 #' Show memory usage, by object
@@ -82,13 +89,18 @@ df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.
 
 as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
 
-source_throw <- function(path) {
+source_throw <- function(path, echo=TRUE) {
+  if(echo) print(paste("Doing file", path))
   env_random <-  new.env()
   sys <- system.time(sys.source(path, envir = env_random))
   ls_env <- ls(envir = env_random)
   rm(list = ls_env, envir = env_random)
   rm(env_random)
-  gc()
+  a <- gc()
+  if(echo) {
+    print(a)
+    print(paste("Done with file", path))
+  }
   t(data.matrix(sys)) %>%
     as.data.frame() %>%
     as_tibble()

@@ -4,11 +4,17 @@
 \alias{mat_run_Rfiles}
 \title{Run files from a df-df}
 \usage{
-mat_run_Rfiles(df)
+mat_run_Rfiles(df, echo = FALSE)
 }
 \arguments{
 \item{df}{the df of files, from mat_list_Rfiles()}
+
+\item{echo}{print shich file done, and gc?}
 }
 \description{
 Run files from a df-df
+}
+\examples{
+files_df <- mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
+mat_run_Rfiles(files_df, echo=TRUE)
 }
