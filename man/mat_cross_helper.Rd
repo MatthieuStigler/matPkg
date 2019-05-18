@@ -4,7 +4,8 @@
 \alias{mat_cross_helper}
 \title{Crossing with helpers}
 \usage{
-mat_cross_helper(df, args, wide = FALSE, remove_NA = TRUE)
+mat_cross_helper(df, args, wide = TRUE, remove_NA = TRUE,
+  replace_all = "all")
 }
 \arguments{
 \item{df}{data}
@@ -14,13 +15,18 @@ mat_cross_helper(df, args, wide = FALSE, remove_NA = TRUE)
 \item{wide}{to wide?}
 
 \item{remove_NA}{Are NAs in unequal data lenghts to be removed?}
+
+\item{replace_all}{Value for the .all column}
 }
 \description{
 Crossing with helpers
 }
 \examples{
+mat_cross_helper(df=warpbreaks, args =list(wool=c("A"),
+                           tension = c("L", "H")), wide=FALSE)
 mat_cross_helper(warpbreaks, list(wool=c("A"),
-                           tension = c("L", "H")))
-mat_cross_helper(warpbreaks, list(wool=c("A"),
-                           tension = c(".each")))
+                           tension = c(".each", ".all")), wide=FALSE)
+mat_cross_helper(df=warpbreaks, args = list(wool=c("A"),
+                           tension = c(".each", ".all")),
+                           wide=TRUE)
 }
