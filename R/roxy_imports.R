@@ -19,10 +19,10 @@ NULL
 #' @importFrom purrr safely quietly map_int map map_dbl map_chr map_lgl map2_lgl map2
 NULL
 
-#' @importFrom tidyselect one_of
+#' @importFrom tidyselect one_of everything
 NULL
 
-#' @importFrom rlang .data :=
+#' @importFrom rlang .data := enquo enquos
 NULL
 
 #' @importFrom ggplot2 ggplot aes geom_col facet_grid geom_errorbar

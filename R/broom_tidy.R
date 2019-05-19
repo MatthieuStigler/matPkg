@@ -115,3 +115,32 @@ mat_tidy_robust <-  function(x, vcov. = NULL, conf.int = TRUE, df = NULL, parm =
   }
   res
 }
+
+#' Tidy on a df of regs with col reg_out
+#'
+#' @param df data
+#' @param reg_col name of column with regs?
+#' @export
+#' @examples
+#' library(purrr)
+#' library(dplyr)
+#' library(tidyr)
+#'
+#' iris_regs <- nest(iris, data=-Species) %>%
+#' mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) %>%
+#' select(-data)
+#'
+#' mat_tidy_do(df=iris_regs)
+mat_tidy_do <- function(df, reg_col = reg_out) {
+  df %>%
+    mat_add_row_num(col_name = "n_reg") %>%
+    mutate(coef_out = map(!!rlang::enquo(reg_col), broom::tidy, conf.int=TRUE)) %>%
+    select(-!!enquo(reg_col)) %>%
+    unnest(.data$coef_out) %>%
+    mat_tidy_clean() %>%
+    select("n_reg", tidyselect::everything())
+}
+
+
+mat_lm_means_tidy <-  function(df_nest, val_name = values, clean = TRUE) {
+}
