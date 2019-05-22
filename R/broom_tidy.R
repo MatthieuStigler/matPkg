@@ -142,5 +142,3 @@ mat_tidy_do <- function(df, reg_col = reg_out) {
 }
 
 
-mat_lm_means_tidy <-  function(df_nest, val_name = values, clean = TRUE) {
-}
