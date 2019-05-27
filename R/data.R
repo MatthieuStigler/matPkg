@@ -1,6 +1,33 @@
 #' Trim a df by quantiles
 #'
 #' @param df The df
+#' @param \ldots the group_by variables
+#' @param .print Print bad output?
+#' @examples
+#' mat_is_unique_combo(iris, Sepal.Length, Sepal.Width, Petal.Width, Petal.Length, Species)
+#' @export
+mat_is_unique_combo <- function(df, ..., .print=TRUE) {
+  df_c <- df %>%
+    dplyr::add_count(!!!enquos(...), name = "n_occur")
+  is_unique <- all(df_c$n_occur==1)
+  if(!is_unique) {
+    cat("Not unique!\n")
+    res <- dplyr::filter(df_c, .data$n_occur>1) %>%
+      select(.data$n_occur, everything()) %>%
+      mat_remo_cols_1val()
+    if(.print) print(res)
+  } else {
+    cat("Is unique!\n")
+    res <- df %>%
+      dplyr::count(!!!enquos(...), name = "n_occur")
+  }
+  invisible(is_unique)
+}
+
+
+#' Trim a df by quantiles
+#'
+#' @param df The df
 #' @param .value_var the column of values
 #' @param \ldots the group_by variables
 #' @param .probs quantile probs
