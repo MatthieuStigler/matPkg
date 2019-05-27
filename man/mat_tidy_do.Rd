@@ -4,12 +4,14 @@
 \alias{mat_tidy_do}
 \title{Tidy on a df of regs with col reg_out}
 \usage{
-mat_tidy_do(df, reg_col = reg_out)
+mat_tidy_do(df, reg_col = reg_out, ...)
 }
 \arguments{
 \item{df}{data}
 
 \item{reg_col}{name of column with regs?}
+
+\item{\ldots}{futher arguments passed to tidy}
 }
 \description{
 Tidy on a df of regs with col reg_out

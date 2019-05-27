@@ -120,6 +120,7 @@ mat_tidy_robust <-  function(x, vcov. = NULL, conf.int = TRUE, df = NULL, parm =
 #'
 #' @param df data
 #' @param reg_col name of column with regs?
+#' @param \ldots futher arguments passed to tidy
 #' @export
 #' @examples
 #' library(purrr)
@@ -131,10 +132,10 @@ mat_tidy_robust <-  function(x, vcov. = NULL, conf.int = TRUE, df = NULL, parm =
 #' select(-data)
 #'
 #' mat_tidy_do(df=iris_regs)
-mat_tidy_do <- function(df, reg_col = reg_out) {
+mat_tidy_do <- function(df, reg_col = reg_out, ...) {
   df %>%
     mat_add_row_num(col_name = "n_reg") %>%
-    mutate(coef_out = map(!!rlang::enquo(reg_col), broom::tidy, conf.int=TRUE)) %>%
+    mutate(coef_out = map(!!rlang::enquo(reg_col), function(x) broom::tidy(x, conf.int=TRUE, ...))) %>%
     select(-!!enquo(reg_col)) %>%
     unnest(.data$coef_out) %>%
     mat_tidy_clean() %>%
