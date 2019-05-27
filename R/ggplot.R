@@ -38,19 +38,49 @@ mat_col_facet <-  function(pl, pal = c("#FFD400", "#267000"), side = c("top", "s
 }
 
 
-gg_th_title <- ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
-                              plot.subtitle = ggplot2::element_text(hjust = 0.5))
-gg_th_legend <- ggplot2::theme(legend.position="bottom")
-gg_th_legend_bottom <- ggplot2::theme(legend.position="bottom")
-gg_th_legend_none <- ggplot2::theme(legend.position="none")
+#' ggplot2 helpers
+#'
+#' Gives  a bunch of different helpers
+#' @name gg_helpers
+#' @aliases mat_gg_helpers
+NULL
 
-gg_th_scale_perc <- ggplot2::scale_x_continuous(labels = scales::percent)
-gg_th_scale_isperc <- ggplot2::scale_x_continuous(labels = function(x) paste0(x, "%"))
 
-gg_th_scale_Y_isperc <- ggplot2::scale_y_continuous(labels = function(x) paste0(x, "%"))
-gg_th_scale_X_isperc <- ggplot2::scale_x_continuous(labels = function(x) paste0(x, "%"))
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_abline_01 <-  ggplot2::geom_abline(slope = 1, intercept = 0, linetype = 2)
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_legend_bottom <- ggplot2::theme(legend.position="bottom")
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_legend_none <- ggplot2::theme(legend.position="none")
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_title_center <- ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+                                      plot.subtitle = ggplot2::element_text(hjust = 0.5))
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_scale_Y_toperc <- ggplot2::scale_y_continuous(labels = scales::percent)
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_scale_X_toperc <- ggplot2::scale_x_continuous(labels = scales::percent)
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_scale_Y_isperc <- ggplot2::scale_y_continuous(labels = function(x) paste0(x, "%"))
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_scale_X_isperc <- ggplot2::scale_x_continuous(labels = function(x) paste0(x, "%"))
 
 gg_th_axisY_thousand  <- ggplot2::scale_y_continuous(labels=function(x) format(x, big.mark = "'", scientific = FALSE))
 gg_th_axisX_thousand  <- ggplot2::scale_x_continuous(labels=function(x) format(x, big.mark = "'", scientific = FALSE))
 
-gg_add_abline_01 <-  ggplot2::geom_abline(slope = 1, intercept = 0)
+

@@ -4,7 +4,7 @@
 \alias{mat_lm_means_tidy}
 \title{Compute means by lm, tidy, unnest}
 \usage{
-mat_lm_means_tidy(df_nest, val_name = values, clean = TRUE)
+mat_lm_means_tidy(df_nest, val_name = value, clean = TRUE)
 }
 \arguments{
 \item{df_nest}{a nested df}
