@@ -90,7 +90,7 @@ df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.
 as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
 
 source_throw <- function(path, echo=TRUE) {
-  if(echo) print(paste("Doing file", path))
+  if(echo) print(paste("\nDoing file", path))
   env_random <-  new.env()
   sys <- system.time(sys.source(path, envir = env_random))
   ls_env <- ls(envir = env_random)
@@ -98,12 +98,30 @@ source_throw <- function(path, echo=TRUE) {
   rm(env_random)
   a <- gc()
   if(echo) {
-    print(a)
-    print(paste("Done with file", path))
+    print(as.character.bytes(pryr::mem_used()))
+    cat(paste("Done with file", path, "\n"))
   }
   t(data.matrix(sys)) %>%
     as.data.frame() %>%
     as_tibble()
+}
+
+#' As character for bytes
+#'
+#' Simply copied from pryr:::print.bytes
+#' @noRd
+as.character.bytes <- function (x, digits = 3, ...) {
+  power <- min(floor(log(abs(x), 1000)), 4)
+  if (power < 1) {
+    unit <- "B"
+  }
+  else {
+    unit <- c("kB", "MB", "GB", "TB")[[power]]
+    x <- x/(1000^power)
+  }
+  formatted <- format(signif(x, digits = digits), big.mark = ",",
+                      scientific = FALSE)
+  paste(formatted,  unit)
 }
 
 if(FALSE) {
