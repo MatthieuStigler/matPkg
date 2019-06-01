@@ -14,7 +14,7 @@ mat_is_unique_combo <- function(df, ..., .print=TRUE) {
     cat("Not unique!\n")
     res <- dplyr::filter(df_c, .data$n_occur>1) %>%
       select(.data$n_occur, everything()) %>%
-      mat_remo_cols_1val()
+      mat_remo_cols_1val(.data$n_occur)
     if(.print) print(res)
   } else {
     cat("Is unique!\n")
