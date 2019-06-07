@@ -58,14 +58,15 @@ mat_df_trim_quant <- function(df, .value_var, ..., .probs =c(0.02, 0.98), na.rm 
 #'
 #' Add either sum, or Total (if not numeric)
 #' @param df the data-frame
+#' @param fun function, Defaults to sum
 #' @export
 #' @examples
 #' data(iris)
 #' iris$Species <- as.character(iris$Species)
 #' mat_add_total_row(iris[1:5,])
-mat_add_total_row <- function(df) {
+mat_add_total_row <- function(df, fun=sum) {
   df %>%
-    bind_rows(summarise_all(df, funs(if(is.numeric(.)) sum(., na.rm=TRUE) else if(is.logical(.)) NA else "Total")))
+    bind_rows(summarise_all(df, list(~if(is.numeric(.)) fun(., na.rm=TRUE) else if(is.logical(.)) NA else "Total")))
 }
 
 
