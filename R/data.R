@@ -15,7 +15,18 @@ mat_is_unique_combo <- function(df, ..., .print=TRUE) {
     res <- dplyr::filter(df_c, .data$n_occur>1) %>%
       select(.data$n_occur, everything()) %>%
       mat_remo_cols_1val(.data$n_occur)
-    if(.print) print(res)
+
+    ## first group
+    res_groups <- dplyr::filter(df_c, .data$n_occur>1) %>%
+      mutate(group = dplyr::group_indices(., !!!enquos(...))) %>%
+      select(.data$group, everything()) %>%
+      filter(.data$group==1) %>%
+      mat_remo_cols_1val()
+
+    if(.print) {
+      print(res_groups)
+      print(utils::head(res, 5))
+    }
   } else {
     cat("Is unique!\n")
     res <- df %>%
