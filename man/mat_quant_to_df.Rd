@@ -5,18 +5,21 @@
 \alias{quant_to_df}
 \title{Convert quantile() output to df}
 \usage{
-mat_quant_to_df(x)
+mat_quant_to_df(x, long = FALSE)
 
 quant_to_df(x)
 }
 \arguments{
 \item{x}{output from quantile}
+
+\item{long}{Use long format?}
 }
 \description{
 Convert quantile() output to df
 }
 \examples{
-library(magrittr)
 X <- runif(100)
-quantile(X, probs=0.975) \%>\% mat_quant_to_df()
+q <- quantile(X, probs= c(0.001, 0.975))
+mat_quant_to_df(q)
+mat_quant_to_df(q, long=TRUE)
 }

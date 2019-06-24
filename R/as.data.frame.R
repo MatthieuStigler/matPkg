@@ -4,15 +4,24 @@ as.data.frame.density <- function(x, ...) data.frame(x=x$x, y=x$y, ...)
 
 #' Convert quantile() output to df
 #' @param x output from quantile
+#' @param long Use long format?
 #' @examples
-#' library(magrittr)
 #' X <- runif(100)
-#' quantile(X, probs=0.975) %>% mat_quant_to_df()
+#' q <- quantile(X, probs= c(0.001, 0.975))
+#' mat_quant_to_df(q)
+#' mat_quant_to_df(q, long=TRUE)
 #' @export
-mat_quant_to_df <- function(x) {
-  x %>%
+mat_quant_to_df <- function(x, long=FALSE) {
+  q_vals <- stringr::str_remove(names(x), "%")
+  res <- x %>%
     bind_rows() %>%
-    magrittr::set_colnames(paste("q_", stringr::str_replace_all(colnames(.), "%|\\.", ""), sep=""))
+    magrittr::set_colnames(paste("q_", stringr::str_remove(q_vals, "\\."), sep=""))
+  if(long){
+    res <- res %>%
+      gather("quantile", "value", everything()) %>%
+      mutate(quantile = as.numeric(q_vals))
+  }
+  res
 }
 
 #' @export
