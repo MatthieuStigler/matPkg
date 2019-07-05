@@ -4,6 +4,7 @@
 #' @param df_nest a nested df
 #' @param val_name name of value column
 #' @param clean Clean the broom colnames?
+#' @param vcov. Specify vcov
 #' @examples
 #' library(magrittr)
 #' library(magrittr)
@@ -12,14 +13,15 @@
 #'   tidyr::nest(-Species) %>%
 #'   mat_lm_means_tidy(Petal.Width)
 #' @export
-mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE) {
+mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NULL) {
   val_name_pr <-  rlang::enquo(val_name)
 
   res <- df_nest %>%
     mutate(reg = map(.data$data, ~lm(value ~ 1, data = rename(., value = !!val_name_pr))),
            n = map_int(.data$data, nrow)) %>%
     ungroup() %>%
-    mutate(reg_out = map(.data$reg, ~broom::tidy(., conf.int = TRUE))) %>%
+    mutate(reg_out = map(.data$reg, ~lmtest::coeftest(., vcov. = vcov.) %>%
+                           broom::tidy(conf.int = TRUE))) %>%
     unnest(.data$reg_out) %>%
     select(-.data$reg, -.data$data, -.data$term)
   if(clean) res <-  res %>%
