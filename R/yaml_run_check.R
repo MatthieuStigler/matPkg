@@ -21,12 +21,13 @@ mat_parse_yaml <- function(file_path, encoding = getOption("encoding")){
 #'
 #' @param dir_path directory of files
 #' @param no_old Avoid scripts in directory old?
+#' @param recursive Look into recursive folders?
 #' @examples
 #' mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
 #'
 #' @export
-mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
-  dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE)
+mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
+  dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE, recursive = recursive)
 
   res <- dir_df %>%
     mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
@@ -44,7 +45,7 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
            runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
     select(-.data$full_path, .data$full_path)
   if(no_old) res <-  res %>%
-    filter(!stringr::str_detect(.data$full_path, "old/"))
+    filter(!stringr::str_detect(.data$full_path, "old.*/"))
   res
 }
 

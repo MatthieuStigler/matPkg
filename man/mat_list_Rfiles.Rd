@@ -4,12 +4,14 @@
 \alias{mat_list_Rfiles}
 \title{List yaml of R scripts}
 \usage{
-mat_list_Rfiles(dir_path, no_old = TRUE)
+mat_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
 }
 \arguments{
 \item{dir_path}{directory of files}
 
 \item{no_old}{Avoid scripts in directory old?}
+
+\item{recursive}{Look into recursive folders?}
 }
 \description{
 List yaml of R scripts
