@@ -1,4 +1,4 @@
-#' Colour facets og ggplot
+#' Colour facets of ggplot
 #'
 #' @param pl plot
 #' @param pal palette
