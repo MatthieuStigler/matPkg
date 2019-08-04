@@ -145,3 +145,27 @@ mat_tidy_do <- function(df, reg_col = reg_out, ...) {
 }
 
 
+#' Remove reg details
+#'
+#' @param df data
+#' @examples
+#' library(purrr)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(tidyr)
+#'
+#' iris_regs <- nest(iris, data=-Species) %>%
+#' mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) %>%
+#' select(-data)
+#'
+#' coefs_out <- mat_tidy_do(df=iris_regs)
+#' mat_tidy_keep_estimate(coefs_out)
+#' mat_tidy_keep_estimate(df= freeny)
+#' @export
+mat_tidy_keep_estimate <- function(df){
+  cols_rem <- c("p_value", "std_error", "statistic", "p_value", "conf_low", "conf_high", "n")
+  cols_here <- which(cols_rem %in% colnames(df))
+  if(length(cols_here)==0) {
+    return(df)
+  }
+  df[, - which(colnames(df) %in%cols_rem)]
+}
