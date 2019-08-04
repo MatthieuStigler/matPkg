@@ -29,3 +29,12 @@
 #' @docType data
 #' @format A tibble
 "quick_stats"
+
+
+#' Coef out when used from mat_tidy_do
+#'
+#' Same
+#' @name coefs_out_iris
+#' @docType data
+#' @format A tibble
+"coefs_out_iris"
