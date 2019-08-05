@@ -18,27 +18,23 @@
 #' @export
 mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, angle = 0, x_var=term, scales = "fixed") {
 
-  print(quo_is_null(enquo(fac1_var)))
-  print(quo_is_null(enquo(fac2_var)))
 
-  if(quo_is_null(enquo(fac1_var))) fac1_var_b <- missing_arg() else fac1_var_b <- fac1_var
-  if(quo_is_null(enquo(fac2_var))) fac2_var_b <- missing_arg() else fac2_var_b <- fac2_var
+  grps <- rlang::enquos(x_var,  fill_var, fac1_var, fac2_var, .ignore_empty = "all")
+  grps <- grps[purrr::map_lgl(grps, ~ !rlang::quo_is_null(.))]
 
   ## Check if unique?
   df_check <- df %>%
-    dplyr::count(!!enquo(x_var), !!enquo(fill_var), {{fac1_var_b}}, !!enquo(fac2_var_b))
+    dplyr::count(!!!grps)
 
-  print("OK")
   ## if not unique: print message
   if(any(df_check$n>1)) {
     warning("Problem: too many values!?")
     hideMe <- df %>%
       mat_tidy_keep_estimate() %>%
       dplyr::select(-.data$estimate) %>%
-      mat_is_unique_combo(!!enquo(x_var), !!enquo(fill_var), !!enquo(fac1_var), !!enquo(fac2_var), .print=TRUE)
+      mat_is_unique_combo(!!!grps, .print=TRUE)
   }
 
-  print("OK")
   out <- df %>%
     ggplot2::ggplot(aes(x=!!enquo(x_var), y= .data$estimate, fill=!!enquo(fill_var), colour=!!enquo(fill_var)))+
     ggplot2::geom_col(position = "dodge") +
@@ -47,82 +43,16 @@ mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL,
     ggplot2::geom_errorbar(aes(ymin=.data$conf_low, ymax = .data$conf_high), position = "dodge", colour = I("black")) +
     ggplot2::xlab(rlang::quo_text(enquo(x_var))) + ggplot2::ylab("Coefficient")
 
-  print("OK")
   ## facet_grid: needs 3,2
-  if(is.null(!!enquo(fac1_var)) & is.null(!!enquo(fac2_var)))  {
-    if(packageVersion("ggplot2")<"3.2.0") warning("Needs ggplot 3.2")
+  if(rlang::quo_is_null(enquo(fac1_var)) & rlang::quo_is_null(enquo(fac2_var)))  {
+    if(utils::packageVersion("ggplot2")<"3.2.0") warning("Needs ggplot 3.2")
     return(out)
   }
 
-  print("OK")
-  out + gr
-
+  out +
+    facet_grid(rows= if(rlang::quo_is_null(enquo(fac1_var))) NULL else rlang::enquos(fac1_var),
+               cols= if(rlang::quo_is_null(enquo(fac2_var))) NULL else rlang::enquos(fac2_var))
 }
-
-
-check <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, angle = 0, x_var=term, scales = "fixed") {
-
-  print(rlang::is_empty(fac1_var))
-  print(rlang::is_missing(fac1_var))
-  ## Check if unique?
-  df_check <- df %>%
-    dplyr::count(!!enquo(x_var), !!enquo(fill_var), !!enquo(fac1_var))
-}
-
-check(coefs_out_iris)
-
-
-library(dplyr)
-
-dt <- data.frame(a = sample(LETTERS[1:2], 100, replace = TRUE), b = sample(LETTERS[3:4], 100, replace = TRUE), value = rnorm(100,5,1))
-
-f1 <- function(dt, a, b, c) {
-  dt %>%
-    mutate(c = ifelse(is_empty(c)==TRUE,NA,c)) %>%
-    group_by(a, b,c) %>%
-    summarise(mean = mean(value))
-}
-
-f1(dt, a = "a", b = "b",c=NULL)
-
-library(rlang)
-
-f1 <- function(dt, a, b, c) {
-
-  # print(is_empty(c))
-  # print(is_missing(c))
-  if(!is_missing(c) && is_empty(c)) c <- missing_arg()
-  # print(is_missing(c))
-
-  dt %>%
-    # mutate(c = ifelse(is_empty(c)==TRUE,NA,c)) %>%
-    group_by(a, b, {{c}}) %>%
-    summarise(mean = mean(value))
-}
-
-f1(dt, a = "a", b = "b")
-f1(dt, a = "a", b = "b", c=NULL)
-
-
-f2 <- function(dt, group_var1=a,  group_var2=NULL) {
-
-  group_var2_orig <- quo_get_expr(quo(group_var2))
-  print(quo_is_null(enquo(group_var2)))
-  if(quo_is_null(enquo(group_var2))) group_var2 <- missing_arg()
-
-  res <- dt %>%
-    count({{group_var1}}, {{group_var2}})
-  print(res)
-  ggplot(aes(x=a, y=n), data = res)+
-    geom_col()+
-    facet_grid(row={{group_var2_orig}})
-    # group_by({{group_var1}}, !!enquo(group_var2)) %>%
-    # summarise(mean = mean(value))
-}
-
-f2(dt, group_var1 = a)
-f2(dt, group_var1 = a, group_var2=NULL)
-f2(dt, group_var1 = a, group_var2=b)
-
-
-## wait for:
+## check online:
+## ggplot one: https://stackoverflow.com/questions/56309158/r-ggplot2-facet-grid-with-vars-how-to-handle-missing-argument
+## rlang NULL one: https://stackoverflow.com/questions/56309158/r-ggplot2-facet-grid-with-vars-how-to-handle-missing-argument

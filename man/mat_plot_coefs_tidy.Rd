@@ -4,8 +4,8 @@
 \alias{mat_plot_coefs_tidy}
 \title{Plot coefficients from tidy output}
 \usage{
-mat_plot_coefs_tidy(df, fill_var = term, fac1_var, fac2_var, angle = 0,
-  x_var = term, scales = "fixed")
+mat_plot_coefs_tidy(df, fill_var = term, fac1_var = NULL,
+  fac2_var = NULL, angle = 0, x_var = term, scales = "fixed")
 }
 \arguments{
 \item{df}{Data-frame}
