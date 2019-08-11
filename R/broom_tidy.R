@@ -4,6 +4,7 @@
 #' @param df_nest a nested df
 #' @param val_name name of value column
 #' @param clean Clean the broom colnames?
+#' @param vcov. Specify vcov
 #' @examples
 #' library(magrittr)
 #' data(iris_tb)
@@ -11,14 +12,15 @@
 #'   tidyr::nest(-Species) %>%
 #'   mat_lm_means_tidy(Petal.Width)
 #' @export
-mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE) {
+mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NULL) {
   val_name_pr <-  rlang::enquo(val_name)
 
   res <- df_nest %>%
     mutate(reg = map(.data$data, ~lm(value ~ 1, data = rename(., value = !!val_name_pr))),
            n = map_int(.data$data, nrow)) %>%
     ungroup() %>%
-    mutate(reg_out = map(.data$reg, ~broom::tidy(., conf.int = TRUE))) %>%
+    mutate(reg_out = map(.data$reg, ~lmtest::coeftest(., vcov. = vcov.) %>%
+                           broom::tidy(conf.int = TRUE))) %>%
     unnest(.data$reg_out) %>%
     select(-.data$reg, -.data$data, -.data$term)
   if(clean) res <-  res %>%
@@ -142,3 +144,27 @@ mat_tidy_do <- function(df, reg_col = reg_out, ...) {
 }
 
 
+#' Remove reg details
+#'
+#' @param df data
+#' @examples
+#' library(purrr)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(tidyr)
+#'
+#' iris_regs <- nest(iris, data=-Species) %>%
+#' mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) %>%
+#' select(-data)
+#'
+#' coefs_out <- mat_tidy_do(df=iris_regs)
+#' mat_tidy_keep_estimate(coefs_out)
+#' mat_tidy_keep_estimate(df= freeny)
+#' @export
+mat_tidy_keep_estimate <- function(df){
+  cols_rem <- c("p_value", "std_error", "statistic", "p_value", "conf_low", "conf_high", "n")
+  cols_here <- which(cols_rem %in% colnames(df))
+  if(length(cols_here)==0) {
+    return(df)
+  }
+  df[, - which(colnames(df) %in%cols_rem)]
+}

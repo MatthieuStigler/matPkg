@@ -21,12 +21,13 @@ mat_parse_yaml <- function(file_path, encoding = getOption("encoding")){
 #'
 #' @param dir_path directory of files
 #' @param no_old Avoid scripts in directory old?
+#' @param recursive Look into recursive folders?
 #' @examples
 #' mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
 #'
 #' @export
-mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
-  dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE)
+mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
+  dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE, recursive = recursive)
 
   res <- dir_df %>%
     mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
@@ -44,7 +45,7 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE) {
            runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
     select(-.data$full_path, .data$full_path)
   if(no_old) res <-  res %>%
-    filter(!stringr::str_detect(.data$full_path, "old/"))
+    filter(!stringr::str_detect(.data$full_path, "old.*/"))
   res
 }
 
@@ -124,6 +125,43 @@ as.character.bytes <- function (x, digits = 3, ...) {
   paste(formatted,  unit)
 }
 
+#' Show problems in 999 file
+#' @param df data from 999
+#' @export
+mat_99_showErr <- function(df) {
+  df_probs <- df %>%
+    dplyr::filter(.data$has_error)
+
+  print(df_probs %>%
+    dplyr::select(.data$filename, .data$error) )
+
+  print(df_probs %>%
+          dplyr::pull(.data$error))
+}
+
+
+#' Write output of 999 file
+#' @param df datd from 999
+#' @param dir Directory
+#' @export
+mat_99_write <- function(df, dir) {
+  file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep="/") %>%
+    str_replace("//", "/")
+  is_there <- file.exists(file_out)
+  today <- Sys.Date() %>% as.character()
+
+  df %>%
+    dplyr::select_if(~!is.list(.)) %>%
+    mutate(session = today,
+           session = dplyr::if_else(duplicated(.data$session), "", today),
+           date = today,
+           time = Sys.time() %>% as.character()) %>%
+    select(date, .data$time, everything()) %>%
+    readr::write_csv(file_out, append=.data$is_there)
+
+}
+
+
 if(FALSE) {
   library(matPkg)
   library(tidyverse)
@@ -132,9 +170,14 @@ if(FALSE) {
   dir
   out <- mat_run_Rfiles(dir)
   out
+  mat_99_showErr(out)
+  mat_99_write(out, dir = "inst")
   out %>%
     filter(has_error) %>%
     select(filename, error)
+
+
   rm(heavy_vec)
+  file.remove("inst/999_CHECK_RUN_report.csv")
 
 }

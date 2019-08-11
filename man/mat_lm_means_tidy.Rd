@@ -4,7 +4,8 @@
 \alias{mat_lm_means_tidy}
 \title{Compute means by lm, tidy, unnest}
 \usage{
-mat_lm_means_tidy(df_nest, val_name = value, clean = TRUE)
+mat_lm_means_tidy(df_nest, val_name = value, clean = TRUE,
+  vcov. = NULL)
 }
 \arguments{
 \item{df_nest}{a nested df}
@@ -12,6 +13,8 @@ mat_lm_means_tidy(df_nest, val_name = value, clean = TRUE)
 \item{val_name}{name of value column}
 
 \item{clean}{Clean the broom colnames?}
+
+\item{vcov.}{Specify vcov}
 }
 \description{
 This returns a clean df of means for each group
