@@ -139,9 +139,33 @@ mat_99_showErr <- function(df) {
           dplyr::pull(.data$error))
 }
 
+#' Write output of 999 file
+#' @param df data from 999
+#' @export
+mat_99_check_there <- function(dir) {
+  file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep="/") %>%
+    str_replace("//", "/")
+  is_there <- file.exists(file_out)
+  if(is_there) {
+    cols_need <- c("session", "filename", "has_error", "error", "user.self", "sys.self",
+                   "elapsed", "user.child", "sys.child", "ext", "number_char", "number",
+                   "error_parse", "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
+                   "elapsed_before", "first_num", "date", "time")
+    file_old <- read_csv(file_out)
+    problems(file_old)
+    if(!all(cols_need %in% colnames(file_old))){
+      warning("Problems in data!")
+      cols_miss <- cols_need[!cols_need %in% colnames(file_old)]
+      file_old[cols_miss] <- NA
+      file_old <- file_old %>%
+        select(cols_need)
+      # write(file_old, )
+    }
+  }
+}
 
 #' Write output of 999 file
-#' @param df datd from 999
+#' @param df data from 999
 #' @param dir Directory
 #' @export
 mat_99_write <- function(df, dir) {
