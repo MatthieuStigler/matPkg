@@ -149,14 +149,17 @@ mat_99_write <- function(df, dir) {
     str_replace("//", "/")
   is_there <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
+  time <- Sys.time() %>%
+    format(format="%H:%M:%S") %>%
+    as.character()
 
   df %>%
     dplyr::select_if(~!is.list(.)) %>%
-    mutate(session = today,
-           session = dplyr::if_else(duplicated(.data$session), "", today),
+    mutate(session = time,
+           session = dplyr::if_else(duplicated(.data$session), "", session),
            date = today,
            time = Sys.time() %>% as.character()) %>%
-    select(date, .data$time, everything()) %>%
+    select(.data$session, everything()) %>%
     readr::write_csv(file_out, append=is_there)
 
 }
