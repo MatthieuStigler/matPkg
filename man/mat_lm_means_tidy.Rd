@@ -23,6 +23,6 @@ This returns a clean df of means for each group
 library(magrittr)
 data(iris_tb)
 iris_tb \%>\%
-  tidyr::nest(-Species) \%>\%
+  tidyr::nest(data=-Species) \%>\%
   mat_lm_means_tidy(Petal.Width)
 }

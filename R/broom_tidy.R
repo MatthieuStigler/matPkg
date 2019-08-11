@@ -9,7 +9,7 @@
 #' library(magrittr)
 #' data(iris_tb)
 #' iris_tb %>%
-#'   tidyr::nest(-Species) %>%
+#'   tidyr::nest(data=-Species) %>%
 #'   mat_lm_means_tidy(Petal.Width)
 #' @export
 mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NULL) {
