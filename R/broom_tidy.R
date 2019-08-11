@@ -6,7 +6,6 @@
 #' @param clean Clean the broom colnames?
 #' @examples
 #' library(magrittr)
-#' library(magrittr)
 #' data(iris_tb)
 #' iris_tb %>%
 #'   tidyr::nest(-Species) %>%

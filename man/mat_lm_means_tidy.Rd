@@ -18,7 +18,6 @@ This returns a clean df of means for each group
 }
 \examples{
 library(magrittr)
-library(magrittr)
 data(iris_tb)
 iris_tb \%>\%
   tidyr::nest(-Species) \%>\%
