@@ -20,7 +20,7 @@ mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NU
            n = map_int(.data$data, nrow)) %>%
     ungroup() %>%
     mutate(reg_out = map(.data$reg, ~lmtest::coeftest(., vcov. = vcov.) %>%
-                           broom::tidy(conf.int = TRUE))) %>%
+                           tidy.coeftest(conf.int = TRUE))) %>%
     unnest(.data$reg_out) %>%
     select(-.data$reg, -.data$data, -.data$term)
   if(clean) res <-  res %>%
