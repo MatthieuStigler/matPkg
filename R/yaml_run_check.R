@@ -157,7 +157,7 @@ mat_99_write <- function(df, dir) {
            date = today,
            time = Sys.time() %>% as.character()) %>%
     select(date, .data$time, everything()) %>%
-    readr::write_csv(file_out, append=.data$is_there)
+    readr::write_csv(file_out, append=is_there)
 
 }
 
