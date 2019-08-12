@@ -7,7 +7,7 @@
 mat_99_check_there(dir)
 }
 \arguments{
-\item{df}{data from 999}
+\item{dir}{main directory}
 }
 \description{
 Write output of 999 file

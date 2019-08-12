@@ -140,7 +140,7 @@ mat_99_showErr <- function(df) {
 }
 
 #' Write output of 999 file
-#' @param df data from 999
+#' @param dir main directory
 #' @export
 mat_99_check_there <- function(dir) {
   file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep="/") %>%
@@ -152,15 +152,15 @@ mat_99_check_there <- function(dir) {
                    "error_parse", "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
                    # "elapsed_before", "first_num",
                    "date", "time")
-    file_old <- read_csv(file_out, col_types = cols())
-    problems(file_old)
+    file_old <- readr::read_csv(file_out, col_types = readr::cols())
+    # problems(file_old)
     if(!all(cols_need %in% colnames(file_old))){
       cols_miss <- cols_need[!cols_need %in% colnames(file_old)]
       warning("Problems in data! Missing: ", paste(cols_miss, collapse = " "))
       file_old[cols_miss] <- NA
       file_old <- file_old %>%
         select(cols_need)
-      write_csv(file_old, dir)
+      readr::write_csv(file_old, dir)
     }
   }
   is_there
@@ -182,7 +182,8 @@ mat_99_write <- function(df, dir) {
   df %>%
     dplyr::select_if(~!is.list(.)) %>%
     mutate(session = today,
-           session = dplyr::if_else(duplicated(.data$session), "", session),
+           session = dplyr::if_else(duplicated(.data$session), "", .data$session),
+           session_time = sum(.data$elapsed, na.rm=TRUE),
            date = today,
            time = Sys.time() %>% as.character()) %>%
     select(.data$session, everything()) %>%
