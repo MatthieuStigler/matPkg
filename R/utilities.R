@@ -19,7 +19,20 @@ mat_check_0row <-  function(df, message_ok ="OK") {
 }
 
 
-#' Show method called on object
+#' remove duplicated in vector
+#' @param x vector
+#' @param fill which value to use
+#' @param warn SHould warn for non-sorted?
+#' @examples
+#' mat_keep_first(rep(1:3, 1:3))
+#' @export
+mat_keep_first <- function(x, fill="", warn = TRUE) {
+  if(is.factor(x)) x <-  as.character(x)
+  if(!all(sort(x)==x) & warn) warning("Make sure sorted output?")
+  ifelse(duplicated(x), fill, x)
+}
+
+2#' Show method called on object
 #' @param generic the generic
 #' @param \ldots the object on which to use the generic
 #' @export
