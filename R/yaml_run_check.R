@@ -91,7 +91,7 @@ df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.
 as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
 
 source_throw <- function(path, echo=TRUE) {
-  if(echo) print(paste("\nDoing file", path))
+  if(echo) cat(paste("\nDoing file: ", basename(path)))
   env_random <-  new.env()
   sys <- system.time(sys.source(path, envir = env_random))
   ls_env <- ls(envir = env_random)
@@ -181,7 +181,7 @@ mat_99_write <- function(df, dir) {
 
   df %>%
     dplyr::select_if(~!is.list(.)) %>%
-    mutate(session = time,
+    mutate(session = today,
            session = dplyr::if_else(duplicated(.data$session), "", session),
            date = today,
            time = Sys.time() %>% as.character()) %>%
