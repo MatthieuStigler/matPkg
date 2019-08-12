@@ -150,18 +150,20 @@ mat_99_check_there <- function(dir) {
     cols_need <- c("session", "filename", "has_error", "error", "user.self", "sys.self",
                    "elapsed", "user.child", "sys.child", "ext", "number_char", "number",
                    "error_parse", "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
-                   "elapsed_before", "first_num", "date", "time")
-    file_old <- read_csv(file_out)
+                   # "elapsed_before", "first_num",
+                   "date", "time")
+    file_old <- read_csv(file_out, col_types = cols())
     problems(file_old)
     if(!all(cols_need %in% colnames(file_old))){
-      warning("Problems in data!")
       cols_miss <- cols_need[!cols_need %in% colnames(file_old)]
+      warning("Problems in data! Missing: ", paste(cols_miss, collapse = " "))
       file_old[cols_miss] <- NA
       file_old <- file_old %>%
         select(cols_need)
-      # write(file_old, )
+      write_csv(file_old, dir)
     }
   }
+  is_there
 }
 
 #' Write output of 999 file
