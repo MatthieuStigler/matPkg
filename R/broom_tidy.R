@@ -129,8 +129,8 @@ mat_tidy_robust <-  function(x, vcov. = NULL, conf.int = TRUE, df = NULL, parm =
 #' library(tidyr)
 #'
 #' iris_regs <- nest(iris, data=-Species) %>%
-#' mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) %>%
-#' select(-data)
+#'   mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) %>%
+#'   select(-data)
 #'
 #' mat_tidy_do(df=iris_regs)
 mat_tidy_do <- function(df, reg_col = reg_out, ...) {

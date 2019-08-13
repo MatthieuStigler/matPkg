@@ -22,8 +22,8 @@ library(dplyr)
 library(tidyr)
 
 iris_regs <- nest(iris, data=-Species) \%>\%
-mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) \%>\%
-select(-data)
+  mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) \%>\%
+  select(-data)
 
 mat_tidy_do(df=iris_regs)
 }
