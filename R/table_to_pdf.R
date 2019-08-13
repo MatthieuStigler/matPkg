@@ -52,3 +52,13 @@ mat_table_to_pdf <- function(x, filename = "input.tex", clean=TRUE, quiet=TRUE,
 #' @export
 #' @rdname mat_table_to_pdf
 table_to_pdf <-  function(x) .Deprecated("mat_table_to_pdf")
+
+
+# mat_pdf_to_png <-  function(path) {
+#   if(!file.exists(path)) stop("File not found")
+#   if(!str_detect(path, "\\.pdf")) stop("File not pdf?")
+#   file_out <-
+#   mat_list_dir(getwd(), pattern = "pdf", recursive = FALSE) %>%
+#     mutate(path_out = paste("convert -flatten-density 150", full_path,  "-quality 90",  str_replace(full_path, "pdf", "png")))%$%
+#     map(path_out, system)
+# }
