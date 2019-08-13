@@ -32,3 +32,6 @@ mat_table_to_pdf(tab_xt, filename = "filename_test")
 file.remove("filename_test.pdf")
 }
 }
+\seealso{
+\code{\link{mat_pdf_to_png}}
+}

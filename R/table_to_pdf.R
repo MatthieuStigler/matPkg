@@ -5,6 +5,7 @@
 #'@param filename output name
 #'@param clean,quiet passed to tools::texi2pdf
 #'@param plus additional lattex stuff
+#'@seealso  \code{\link{mat_pdf_to_png}}
 #'@examples
 #'\dontrun{
 #'tab <-  data.frame(variable= c("A", "B"), stat = c("mean"), value = 1:2)
@@ -53,12 +54,33 @@ mat_table_to_pdf <- function(x, filename = "input.tex", clean=TRUE, quiet=TRUE,
 #' @rdname mat_table_to_pdf
 table_to_pdf <-  function(x) .Deprecated("mat_table_to_pdf")
 
+#' Convert pdf to png
+#'
+#' @param path path of file
+#' @param density,quality parameters to convert
+#' @param echo should show command?
+#' @export
+#' @examples
+#'   pdf("try.pdf")
+#'   plot(1, col = "green")
+#'   dev.off()
+#'   mat_pdf_to_png("try.pdf")
+#'   file.remove(c("try.pdf", "try.png"))
 
-# mat_pdf_to_png <-  function(path) {
-#   if(!file.exists(path)) stop("File not found")
-#   if(!str_detect(path, "\\.pdf")) stop("File not pdf?")
-#   file_out <-
-#   mat_list_dir(getwd(), pattern = "pdf", recursive = FALSE) %>%
-#     mutate(path_out = paste("convert -flatten-density 150", full_path,  "-quality 90",  str_replace(full_path, "pdf", "png")))%$%
-#     map(path_out, system)
-# }
+mat_pdf_to_png <-  function(path, density = 150, quality = 90, echo=TRUE) {
+  if(!file.exists(path)) stop("File not found")
+  if(!stringr::str_detect(path, "\\.pdf")) stop("File not pdf?")
+  path_out <- stringr::str_replace(path, "\\.pdf", ".png")
+  cmd <-  paste("convert -flatten -density",  density, path,  "-quality",  quality,  path_out)
+  if(echo) print(cmd)
+  system(cmd)
+
+}
+
+if(FALSE) {
+  pdf("try.pdf")
+  plot(1, col = "green")
+  dev.off()
+  mat_pdf_to_png("try.pdf")
+  file.remove(c("try.pdf", "try.png"))
+}
