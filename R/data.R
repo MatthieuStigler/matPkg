@@ -1,5 +1,6 @@
-#' Trim a df by quantiles
+#' What are combinations of dataset?
 #'
+#'Check if the data is uniquely determiend by (n=1) for given variables
 #' @param df The df
 #' @param \ldots the group_by variables
 #' @param .print Print bad output?
@@ -11,7 +12,7 @@ mat_is_unique_combo <- function(df, ..., .print=TRUE) {
     dplyr::add_count(!!!enquos(...), name = "n_occur")
   is_unique <- all(df_c$n_occur==1)
   if(!is_unique) {
-    cat("Not unique!\n")
+    cat("Not unique! Some combinations have n>1\n")
     res <- dplyr::filter(df_c, .data$n_occur>1) %>%
       select(.data$n_occur, everything()) %>%
       mat_remo_cols_1val(.data$n_occur)

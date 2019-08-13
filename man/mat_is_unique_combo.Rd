@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.R
 \name{mat_is_unique_combo}
 \alias{mat_is_unique_combo}
-\title{Trim a df by quantiles}
+\title{What are combinations of dataset?}
 \usage{
 mat_is_unique_combo(df, ..., .print = TRUE)
 }
@@ -14,7 +14,7 @@ mat_is_unique_combo(df, ..., .print = TRUE)
 \item{\ldots}{the group_by variables}
 }
 \description{
-Trim a df by quantiles
+Check if the data is uniquely determiend by (n=1) for given variables
 }
 \examples{
 mat_is_unique_combo(iris, Sepal.Length, Sepal.Width, Petal.Width, Petal.Length, Species)
