@@ -129,26 +129,43 @@ mat_99_showErr <- function(df) {
 
 #' Write output of 999 file
 #' @param dir main directory
+#' @param overwrite should overwtie data?
 #' @export
-mat_99_check_there <- function(dir) {
-  file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep="/") %>%
+mat_99_check_there <- function (dir, overwrite=TRUE) {
+  file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
     str_replace("//", "/")
   is_there <- file.exists(file_out)
-  if(is_there) {
-    cols_need <- c("session", "filename", "has_error", "error", "user.self", "sys.self",
-                   "elapsed", "user.child", "sys.child", "ext", "number_char", "number",
-                   "error_parse", "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
-                   # "elapsed_before", "first_num",
+  if (is_there) {
+    cols_need <- c("session", "session_time",
+                   "filename", "has_error", "error",
+                   "user.self", "sys.self", "elapsed", "user.child",
+                   "sys.child", "ext", "number_char", "number", "error_parse",
+                   "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
+                   "full_path",
                    "date", "time")
     file_old <- readr::read_csv(file_out, col_types = readr::cols())
-    # problems(file_old)
-    if(!all(cols_need %in% colnames(file_old))){
+    if (!all(cols_need %in% colnames(file_old))) {
       cols_miss <- cols_need[!cols_need %in% colnames(file_old)]
-      warning("Problems in data! Missing: ", paste(cols_miss, collapse = " "))
+      if("session" %in% cols_miss && !"date" %in% cols_miss) {
+        cols_miss <-  cols_miss[-which(cols_miss=="session")]
+        file_old <-  file_old %>%
+          mutate(session=date,
+                 session = mat_keep_first(as.character(session)))
+      }
+      warning("Problems in data! Missing: ", paste(cols_miss,
+                                                   collapse = " "))
       file_old[cols_miss] <- NA
-      file_old <- file_old %>%
-        select(cols_need)
-      readr::write_csv(file_old, dir)
+      file_old <- file_old %>% select(cols_need)
+      print(file_old)
+      if(overwrite) readr::write_csv(file_old, file_out)
+    }
+    if(!all(cols_need == colnames(file_old))){
+      print("Change order")
+      if(overwrite) {
+        file_old %>%
+          select(cols_need) %>%
+          readr::write_csv(file_out)
+      }
     }
   }
   is_there
@@ -174,7 +191,7 @@ mat_99_write <- function(df, dir) {
            session_time = sum(.data$elapsed, na.rm=TRUE),
            date = today,
            time = Sys.time() %>% as.character()) %>%
-    select(.data$session, everything()) %>%
+    select(.data$session, .data$session_time, everything()) %>%
     readr::write_csv(file_out, append=is_there)
 
 }
@@ -189,7 +206,11 @@ if(FALSE) {
   out <- mat_run_Rfiles(dir)
   out
   mat_99_showErr(out)
+  mat_99_check_there("inst/", overwrite=FALSE)
+  mat_99_check_there("inst/", overwrite=TRUE)
   mat_99_write(out, dir = "inst")
+  read_csv("inst/999_CHECK_RUN_report.csv")
+
   out %>%
     filter(has_error) %>%
     select(filename, error)

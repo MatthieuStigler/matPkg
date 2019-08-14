@@ -4,7 +4,7 @@
 \alias{mat_99_check_there}
 \title{Write output of 999 file}
 \usage{
-mat_99_check_there(dir)
+mat_99_check_there(dir, overwrite = TRUE)
 }
 \arguments{
 \item{dir}{main directory}
