@@ -51,7 +51,8 @@ mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL,
 
   out +
     facet_grid(rows= if(rlang::quo_is_null(enquo(fac1_var))) NULL else rlang::enquos(fac1_var),
-               cols= if(rlang::quo_is_null(enquo(fac2_var))) NULL else rlang::enquos(fac2_var))
+               cols= if(rlang::quo_is_null(enquo(fac2_var))) NULL else rlang::enquos(fac2_var),
+               scales = scales)
 }
 ## check online:
 ## ggplot one: https://stackoverflow.com/questions/56309158/r-ggplot2-facet-grid-with-vars-how-to-handle-missing-argument
