@@ -82,6 +82,40 @@ mat_add_total_row <- function(df, fun=sum) {
 }
 
 
+#' Add rowSums over some variables
+#'
+#' If not specified, over all numeric columns
+#' @param df data
+#' @param \ldots variables
+#' @examples
+#' library(dplyr)
+#' df <- data.frame(Char = c("A", "B"),
+#'                  var_1 = c(1,2),
+#'                  var_2=c(1,2),
+#'                  other = c(9,10))
+#' mat_add_total_col(df)
+#' mat_add_total_col(df, var_1)
+#' mat_add_total_col(df, -var_1, -Char)
+#' mat_add_total_col(df, starts_with("var"))
+#' mat_add_total_col(df, starts_with("not found"))
+#' @export
+mat_add_total_col <- function(df, ...) {
+
+  if(length(rlang::quos(...))>0){
+    vars <- tidyselect::vars_select(dplyr::tbl_vars(df), !!!rlang::enquos(...))
+    df_sum <- df %>%
+      select(vars)
+  } else {
+    df_sum <- df %>%
+      dplyr::select_if(is.numeric)
+  }
+  if(ncol(df_sum)==0) {
+    warning("No variable selected!?")
+  }
+  df %>%
+    mutate(Total = rowSums(df_sum))
+}
+
 
 #' Spread data with TRUE/FALSE (from count)
 #' @param df data
