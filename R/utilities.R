@@ -46,3 +46,24 @@ mat_find_method <- function(generic, ...) {
   for(m in utils::methods(ch)) assign(sub(ch, "X", m, fixed = TRUE), "body<-"(f, value = m))
   X(...)
 }
+
+#' Check number even
+#'
+#' @param x vector
+#' @export
+#' @examples
+#' vec <-  1:6
+#' names(vec) <-  vec
+#' mat_check_even(vec)
+mat_check_even <- function(x) !as.logical(round(x)%%2)
+
+if(FALSE){
+  # should round first?
+  # abs(sqrt(x)^2%%2-0)<0.0000001
+  vec <-  1:6
+  names(vec) <-  vec
+
+  setNames(mat_check_even(vec), names(vec))
+  setNames(mat_check_even(sqrt(vec)^2), names(vec))
+  abs(sqrt(vec)^2%%2-0)<0.0000001
+}
