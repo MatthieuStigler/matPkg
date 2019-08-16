@@ -8,6 +8,8 @@ mat_99_check_there(dir, overwrite = TRUE)
 }
 \arguments{
 \item{dir}{main directory}
+
+\item{overwrite}{should overwrite data?}
 }
 \description{
 Write output of 999 file

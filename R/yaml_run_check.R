@@ -129,7 +129,7 @@ mat_99_showErr <- function(df) {
 
 #' Write output of 999 file
 #' @param dir main directory
-#' @param overwrite should overwtie data?
+#' @param overwrite should overwrite data?
 #' @export
 mat_99_check_there <- function (dir, overwrite=TRUE) {
   file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
@@ -150,7 +150,7 @@ mat_99_check_there <- function (dir, overwrite=TRUE) {
         cols_miss <-  cols_miss[-which(cols_miss=="session")]
         file_old <-  file_old %>%
           mutate(session=date,
-                 session = mat_keep_first(as.character(session)))
+                 session = mat_keep_first(as.character(.data$session)))
       }
       warning("Problems in data! Missing: ", paste(cols_miss,
                                                    collapse = " "))
