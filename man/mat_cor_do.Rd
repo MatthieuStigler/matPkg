@@ -37,3 +37,6 @@ ggplot(aes(x = variable, y= variable2, fill = estimate), data = mat_cor_do(x)) +
    geom_text(aes(label = estimate_pval)) +
    scale_fill_gradient2()
 }
+\seealso{
+\code{\link{mat_cor_to_df}}
+}

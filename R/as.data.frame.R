@@ -58,6 +58,7 @@ if(FALSE){
 #'   cor()  %>%
 #'   mat_cor_to_df()
 #' @export
+#' @seealso \code{\link{mat_cor_do}}
 mat_cor_to_df <- function(x, long=TRUE)  {
   rownames_x <- rownames(x)
   if(long) x[!lower.tri(x)] <- 999

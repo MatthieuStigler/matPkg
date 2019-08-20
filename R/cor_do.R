@@ -24,6 +24,7 @@
 #'    scale_fill_gradient2()
 
 #' @export
+#' @seealso \code{\link{mat_cor_to_df}}
 mat_cor_do <- function(df, add_stars = TRUE, digits = 2, ...){
 
 

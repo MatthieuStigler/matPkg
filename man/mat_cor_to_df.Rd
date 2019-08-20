@@ -23,3 +23,6 @@ iris_tb \%>\%
   cor()  \%>\%
   mat_cor_to_df()
 }
+\seealso{
+\code{\link{mat_cor_do}}
+}
