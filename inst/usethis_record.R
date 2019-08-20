@@ -7,7 +7,7 @@ path <- "/home/matifou/gitReps/my_github/matPkg"
 # create_package(path)
 
 
-use_package("tidyr", "Imports")
+use_package("tidyr", "Imports", min_version = "0.8.31")
 use_package("broom", "Imports")
 use_package("dplyr", "Imports")
 use_package("ggplot2", "Imports")
