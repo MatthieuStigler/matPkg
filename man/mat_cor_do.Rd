@@ -4,21 +4,36 @@
 \alias{mat_cor_do}
 \title{compute correlations among all variables}
 \usage{
-mat_cor_do(df, ...)
+mat_cor_do(df, add_stars = TRUE, digits = 2, ...)
 }
 \arguments{
 \item{df}{data}
 
-\item{\ldots}{further argumetns passed to \code{\link{cor.test}}}
+\item{add_stars}{Add column \code{p_value_chr} with stars?}
+
+\item{digits}{if \code{add_stars}, digits to round?}
+
+\item{\ldots}{further arguments passed to \code{\link{cor.test}}}
 }
 \description{
 compute correlations among all variables
 }
 \examples{
-x <- data.frame(matrix(rnorm(500), ncol=5))
-colnames(x) <-  letters[1:5]
+x1 <- rnorm(100)
+x2 <- 0.2 * x1 + rnorm(100)
+x3 <- 0.9 * x1 + rnorm(100, sd=0.1)
+x4 <- rnorm(100)
+x <- data.frame(x1, x2, x3, x4)
 
 mat_cor_do(x)
+mat_cor_do(x, add_stars = TRUE)[, c(1,2,3,4,5,11)]
 mat_cor_do(x, method = "kendall")
-mat_cor_do(x, method = "kendall", alternative = "greater")
+mat_cor_do(x, method = "kendall", alternative = "greater", add_stars = TRUE)
+
+## plot
+library(ggplot2)
+ggplot(aes(x = variable, y= variable2, fill = estimate), data = mat_cor_do(x)) +
+   geom_tile() +
+   geom_text(aes(label = estimate_pval)) +
+   scale_fill_gradient2()
 }
