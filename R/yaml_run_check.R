@@ -144,6 +144,8 @@ mat_99_check_there <- function (dir, overwrite=TRUE) {
                    "full_path",
                    "date", "time")
     file_old <- readr::read_csv(file_out, col_types = readr::cols())
+
+    ## add columns if needed
     if (!all(cols_need %in% colnames(file_old))) {
       cols_miss <- cols_need[!cols_need %in% colnames(file_old)]
       if("session" %in% cols_miss && !"date" %in% cols_miss) {
@@ -159,13 +161,25 @@ mat_99_check_there <- function (dir, overwrite=TRUE) {
       print(file_old)
       if(overwrite) readr::write_csv(file_old, file_out)
     }
+    ## reorder columns if needed
     if(!all(cols_need == colnames(file_old))){
       print("Change order")
-      if(overwrite) {
-        file_old %>%
-          select(cols_need) %>%
-          readr::write_csv(file_out)
-      }
+      file_old <- file_old %>%
+        select(cols_need)
+      if(overwrite)  readr::write_csv(file_old, file_out)
+    }
+    ## add session_time if not there
+    if(any(!is.na(file_old$session) & is.na(file_old$session_time))) {
+      print("Some session_time missing?")
+
+      file_old <- file_old %>%
+        group_by(.data$time) %>%
+        mutate(session_time = ifelse(!is.na(.data$session_time),
+                                     .data$session_time,
+                                     sum(.data$elapsed, na.rm=TRUE)),
+               session_time = mat_keep_first(.data$session_time)) %>%
+        ungroup()
+      if(overwrite)  readr::write_csv(file_old, file_out)
     }
   }
   is_there
