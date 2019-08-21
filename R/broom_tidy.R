@@ -52,7 +52,9 @@ mat_tidy_clean <- function(df) {
 #' @param fac_1,fac_2 vars for facetting
 #' @export
 mat_tidy_coef_plot <- function(df, x_var, fill_var, fac_1=NULL, fac_2=NULL) {
-  warning("Deprecated! Should use mat_plot_coefs_tidy instead")
+  warning("Deprecated! Should use mat_plot_coefs_tidy instead:
+          - OLD: mat_tidy_coef_plot(df, x_var, fill_var, fac_1=NULL, fac_2=NULL) {
+          - NEW: mat_plot_coefs_tidy(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, x_var=term)")
   x_var <- rlang::enquo(x_var)
   fill_var <- rlang::enquo(fill_var)
   fac_1 <- rlang::enquo(fac_1)

@@ -35,13 +35,22 @@ mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL,
       mat_is_unique_combo(!!!grps, .print=TRUE)
   }
 
+
+
   out <- df %>%
     ggplot2::ggplot(aes(x=!!enquo(x_var), y= .data$estimate, fill=!!enquo(fill_var), colour=!!enquo(fill_var)))+
     ggplot2::geom_col(position = "dodge") +
     ggplot2::theme(axis.text.x  = ggplot2::element_text(angle = angle)) +
     ggplot2::theme(legend.position = "bottom") +
-    ggplot2::geom_errorbar(aes(ymin=.data$conf_low, ymax = .data$conf_high), position = "dodge", colour = I("black")) +
     ggplot2::xlab(rlang::quo_text(enquo(x_var))) + ggplot2::ylab("Coefficient")
+
+  ## add error bar if se provided
+  has_se <- all(c("conf_low", "conf_high") %in% colnames(df))
+  if(has_se) {
+    out <- out+
+      ggplot2::geom_errorbar(aes(ymin=.data$conf_low, ymax = .data$conf_high), position = "dodge", colour = I("black"))
+
+  }
 
   ## facet_grid: needs 3,2
   if(rlang::quo_is_null(enquo(fac1_var)) & rlang::quo_is_null(enquo(fac2_var)))  {
