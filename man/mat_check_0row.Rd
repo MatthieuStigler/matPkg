@@ -4,16 +4,26 @@
 \alias{mat_check_0row}
 \title{Check 0 rows}
 \usage{
-mat_check_0row(df, message_ok = "OK")
+mat_check_0row(df, message_ok = "OK", warn_message = NULL,
+  stop_message = NULL)
 }
 \arguments{
 \item{df}{data}
 
 \item{message_ok}{the ok message}
+
+\item{warn_message}{message if only wants wanr}
+
+\item{stop_message}{message when stopping}
 }
 \description{
 Check 0 rows
 }
 \examples{
 mat_check_0row(df=subset(iris, Species=="aaa"))
+mat_check_0row(df=subset(iris, Species=="setosa"), warn_message ="make sure no setosa?")
+\dontrun{
+  mat_check_0row(df=subset(iris, Species=="setosa"))
+  mat_check_0row(df=subset(iris, Species=="setosa"), stop_message ="Should not have setosa")
+}
 }
