@@ -2,10 +2,14 @@
 % Please edit documentation in R/data_group.R
 \name{mat_group_quantile}
 \alias{mat_group_quantile}
+\alias{mat_group_quantile_table}
 \title{Compute quantiles by group}
 \usage{
 mat_group_quantile(df, .value_var, ..., .probs = c(0.05, 0.25, 0.5, 0.75,
   0.95), na.rm = TRUE)
+
+mat_group_quantile_table(df, .value_var, ..., .breaks = c(0.05, 0.25,
+  0.5, 0.75, 0.95), wide = TRUE)
 }
 \arguments{
 \item{df}{The df}
@@ -16,6 +20,10 @@ mat_group_quantile(df, .value_var, ..., .probs = c(0.05, 0.25, 0.5, 0.75,
 
 \item{na.rm}{Remove NA when computing quantile?}
 
+\item{.breaks}{the breaks to compute table over}
+
+\item{wide}{should the table be wide?}
+
 \item{\ldots}{the group_by variables}
 }
 \description{
@@ -23,6 +31,7 @@ Compute quantiles by group
 }
 \examples{
 mat_group_quantile(iris, Petal.Width, Species)
+mat_group_quantile_table(iris, Petal.Width, Species, .breaks = c(0.2, 0.5, 1, Inf))
 }
 \seealso{
 \code{\link{mat_df_trim_quant}}
