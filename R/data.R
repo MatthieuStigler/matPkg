@@ -386,3 +386,26 @@ mat_slice_by <- function(df, N=100, ...) {
     ungroup()
 }
 
+#' Compare if dtasets are equal
+#'
+#'Merge, and for all identical variables, compare
+#' @param df1,df2 The two df to compare
+#' @param by the key variables
+#' @param join_fun the type of join
+#' @param tol tolerance value
+#' @examples
+#' library(dplyr)
+#' data(iris_tb)
+#' iris_orig <- mutate(iris_tb, row_num = 1:n())
+#' iris_new <- mutate(iris_orig, Sepal.Length =Sepal.Length+0.000001)
+#' mat_join_compare(df1=iris_orig, df2=iris_new, by = c("row_num", "Species"))
+#' mat_join_compare(df1=iris_orig, df2=iris_new, by =c("row_num", "Species"), tol = 0.00001)
+#' @export
+mat_join_compare <- function(df1, df2, by=NULL, join_fun = dplyr::inner_join, tol = 0.00000001) {
+  df1 %>%
+    join_fun(df2, by = by) %>%
+    tidyr::pivot_longer(tidyselect::matches("\\.x$|\\.y$"),
+                        names_to = c("variable", ".value"),
+                        names_pattern = "(.+)\\.(x$|y$)") %>%
+    filter(abs(.data$x-.data$y) >tol)
+}
