@@ -386,7 +386,7 @@ mat_slice_by <- function(df, N=100, ...) {
     ungroup()
 }
 
-#' Compare if dtasets are equal
+#' Compare if datasets are equal
 #'
 #'Merge, and for all identical variables, compare
 #' @param df1,df2 The two df to compare
@@ -408,4 +408,21 @@ mat_join_compare <- function(df1, df2, by=NULL, join_fun = dplyr::inner_join, to
                         names_to = c("variable", ".value"),
                         names_pattern = "(.+)\\.(x$|y$)") %>%
     filter(abs(.data$x-.data$y) >tol)
+}
+
+#' Compare if col_1 and col_2 equal
+#'
+#' Add a col diff
+#' @param df data
+#' @param col_1,col_2 The columns
+#' @param tol tolerance level
+#' @examples
+#' library(dplyr)
+#' data(iris_tb)
+#' mutate(iris_tb, Sepal.Length2 =Sepal.Length+rep(c(0.000001, 0), 75)) %>%
+#'   mat_col_check_same(Sepal.Length2, Sepal.Length)
+#' @export
+mat_col_check_same <- function(df, col_1, col_2, tol = 0.00000001) {
+  df %>%
+    mutate(is_same = abs({{col_1}}- {{col_2}}) < tol)
 }

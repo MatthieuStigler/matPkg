@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.R
 \name{mat_join_compare}
 \alias{mat_join_compare}
-\title{Compare if dtasets are equal}
+\title{Compare if datasets are equal}
 \usage{
 mat_join_compare(df1, df2, by = NULL, join_fun = dplyr::inner_join,
   tol = 1e-08)
