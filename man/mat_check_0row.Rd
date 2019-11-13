@@ -5,7 +5,7 @@
 \title{Check 0 rows}
 \usage{
 mat_check_0row(df, message_ok = "OK", warn_message = NULL,
-  stop_message = NULL)
+  stop_message = NULL, print_df = TRUE)
 }
 \arguments{
 \item{df}{data}
@@ -15,6 +15,8 @@ mat_check_0row(df, message_ok = "OK", warn_message = NULL,
 \item{warn_message}{message if only wants wanr}
 
 \item{stop_message}{message when stopping}
+
+\item{print_df}{print when error?}
 }
 \description{
 Check 0 rows

@@ -13,6 +13,7 @@ is_true <-  function(x) map_lgl(x, isTRUE)
 #' @param message_ok the ok message
 #' @param warn_message message if only wants wanr
 #' @param stop_message message when stopping
+#' @param print_df print when error?
 #' @examples
 #' mat_check_0row(df=subset(iris, Species=="aaa"))
 #' mat_check_0row(df=subset(iris, Species=="setosa"), warn_message ="make sure no setosa?")
@@ -22,13 +23,14 @@ is_true <-  function(x) map_lgl(x, isTRUE)
 #' }
 #'@export
 mat_check_0row <-  function(df, message_ok ="OK", warn_message = NULL,
-                            stop_message=NULL) {
+                            stop_message=NULL, print_df=TRUE) {
   if(nrow(df)==0) {
     return(message_ok)
   } else if(!is.null(warn_message)) {
     warning(warn_message)
   } else {
     if(is.null(stop_message)) stop_message <- "Does not have z rows!"
+    if(print_df) print(df)
     stop(stop_message)
   }
 }
