@@ -5,8 +5,8 @@
 \alias{table_to_pdf}
 \title{Convert a table to direct pdf}
 \usage{
-mat_table_to_pdf(x, filename = "input.tex", clean = TRUE,
-  quiet = TRUE,
+mat_table_to_pdf(x, filename = "input.tex", quiet = TRUE,
+  clean_tex = TRUE, clean_rest = TRUE,
   plus = "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}")
 
 table_to_pdf(x)
@@ -16,7 +16,9 @@ table_to_pdf(x)
 
 \item{filename}{output name}
 
-\item{clean, quiet}{passed to tools::texi2pdf}
+\item{quiet}{passed to tools::texi2pdf}
+
+\item{clean_tex, clean_rest}{Should remove other files, and tex too?}
 
 \item{plus}{additional lattex stuff}
 }
