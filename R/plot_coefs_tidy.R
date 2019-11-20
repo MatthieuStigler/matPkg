@@ -5,7 +5,7 @@
 #' @param fac1_var,fac2_var facet variable
 #' @param angle angle in \code{element_text()}
 #' @param x_var x variable, default term
-#' @param scales argument to \code{facet_grid}
+#' @param scales,fac_space argument to \code{facet_grid}
 #'
 #' @examples
 #' data(coefs_out_iris)
@@ -16,7 +16,8 @@
 #' ## handle duplicates
 #' mat_plot_coefs_tidy(coefs_out_iris)
 #' @export
-mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, angle = 0, x_var=term, scales = "fixed") {
+mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, angle = 0, x_var=term, scales = "fixed",
+                                fac_space = "fixed") {
 
 
   grps <- rlang::enquos(x_var,  fill_var, fac1_var, fac2_var, .ignore_empty = "all")
@@ -61,7 +62,7 @@ mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL,
   out +
     facet_grid(rows= if(rlang::quo_is_null(enquo(fac1_var))) NULL else rlang::enquos(fac1_var),
                cols= if(rlang::quo_is_null(enquo(fac2_var))) NULL else rlang::enquos(fac2_var),
-               scales = scales)
+               scales = scales, space=fac_space)
 }
 ## check online:
 ## ggplot one: https://stackoverflow.com/questions/56309158/r-ggplot2-facet-grid-with-vars-how-to-handle-missing-argument

@@ -5,7 +5,8 @@
 \title{Plot coefficients from tidy output}
 \usage{
 mat_plot_coefs_tidy(df, fill_var = term, fac1_var = NULL,
-  fac2_var = NULL, angle = 0, x_var = term, scales = "fixed")
+  fac2_var = NULL, angle = 0, x_var = term, scales = "fixed",
+  fac_space = "fixed")
 }
 \arguments{
 \item{df}{Data-frame}
@@ -18,7 +19,7 @@ mat_plot_coefs_tidy(df, fill_var = term, fac1_var = NULL,
 
 \item{x_var}{x variable, default term}
 
-\item{scales}{argument to \code{facet_grid}}
+\item{scales, fac_space}{argument to \code{facet_grid}}
 }
 \description{
 Plot coefficients from tidy output
