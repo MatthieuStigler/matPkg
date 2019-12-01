@@ -3,7 +3,6 @@
 \docType{package}
 \name{matPkg}
 \alias{matPkg}
-\alias{matPkg-package}
 \title{matPkg: Internal functions I use}
 \description{
 to do... can I get a list of functions? Just document them!

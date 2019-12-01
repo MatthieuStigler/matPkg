@@ -4,8 +4,13 @@
 \alias{mat_check_0row}
 \title{Check 0 rows}
 \usage{
-mat_check_0row(df, message_ok = "OK", warn_message = NULL,
-  stop_message = NULL, print_df = TRUE)
+mat_check_0row(
+  df,
+  message_ok = "OK",
+  warn_message = NULL,
+  stop_message = NULL,
+  print_df = TRUE
+)
 }
 \arguments{
 \item{df}{data}

@@ -4,8 +4,14 @@
 \alias{mat_df_trim_quant}
 \title{Trim a df by quantiles}
 \usage{
-mat_df_trim_quant(df, .value_var, ..., .probs = c(0.02, 0.98),
-  na.rm = TRUE, .rem_quants = TRUE)
+mat_df_trim_quant(
+  df,
+  .value_var,
+  ...,
+  .probs = c(0.02, 0.98),
+  na.rm = TRUE,
+  .rem_quants = TRUE
+)
 }
 \arguments{
 \item{df}{The df}

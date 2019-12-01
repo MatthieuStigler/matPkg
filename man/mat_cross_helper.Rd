@@ -4,8 +4,7 @@
 \alias{mat_cross_helper}
 \title{Crossing with helpers}
 \usage{
-mat_cross_helper(df, args, wide = TRUE, remove_NA = TRUE,
-  replace_all = "all")
+mat_cross_helper(df, args, wide = TRUE, remove_NA = TRUE, replace_all = "all")
 }
 \arguments{
 \item{df}{data}

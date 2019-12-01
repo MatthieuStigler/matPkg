@@ -5,9 +5,15 @@
 \alias{table_to_pdf}
 \title{Convert a table to direct pdf}
 \usage{
-mat_table_to_pdf(x, filename = "input.tex", quiet = TRUE,
-  clean_tex = TRUE, clean_rest = TRUE,
-  plus = "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}")
+mat_table_to_pdf(
+  x,
+  filename = "input.tex",
+  quiet = TRUE,
+  clean_tex = TRUE,
+  clean_rest = TRUE,
+ 
+    plus = "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}"
+)
 
 table_to_pdf(x)
 }

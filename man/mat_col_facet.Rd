@@ -4,8 +4,7 @@
 \alias{mat_col_facet}
 \title{Colour facets of ggplot}
 \usage{
-mat_col_facet(pl, pal = c("#FFD400", "#267000"), side = c("top",
-  "side"))
+mat_col_facet(pl, pal = c("#FFD400", "#267000"), side = c("top", "side"))
 }
 \arguments{
 \item{pl}{plot}

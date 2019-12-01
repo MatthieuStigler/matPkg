@@ -4,8 +4,13 @@
 \alias{mat_join_compare}
 \title{Compare if datasets are equal}
 \usage{
-mat_join_compare(df1, df2, by = NULL, join_fun = dplyr::inner_join,
-  tol = 1e-08)
+mat_join_compare(
+  df1,
+  df2,
+  by = NULL,
+  join_fun = dplyr::inner_join,
+  tol = 1e-08
+)
 }
 \arguments{
 \item{df1, df2}{The two df to compare}

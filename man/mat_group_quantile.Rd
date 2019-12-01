@@ -5,11 +5,21 @@
 \alias{mat_group_quantile_table}
 \title{Compute quantiles by group}
 \usage{
-mat_group_quantile(df, .value_var, ..., .probs = c(0.05, 0.25, 0.5, 0.75,
-  0.95), na.rm = TRUE)
+mat_group_quantile(
+  df,
+  .value_var,
+  ...,
+  .probs = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  na.rm = TRUE
+)
 
-mat_group_quantile_table(df, .value_var, ..., .breaks = c(0.05, 0.25,
-  0.5, 0.75, 0.95), wide = TRUE)
+mat_group_quantile_table(
+  df,
+  .value_var,
+  ...,
+  .breaks = c(0.05, 0.25, 0.5, 0.75, 0.95),
+  wide = TRUE
+)
 }
 \arguments{
 \item{df}{The df}

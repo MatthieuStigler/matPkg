@@ -4,8 +4,15 @@
 \alias{mat_tidy_robust}
 \title{Use tidy() with robust vcov directly}
 \usage{
-mat_tidy_robust(x, vcov. = NULL, conf.int = TRUE, df = NULL,
-  parm = NULL, level = 0.95, ...)
+mat_tidy_robust(
+  x,
+  vcov. = NULL,
+  conf.int = TRUE,
+  df = NULL,
+  parm = NULL,
+  level = 0.95,
+  ...
+)
 }
 \arguments{
 \item{x}{object for which hopfully there is a coeftst/vcov method}
