@@ -38,6 +38,29 @@ mat_col_facet <-  function(pl, pal = c("#FFD400", "#267000"), side = c("top", "s
 }
 
 
+#' geom_lm: enforce lm without se
+#'
+#' @param mapping,data,stat,position Unchanged
+#' @param formula,na.rm,show.legend,inherit.aes Unchanged
+#' @param method,se Arguments changed
+#' @param ... As in geom_smooth
+#' @examples
+#' library(ggplot2)
+#' ggplot(mpg, aes(displ, hwy)) +
+#'   geom_point() +
+#'   mat_geom_lm()
+#' @export
+mat_geom_lm <-  function(mapping = NULL, data = NULL, stat = "smooth", position = "identity",
+                         ..., method = "lm", formula = y ~ x, se = FALSE, na.rm = FALSE,
+                         show.legend = NA, inherit.aes = TRUE) {
+  ggplot2::geom_smooth(mapping = mapping, data = data, stat = stat, position = position,
+                       ..., method = method, formula = formula, se = se, na.rm = na.rm,
+                       show.legend = show.legend, inherit.aes = inherit.aes)
+}
+
+
+
+
 #' ggplot2 helpers
 #'
 #' Gives  a bunch of different helpers
