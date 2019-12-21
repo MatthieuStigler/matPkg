@@ -171,3 +171,32 @@ mat_tidy_keep_estimate <- function(df){
   }
   df[, - which(colnames(df) %in%cols_rem)]
 }
+
+
+#' Tidy and glance together
+#'
+#' @param reg regression object
+#' @param wide Do wide (removing pval, se, etc...)
+#' @examples
+#'
+#' reg <- lm(freeny)
+#' mat_tidy_glance(reg)
+#' mat_tidy_glance(reg, wide=FALSE)
+#' @export
+mat_tidy_glance <- function(reg, wide=TRUE) {
+  coefs <- broom::tidy(reg)
+  stats <- broom::glance(reg) %>%
+    select(.data$r.squared, .data$sigma, .data$deviance)
+
+  res <-   coefs %>%
+    cbind(stats) %>%
+    as_tibble %>%
+    mat_tidy_clean()
+
+  if(wide) {
+    res <- res %>%
+      select(-.data$std_error, -.data$statistic, -.data$p_value) %>%
+      spread(.data$term, .data$estimate)
+  }
+  res
+}
