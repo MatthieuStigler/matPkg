@@ -4,10 +4,9 @@ parse_yaml_front_matter = getFromNamespace("parse_yaml_front_matter", "rmarkdown
 
 #' Read YAML header to list
 #' @param file_path The file path
-#' @param encoding just in case
 #' @export
-mat_parse_yaml <- function(file_path, encoding = getOption("encoding")){
-  input_lines <- read_utf8(file_path, encoding)
+mat_parse_yaml <- function(file_path){
+  input_lines <- read_utf8(file_path)
   # input_lines <- rmarkdown:::read_lines_utf8(file_path, encoding)
   if (identical(tolower(tools::file_ext(file_path)), "r"))
     input_lines <- knitr::spin(text = input_lines, knit = FALSE)
