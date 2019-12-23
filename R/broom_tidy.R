@@ -200,3 +200,20 @@ mat_tidy_glance <- function(reg, wide=TRUE) {
   }
   res
 }
+
+#' Get coef as wide df
+#'
+#' @param reg regression object
+#' @examples
+#' reg <- lm(freeny)
+#' mat_coef_wide(reg)
+#' @export
+mat_coef_wide <- function(reg) {
+  res <- tibble::enframe(stats::coef(reg)) %>%
+    spread(.data$name, .data$value)
+  if("(Intercept)" %in% colnames(res) ) {
+    res <- res %>%
+      rename(Intercept="(Intercept)")
+  }
+  res
+}

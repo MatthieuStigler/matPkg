@@ -4,12 +4,10 @@
 \alias{mat_parse_yaml}
 \title{Read YAML header to list}
 \usage{
-mat_parse_yaml(file_path, encoding = getOption("encoding"))
+mat_parse_yaml(file_path)
 }
 \arguments{
 \item{file_path}{The file path}
-
-\item{encoding}{just in case}
 }
 \description{
 Read YAML header to list
