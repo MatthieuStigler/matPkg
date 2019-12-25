@@ -402,6 +402,10 @@ mat_slice_by <- function(df, N=100, ...) {
 #' mat_join_compare(df1=iris_orig, df2=iris_new, by =c("row_num", "Species"), tol = 0.00001)
 #' @export
 mat_join_compare <- function(df1, df2, by=NULL, join_fun = dplyr::inner_join, tol = 0.00000001) {
+  commonCols <- base::intersect(colnames(df1), colnames(df2))
+  new_cols <- setdiff(commonCols, by)
+  if(length(new_cols)==0) warning("New remaining common columns?")
+
   df1 %>%
     join_fun(df2, by = by) %>%
     tidyr::pivot_longer(tidyselect::matches("\\.x$|\\.y$"),
