@@ -2,17 +2,45 @@
 % Please edit documentation in R/yaml_run_check.R
 \name{mat_run_Rfiles}
 \alias{mat_run_Rfiles}
+\alias{mat_99_showErr}
+\alias{mat_99_check_there}
+\alias{mat_99_write}
+\alias{mat_99_arrange_by_last}
 \title{Run files from a df-df}
 \usage{
 mat_run_Rfiles(df, echo = FALSE)
+
+mat_99_showErr(df)
+
+mat_99_check_there(dir, overwrite = TRUE)
+
+mat_99_write(df, dir)
+
+mat_99_arrange_by_last(path_out, dat_files)
 }
 \arguments{
-\item{df}{the df of files, from mat_list_Rfiles()}
+\item{df}{data from 999}
 
 \item{echo}{print shich file done, and gc?}
+
+\item{dir}{Directory}
+
+\item{overwrite}{should overwrite data?}
+
+\item{path_out}{path of where 999_CHECK_RUN_report os}
+
+\item{dat_files}{current file with path to run}
 }
 \description{
 Run files from a df-df
+
+Show problems in 999 file
+
+Write output of 999 file
+
+Write output of 999 file
+
+If only appendix, arrange file by previous timings
 }
 \examples{
 files_df <- mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))

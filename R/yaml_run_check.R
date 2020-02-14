@@ -115,6 +115,7 @@ as.character.bytes <- function (x, digits = 3, ...) {
 #' Show problems in 999 file
 #' @param df data from 999
 #' @export
+#' @rdname mat_run_Rfiles
 mat_99_showErr <- function(df) {
   df_probs <- df %>%
     dplyr::filter(.data$has_error)
@@ -130,6 +131,7 @@ mat_99_showErr <- function(df) {
 #' @param dir main directory
 #' @param overwrite should overwrite data?
 #' @export
+#' @rdname mat_run_Rfiles
 mat_99_check_there <- function (dir, overwrite=TRUE) {
   file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
     str_replace("//", "/")
@@ -188,6 +190,7 @@ mat_99_check_there <- function (dir, overwrite=TRUE) {
 #' @param df data from 999
 #' @param dir Directory
 #' @export
+#' @rdname mat_run_Rfiles
 mat_99_write <- function(df, dir) {
   file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep="/") %>%
     str_replace("//", "/")
@@ -207,6 +210,30 @@ mat_99_write <- function(df, dir) {
     select(.data$session, .data$session_time, everything()) %>%
     readr::write_csv(file_out, append=is_there)
 
+}
+
+
+#' If only appendix, arrange file by previous timings
+#' @param path_out path of where 999_CHECK_RUN_report os
+#' @param dat_files current file with path to run
+#' @export
+#' @rdname mat_run_Rfiles
+mat_99_arrange_by_last <- function(path_out, dat_files) {
+
+  if(file.exists(path_out)) {
+    df_out <- readr::read_csv(path_out) %>%
+      filter(.data$time==max(.data$time))
+
+    dat_files <- dat_files %>%
+      left_join(df_out %>%
+                  select(.data$filename, .data$elapsed),
+                by = "filename") %>%
+      mutate(first_num = str_extract(.data$filename, "^[0-9]") %>% as.integer) %>%
+      arrange(.data$first_num, .data$elapsed) %>%
+      # rename(elapsed_before=elapsed)
+      select(-.data$elapsed, -.data$first_num)
+  }
+  dat_files
 }
 
 
