@@ -199,16 +199,31 @@ mat_99_write <- function(df, dir) {
   time <- Sys.time() %>%
     format(format="%H:%M:%S") %>%
     as.character()
+  user <- paste(Sys.info()[c("user", "nodename")], collapse = "_")
 
-  df %>%
+  ## add session info, etc
+  df_new <- df %>%
     dplyr::select_if(~!is.list(.)) %>%
     mutate(session = today,
            session = dplyr::if_else(duplicated(.data$session), "", .data$session),
            session_time = sum(.data$elapsed, na.rm=TRUE),
            date = today,
-           time = Sys.time() %>% as.character()) %>%
-    select(.data$session, .data$session_time, everything()) %>%
-    readr::write_csv(file_out, append=is_there)
+           time = Sys.time() %>% as.character(),
+           user_node =user) %>%
+    select(.data$session, .data$session_time, .data$user_node, everything())
+
+  ## update use if there!
+  if(is_there) {
+    file_before <- readr::read_csv(file_out, col_types = readr::cols())
+    if(!"user_node" %in% colnames(file_before)) {
+      file_before %>%
+        mutate(user_node = NA_character_) %>%
+        select(.data$session, .data$session_time, .data$user_node, everything()) %>%
+        readr::write_csv()
+    }
+  }
+
+  readr::write_csv(df_new, file_out, append=is_there)
 
 }
 
