@@ -219,7 +219,7 @@ mat_99_write <- function(df, dir) {
       file_before %>%
         mutate(user_node = NA_character_) %>%
         select(.data$session, .data$session_time, .data$user_node, everything()) %>%
-        readr::write_csv()
+        readr::write_csv(file_out)
     }
   }
 
