@@ -44,9 +44,10 @@ mat_check_0row <-  function(df, message_ok ="OK", warn_message = NULL,
 #' mat_keep_first(rep(1:3, 1:3))
 #' @export
 mat_keep_first <- function(x, fill="", warn = TRUE) {
-  if(is.factor(x)) x <-  as.character(x)
-  if(!all(sort(x)==x) & warn) warning("Make sure sorted output?")
-  ifelse(duplicated(x), fill, x)
+  # if(is.factor(x)) x <-  as.character(x)
+  x_char <- as.character(x)
+  if(!all(sort(x_char)==x_char) & warn) warning("Make sure sorted output?")
+  ifelse(duplicated(x_char), fill, x_char)
 }
 
 2#' Show method called on object

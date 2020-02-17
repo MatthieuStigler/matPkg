@@ -3,6 +3,7 @@
 \name{mat_run_Rfiles}
 \alias{mat_run_Rfiles}
 \alias{mat_99_showErr}
+\alias{mat_99_check_there_update}
 \alias{mat_99_check_there}
 \alias{mat_99_write}
 \alias{mat_99_arrange_by_last}
@@ -11,6 +12,8 @@
 mat_run_Rfiles(df, echo = FALSE)
 
 mat_99_showErr(df)
+
+mat_99_check_there_update(dir, overwrite = TRUE)
 
 mat_99_check_there(dir, overwrite = TRUE)
 

@@ -1,3 +1,6 @@
+## internals
+intrl_session_clean <- function(.data, var) dplyr::if_else(duplicated(.data$time), "", as.character({{var}}))
+
 #' @importFrom utils getFromNamespace
 read_utf8 = getFromNamespace("read_utf8", "rmarkdown")
 parse_yaml_front_matter = getFromNamespace("parse_yaml_front_matter", "rmarkdown")
@@ -132,17 +135,21 @@ mat_99_showErr <- function(df) {
 #' @param overwrite should overwrite data?
 #' @export
 #' @rdname mat_run_Rfiles
-mat_99_check_there <- function (dir, overwrite=TRUE) {
+mat_99_check_there_update <- function (dir, overwrite=TRUE) {
   file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
     str_replace("//", "/")
+  path_out_save <-file_out
+  # if(is_test) path_out_save <-  str_replace(path_out_save, "_report", "_report_TEST")"999_CHECK_RUN_report_TEST.csv" else
+
   is_there <- file.exists(file_out)
   if (is_there) {
     cols_need <- c("session", "session_time",
-                   "filename", "has_error", "error",
-                   "user.self", "sys.self", "elapsed", "user.child",
+                   "user_node",
+                   "filename", "subfolder",
+                   "error", "has_error",
+                   "elapsed", "user.self", "sys.self", "user.child",
                    "sys.child", "ext", "number_char", "number", "error_parse",
                    "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
-                   "full_path",
                    "date", "time")
     file_old <- readr::read_csv(file_out, col_types = readr::cols())
 
@@ -160,30 +167,66 @@ mat_99_check_there <- function (dir, overwrite=TRUE) {
       file_old[cols_miss] <- NA
       file_old <- file_old %>% select(cols_need)
       print(file_old)
-      if(overwrite) readr::write_csv(file_old, file_out)
+      if(overwrite)  {
+        readr::write_csv(file_old, file_out)
+        file_old <- readr::read_csv(file_out, col_types = readr::cols())
+      }
     }
+
+    ## Check too many columns?
+    if (!all(colnames(file_old) %in% cols_need )) {
+      cols_old_superflous <- colnames(file_old)[!colnames(file_old) %in% cols_need]
+      cols_old_necessary <- colnames(file_old)[colnames(file_old) %in% cols_need]
+      warning("Supplementary columns: ", paste(cols_old_superflous, collapse = ", "))
+      file_old <- file_old %>%
+        select(tidyselect::all_of(cols_old_necessary))
+    }
+
     ## reorder columns if needed
     if(!all(cols_need == colnames(file_old))){
       print("Change order")
       file_old <- file_old %>%
-        select(cols_need)
-      if(overwrite)  readr::write_csv(file_old, file_out)
+        select(tidyselect::all_of(cols_need))
+      if(overwrite)  {
+        readr::write_csv(file_old, file_out)
+        file_old <- readr::read_csv(file_out, col_types = readr::cols())
+      }
     }
-    ## add session_time if not there
-    if(any(!is.na(file_old$session) & is.na(file_old$session_time))) {
-      print("Some session_time missing?")
 
+    ## compute session_time if relevant columns there
+    if(all(c("time", "elapsed") %in% colnames(file_old))) {
       file_old <- file_old %>%
         group_by(.data$time) %>%
         mutate(session_time = ifelse(!is.na(.data$session_time),
                                      .data$session_time,
-                                     sum(.data$elapsed, na.rm=TRUE)),
-               session_time = mat_keep_first(.data$session_time)) %>%
+                                     round(sum(.data$elapsed, na.rm=TRUE)))) %>%
         ungroup()
-      if(overwrite)  readr::write_csv(file_old, file_out)
+      if(overwrite)  {
+        readr::write_csv(file_old, file_out)
+        # file_old <- readr::read_csv(file_out, col_types = readr::cols())
+      }
+    } else {
+      warning("Missing columns 'time' and 'elapsed'")
+    }
+
+    ## last run nake sure clean columns
+    if(overwrite)  {
+      readr::read_csv(file_out, col_types = readr::cols()) %>%
+        mutate(session_id = paste(.data$session, .data$session_time, sep="_"),
+               session = dplyr::if_else(duplicated(.data$session_id) | is.na(.data$session), "", as.character(.data$session))) %>%
+        select(-.data$session_id) %>%
+               # session_time = intrl_session_clean(., session_time)) %>%
+        readr::write_csv(file_out)
     }
   }
   is_there
+}
+
+#' @export
+#' @rdname mat_run_Rfiles
+mat_99_check_there <- function (dir, overwrite=TRUE) {
+  warning("Deprecated, use rather 'mat_99_check_there_update'")
+  mat_99_check_there_update(dir=dir, overwrite=overwrite)
 }
 
 #' Write output of 999 file
