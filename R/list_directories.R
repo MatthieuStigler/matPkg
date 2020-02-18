@@ -12,8 +12,8 @@
 mat_list_dir <- function(path, pattern = "\\.tif", recursive = TRUE, add_ext = FALSE, ...) {
 
   ## check
-  if(!file.exists(path)) stop("Missing folder?")
   if(str_detect(path, "%20")) path <- utils::URLdecode(path)
+  if(!file.exists(path)) stop("Missing folder?")
 
   ## read
   li <- list.files(path, full.names = TRUE, pattern=pattern, recursive = recursive, ...)
