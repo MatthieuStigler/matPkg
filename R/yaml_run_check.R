@@ -30,8 +30,7 @@ mat_parse_yaml <- function(file_path){
 }
 
 
-#' List yaml of R scripts
-#'
+
 #' @param dir_path directory of files
 #' @param no_old Avoid scripts in directory old?
 #' @param recursive Look into recursive folders?
@@ -67,7 +66,7 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
   mat_99_list_Rfiles(dir_path, no_old = no_old, recursive=recursive)
 }
 
-#' Run-check files 999
+#' Run-check files 999 machinery
 #'
 #' @param echo print which file done, and gc?
 #' @examples
@@ -91,9 +90,8 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' ## check output
 #' read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 #'
-#' ## rerun
-#' out2 <- mat_run_Rfiles(dir_dat)
-#' mat_99_write(out2, dir = path_temp)
+#' ## re-write
+#' mat_99_write(out, dir = path_temp)
 #' read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 #'
 #' ## check format
@@ -118,7 +116,7 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE) {
 #' @export
 mat_run_Rfiles <- function(scripts_file, echo=FALSE) {
   warning("Deprectaed, use rather 'mat_99_run_Rfiles'")
-  mat_run_Rfiles(scripts_file=scripts_file, echo=echo)
+  mat_99_run_Rfiles(scripts_file=scripts_file, echo=echo)
 }
 
 ## utilities (from: )
@@ -161,12 +159,10 @@ as.character.bytes <- function (x, digits = 3, ...) {
   paste(formatted,  unit)
 }
 
-#' Show problems in 999 file
-#' @param df data from 999
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_showErr <- function(df) {
-  df_probs <- df %>%
+mat_99_showErr <- function(scripts_file_runned) {
+  df_probs <- scripts_file_runned %>%
     dplyr::filter(.data$has_error)
 
   print(df_probs %>%
@@ -176,13 +172,11 @@ mat_99_showErr <- function(df) {
           dplyr::pull(.data$error))
 }
 
-#' Write output of 999 file
-#' @param dir main directory
 #' @param overwrite should overwrite data?
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_check_there_update <- function (dir="code_setup", overwrite=TRUE) {
-  file_out <- intrl_dir_to_file(dir)
+mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
+  file_out <- intrl_dir_to_file(dir_path)
 
   is_there <- file.exists(file_out)
   if (is_there) {
@@ -261,18 +255,16 @@ mat_99_check_there_update <- function (dir="code_setup", overwrite=TRUE) {
 
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_check_there <- function (dir, overwrite=TRUE) {
+mat_99_check_there <- function (dir_path, overwrite=TRUE) {
   warning("Deprecated, use rather 'mat_99_check_there_update'")
-  mat_99_check_there_update(dir=dir, overwrite=overwrite)
+  mat_99_check_there_update(dir_path=dir_path, overwrite=overwrite)
 }
 
-#' Write output of 999 file
 #' @param scripts_file_runned data from mat_99_run_Rfiles
-#' @param dir Directory
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_write <- function(scripts_file_runned, path_out) {
-  file_out <- intrl_dir_to_file(path_out)
+mat_99_write <- function(scripts_file_runned, dir_path) {
+  file_out <- intrl_dir_to_file(dir_path)
   is_there <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
   time <- Sys.time() %>%
@@ -288,7 +280,7 @@ mat_99_write <- function(scripts_file_runned, path_out) {
            session_time = sum(.data$elapsed, na.rm=TRUE),
            date = today,
            time = Sys.time() %>% as.character(),
-           folder = basename(dirname(full_path)),
+           folder = basename(dirname(.data$full_path)),
            user_node =user) %>%
     select(tidyselect::all_of(intrl_cols_need))
 
@@ -296,12 +288,11 @@ mat_99_write <- function(scripts_file_runned, path_out) {
 
 }
 
-#' If only appendix, arrange file by previous timings
-#' @param warn SHould it warn if file is actually missing?
+#' @param warn Should it warn if file is actually missing?
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_add_info_last <- function(scripts_file_runned, path_out, warn=TRUE) {
-  file_out <- intrl_dir_to_file(path_out)
+mat_99_add_info_last <- function(scripts_file_runned, dir_path, warn=TRUE) {
+  file_out <- intrl_dir_to_file(dir_path)
 
   if(file.exists(file_out)) {
     df_out <- readr::read_csv(file_out) %>%
@@ -319,7 +310,6 @@ mat_99_add_info_last <- function(scripts_file_runned, path_out, warn=TRUE) {
   scripts_file_runned
 }
 
-#' If only appendix, arrange file by previous timings
 #' @param scripts_file file of R scripts with path to run, from mat_99_list_Rfiles()
 #' @export
 #' @rdname mat_99_run_Rfiles
@@ -353,7 +343,7 @@ if(FALSE) {
   dir_dat
 
   ## run
-  out <- mat_run_Rfiles(dir_dat)
+  out <- mat_99_run_Rfiles(dir_dat)
   out
   mat_99_showErr(out)
 
@@ -364,7 +354,7 @@ if(FALSE) {
   read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 
   ## rerun
-  out2 <- mat_run_Rfiles(dir_dat)
+  out2 <- mat_99_run_Rfiles(dir_dat)
   mat_99_write(out2, dir = path_temp)
   read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 

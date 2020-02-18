@@ -11,7 +11,7 @@
 \alias{mat_99_write}
 \alias{mat_99_add_info_last}
 \alias{mat_99_arrange_by_last}
-\title{List yaml of R scripts}
+\title{Run-check files 999 machinery}
 \usage{
 mat_99_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
 
@@ -21,15 +21,15 @@ mat_99_run_Rfiles(scripts_file, echo = FALSE)
 
 mat_run_Rfiles(scripts_file, echo = FALSE)
 
-mat_99_showErr(df)
+mat_99_showErr(scripts_file_runned)
 
-mat_99_check_there_update(dir = "code_setup", overwrite = TRUE)
+mat_99_check_there_update(dir_path = "code_setup", overwrite = TRUE)
 
-mat_99_check_there(dir, overwrite = TRUE)
+mat_99_check_there(dir_path, overwrite = TRUE)
 
-mat_99_write(scripts_file_runned, path_out)
+mat_99_write(scripts_file_runned, dir_path)
 
-mat_99_add_info_last(scripts_file_runned, path_out, warn = TRUE)
+mat_99_add_info_last(scripts_file_runned, dir_path, warn = TRUE)
 
 mat_99_arrange_by_last(scripts_file_runned, dir_path)
 }
@@ -44,34 +44,16 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path)
 
 \item{echo}{print which file done, and gc?}
 
-\item{df}{data from 999}
-
-\item{dir}{Directory}
+\item{scripts_file_runned}{data from mat_99_run_Rfiles}
 
 \item{overwrite}{should overwrite data?}
 
-\item{scripts_file_runned}{data from mat_99_run_Rfiles}
-
-\item{warn}{SHould it warn if file is actually missing?}
+\item{warn}{Should it warn if file is actually missing?}
 }
 \description{
-List yaml of R scripts
-
-Run-check files 999
-
-Show problems in 999 file
-
-Write output of 999 file
-
-Write output of 999 file
-
-If only appendix, arrange file by previous timings
-
-If only appendix, arrange file by previous timings
+Run-check files 999 machinery
 }
 \examples{
-mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
-
 library(matPkg)
 library(readr)
 
@@ -93,7 +75,7 @@ mat_99_write(out, dir = path_temp)
 read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 
 ## rerun
-out2 <- mat_run_Rfiles(dir_dat)
+out2 <- mat_99_run_Rfiles(dir_dat)
 mat_99_write(out2, dir = path_temp)
 read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 
