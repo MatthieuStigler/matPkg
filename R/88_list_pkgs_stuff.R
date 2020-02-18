@@ -28,6 +28,7 @@ intrl_get_path <- function(x) {
 #' path_rscripts <- system.file("r_scripts_fake", package = "matPkg")
 #' dir_dat <- mat_99_list_Rfiles(path_rscripts)
 #' mat_88_list_pkgs(dir_dat)
+#' mat_88_list_paths(dir_dat)
 #' @export
 mat_88_list_pkgs <- function(scripts_file, warn_missing = TRUE, unique =TRUE) {
 
@@ -66,11 +67,14 @@ mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, d
 
   #
   out <- scripts_file %>%
-    mutate(script = map(.data$pfull_path, readLines),
-           path_data = map(.data$pscript, ~tibble::enframe(intrl_get_path(.), value = "path", name=NULL))) %>%
+    mutate(script = map(.data$full_path, readLines),
+           path_data = map(.data$script, ~tibble::enframe(intrl_get_path(.), value = "path", name=NULL))) %>%
     select(.data$filename, .data$path_data) %>%
     mutate(n_path = map_int(.data$path_data, nrow)) %>%
-    filter(.data$n_path>0) %>%
+    filter(.data$n_path>0)
+
+  if(nrow(out)==0) return(out)
+  out <- out %>%
     unnest(.data$path_data) %>%
     mutate(base_path = dirname(.data$path),
            exists = map_lgl(.data$base_path, ~file.exists(paste(dir_path, ., sep="/"))))
@@ -95,11 +99,13 @@ mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, d
 if(FALSE){
   ## read stuff
   path_rscripts <- system.file("r_scripts_fake", package = "matPkg")
-  path_rscripts <- "/home/matifou/gitReps/my_github/matPkg/inst/r_scripts_fake/"
   dir_dat <- mat_99_list_Rfiles(path_rscripts)
 
   ##
   mat_88_list_pkgs(dir_dat)
+  mat_88_list_paths(scripts_file = dir_dat)
+
+
   mat_88_list_paths(dir_dat, dir_path = "/home/matifou/Dropbox/Documents/Uni/Stanford/Crop Insurance Project/analysis/cropIns_gCloud") %>%
     filter(!exists)
 

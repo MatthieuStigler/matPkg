@@ -30,4 +30,5 @@ List required packages
 path_rscripts <- system.file("r_scripts_fake", package = "matPkg")
 dir_dat <- mat_99_list_Rfiles(path_rscripts)
 mat_88_list_pkgs(dir_dat)
+mat_88_list_paths(dir_dat)
 }
