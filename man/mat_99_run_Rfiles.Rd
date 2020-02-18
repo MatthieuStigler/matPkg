@@ -74,9 +74,8 @@ mat_99_write(out, dir = path_temp)
 ## check output
 read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 
-## rerun
-out2 <- mat_99_run_Rfiles(dir_dat)
-mat_99_write(out2, dir = path_temp)
+## re-write
+mat_99_write(out, dir = path_temp)
 read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 
 ## check format

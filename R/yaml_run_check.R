@@ -125,20 +125,31 @@ df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.
 as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
 
 source_throw <- function(path, echo=TRUE) {
-  if(echo) cat(paste("\nDoing file: ", basename(path)))
+  if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
+  mem_before <- pryr::mem_used()
   env_random <-  new.env()
   sys <- system.time(sys.source(path, envir = env_random))
+  mem_after <- pryr::mem_used()
   ls_env <- ls(envir = env_random)
   rm(list = ls_env, envir = env_random)
   rm(env_random)
   a <- gc()
+
+  # memory count
+  mem_final <- pryr::mem_used()
+  mems_info <- c(mem_before=mem_before, mem_after=mem_after,
+                 mem_diff=mem_after-mem_before,
+                 mem_final=mem_final)
   if(echo) {
-    print(as.character.bytes(pryr::mem_used()))
+    mems_info_char <- as.character.bytes(mems_info)
+    mems_info_char2 <- paste(stringr::str_remove(names(mems_info), "mem_"), mems_info_char, sep=": ")
+    cat("Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
     cat(paste("Done with file", path, "\n"))
   }
   t(data.matrix(sys)) %>%
     as.data.frame() %>%
-    as_tibble()
+    as_tibble() %>%
+    mutate(memory_used = as.character.bytes(mems_info["mem_diff"]))
 }
 
 #' As character for bytes
