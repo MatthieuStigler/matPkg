@@ -1,5 +1,16 @@
 ## internals
 intrl_session_clean <- function(.data, var) dplyr::if_else(duplicated(.data$time), "", as.character({{var}}))
+intrl_dir_to_file <- function(dir) paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
+  str_replace("//", "/")
+
+intrl_cols_need <- c("session", "session_time",
+                     "user_node",
+                     "filename", "folder",
+                     "error", "has_error",
+                     "elapsed", "user.self", "sys.self", "user.child",
+                     "sys.child", "ext", "number_char", "number", "error_parse",
+                     "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
+                     "date", "time")
 
 #' @importFrom utils getFromNamespace
 read_utf8 = getFromNamespace("read_utf8", "rmarkdown")
@@ -24,11 +35,9 @@ mat_parse_yaml <- function(file_path){
 #' @param dir_path directory of files
 #' @param no_old Avoid scripts in directory old?
 #' @param recursive Look into recursive folders?
-#' @examples
-#' mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
-#'
 #' @export
-mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
+#' @rdname mat_99_run_Rfiles
+mat_99_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
   dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE, recursive = recursive)
 
   res <- dir_df %>%
@@ -51,16 +60,48 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
   res
 }
 
-#' Run files from a df-df
-#'
-#' @param df the df of files, from mat_list_Rfiles()
-#' @param echo print shich file done, and gc?
-#' @examples
-#' files_df <- mat_list_Rfiles(system.file("r_scripts_fake", package = "matPkg"))
-#' mat_run_Rfiles(files_df, echo=TRUE)
+#' @rdname mat_99_run_Rfiles
 #' @export
-mat_run_Rfiles <- function(df, echo=FALSE) {
-  df %>%
+mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
+  warning("Deprecated: use rather mat_99_list_Rfiles")
+  mat_99_list_Rfiles(dir_path, no_old = no_old, recursive=recursive)
+}
+
+#' Run-check files 999
+#'
+#' @param echo print which file done, and gc?
+#' @examples
+#' library(matPkg)
+#' library(readr)
+#'
+#' ## read
+#' path_rscripts <- system.file("r_scripts_fake", package = "matPkg")
+#' path_temp <- tempdir()
+#' dir_dat <- mat_99_list_Rfiles(path_rscripts)
+#' dir_dat
+#'
+#' ## run
+#' out <- mat_99_run_Rfiles(dir_dat)
+#' out
+#' mat_99_showErr(out)
+#'
+#' ## save
+#' mat_99_write(out, dir = path_temp)
+#'
+#' ## check output
+#' read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
+#'
+#' ## rerun
+#' out2 <- mat_run_Rfiles(dir_dat)
+#' mat_99_write(out2, dir = path_temp)
+#' read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
+#'
+#' ## check format
+#' mat_99_check_there_update(path_temp, overwrite=FALSE)
+#' mat_99_check_there_update(path_temp, overwrite=TRUE)
+#' @export
+mat_99_run_Rfiles <- function(scripts_file, echo=FALSE) {
+  scripts_file %>%
     mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
            has_error= map_lgl(.data$error, ~!is.null(.)),
@@ -73,7 +114,12 @@ mat_run_Rfiles <- function(df, echo=FALSE) {
 
 }
 
-
+#' @rdname mat_99_run_Rfiles
+#' @export
+mat_run_Rfiles <- function(scripts_file, echo=FALSE) {
+  warning("Deprectaed, use rather 'mat_99_run_Rfiles'")
+  mat_run_Rfiles(scripts_file=scripts_file, echo=echo)
+}
 
 ## utilities (from: )
 df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.child" = NA, "sys.child" = NA)
@@ -118,7 +164,7 @@ as.character.bytes <- function (x, digits = 3, ...) {
 #' Show problems in 999 file
 #' @param df data from 999
 #' @export
-#' @rdname mat_run_Rfiles
+#' @rdname mat_99_run_Rfiles
 mat_99_showErr <- function(df) {
   df_probs <- df %>%
     dplyr::filter(.data$has_error)
@@ -134,28 +180,18 @@ mat_99_showErr <- function(df) {
 #' @param dir main directory
 #' @param overwrite should overwrite data?
 #' @export
-#' @rdname mat_run_Rfiles
-mat_99_check_there_update <- function (dir, overwrite=TRUE) {
-  file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
-    str_replace("//", "/")
-  path_out_save <-file_out
-  # if(is_test) path_out_save <-  str_replace(path_out_save, "_report", "_report_TEST")"999_CHECK_RUN_report_TEST.csv" else
+#' @rdname mat_99_run_Rfiles
+mat_99_check_there_update <- function (dir="code_setup", overwrite=TRUE) {
+  file_out <- intrl_dir_to_file(dir)
 
   is_there <- file.exists(file_out)
   if (is_there) {
-    cols_need <- c("session", "session_time",
-                   "user_node",
-                   "filename", "subfolder",
-                   "error", "has_error",
-                   "elapsed", "user.self", "sys.self", "user.child",
-                   "sys.child", "ext", "number_char", "number", "error_parse",
-                   "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
-                   "date", "time")
+
     file_old <- readr::read_csv(file_out, col_types = readr::cols())
 
     ## add columns if needed
-    if (!all(cols_need %in% colnames(file_old))) {
-      cols_miss <- cols_need[!cols_need %in% colnames(file_old)]
+    if (!all(intrl_cols_need %in% colnames(file_old))) {
+      cols_miss <- intrl_cols_need[!intrl_cols_need %in% colnames(file_old)]
       if("session" %in% cols_miss && !"date" %in% cols_miss) {
         cols_miss <-  cols_miss[-which(cols_miss=="session")]
         file_old <-  file_old %>%
@@ -165,7 +201,8 @@ mat_99_check_there_update <- function (dir, overwrite=TRUE) {
       warning("Problems in data! Missing: ", paste(cols_miss,
                                                    collapse = " "))
       file_old[cols_miss] <- NA
-      file_old <- file_old %>% select(cols_need)
+      file_old <- file_old %>%
+        select(tidyselect::all_of(intrl_cols_need))
       print(file_old)
       if(overwrite)  {
         readr::write_csv(file_old, file_out)
@@ -174,19 +211,19 @@ mat_99_check_there_update <- function (dir, overwrite=TRUE) {
     }
 
     ## Check too many columns?
-    if (!all(colnames(file_old) %in% cols_need )) {
-      cols_old_superflous <- colnames(file_old)[!colnames(file_old) %in% cols_need]
-      cols_old_necessary <- colnames(file_old)[colnames(file_old) %in% cols_need]
+    if (!all(colnames(file_old) %in% intrl_cols_need )) {
+      cols_old_superflous <- colnames(file_old)[!colnames(file_old) %in% intrl_cols_need]
+      cols_old_necessary <- colnames(file_old)[colnames(file_old) %in% intrl_cols_need]
       warning("Supplementary columns: ", paste(cols_old_superflous, collapse = ", "))
       file_old <- file_old %>%
         select(tidyselect::all_of(cols_old_necessary))
     }
 
     ## reorder columns if needed
-    if(!all(cols_need == colnames(file_old))){
+    if(!all(intrl_cols_need == colnames(file_old))){
       print("Change order")
       file_old <- file_old %>%
-        select(tidyselect::all_of(cols_need))
+        select(tidyselect::all_of(intrl_cols_need))
       if(overwrite)  {
         readr::write_csv(file_old, file_out)
         file_old <- readr::read_csv(file_out, col_types = readr::cols())
@@ -223,20 +260,19 @@ mat_99_check_there_update <- function (dir, overwrite=TRUE) {
 }
 
 #' @export
-#' @rdname mat_run_Rfiles
+#' @rdname mat_99_run_Rfiles
 mat_99_check_there <- function (dir, overwrite=TRUE) {
   warning("Deprecated, use rather 'mat_99_check_there_update'")
   mat_99_check_there_update(dir=dir, overwrite=overwrite)
 }
 
 #' Write output of 999 file
-#' @param df data from 999
+#' @param scripts_file_runned data from mat_99_run_Rfiles
 #' @param dir Directory
 #' @export
-#' @rdname mat_run_Rfiles
-mat_99_write <- function(df, dir) {
-  file_out <- paste(dir, "999_CHECK_RUN_report.csv", sep="/") %>%
-    str_replace("//", "/")
+#' @rdname mat_99_run_Rfiles
+mat_99_write <- function(scripts_file_runned, path_out) {
+  file_out <- intrl_dir_to_file(path_out)
   is_there <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
   time <- Sys.time() %>%
@@ -245,44 +281,55 @@ mat_99_write <- function(df, dir) {
   user <- paste(Sys.info()[c("user", "nodename")], collapse = "_")
 
   ## add session info, etc
-  df_new <- df %>%
+  df_new <- scripts_file_runned %>%
     dplyr::select_if(~!is.list(.)) %>%
     mutate(session = today,
            session = dplyr::if_else(duplicated(.data$session), "", .data$session),
            session_time = sum(.data$elapsed, na.rm=TRUE),
            date = today,
            time = Sys.time() %>% as.character(),
+           folder = basename(dirname(full_path)),
            user_node =user) %>%
-    select(.data$session, .data$session_time, .data$user_node, everything())
-
-  ## update use if there!
-  if(is_there) {
-    file_before <- readr::read_csv(file_out, col_types = readr::cols())
-    if(!"user_node" %in% colnames(file_before)) {
-      file_before %>%
-        mutate(user_node = NA_character_) %>%
-        select(.data$session, .data$session_time, .data$user_node, everything()) %>%
-        readr::write_csv(file_out)
-    }
-  }
+    select(tidyselect::all_of(intrl_cols_need))
 
   readr::write_csv(df_new, file_out, append=is_there)
 
 }
 
-
 #' If only appendix, arrange file by previous timings
-#' @param path_out path of where 999_CHECK_RUN_report os
-#' @param dat_files current file with path to run
+#' @param warn SHould it warn if file is actually missing?
 #' @export
-#' @rdname mat_run_Rfiles
-mat_99_arrange_by_last <- function(path_out, dat_files) {
+#' @rdname mat_99_run_Rfiles
+mat_99_add_info_last <- function(scripts_file_runned, path_out, warn=TRUE) {
+  file_out <- intrl_dir_to_file(path_out)
 
-  if(file.exists(path_out)) {
-    df_out <- readr::read_csv(path_out) %>%
+  if(file.exists(file_out)) {
+    df_out <- readr::read_csv(file_out) %>%
       filter(.data$time==max(.data$time))
 
-    dat_files <- dat_files %>%
+    scripts_file_runned <- scripts_file_runned %>%
+      left_join(df_out %>%
+                  select(.data$filename, .data$elapsed, .data$has_error),
+                by = "filename") %>%
+      rename(elapsed_last=.data$elapsed,
+             has_error_last=.data$has_error)
+  } else {
+    if(warn) warning("File not already there!")
+  }
+  scripts_file_runned
+}
+
+#' If only appendix, arrange file by previous timings
+#' @param scripts_file file of R scripts with path to run, from mat_99_list_Rfiles()
+#' @export
+#' @rdname mat_99_run_Rfiles
+mat_99_arrange_by_last <- function(scripts_file_runned, dir_path) {
+
+  if(file.exists(dir_path)) {
+    df_out <- readr::read_csv(dir_path) %>%
+      filter(.data$time==max(.data$time))
+
+    scripts_file_runned <- scripts_file_runned %>%
       left_join(df_out %>%
                   select(.data$filename, .data$elapsed),
                 by = "filename") %>%
@@ -291,27 +338,40 @@ mat_99_arrange_by_last <- function(path_out, dat_files) {
       # rename(elapsed_before=elapsed)
       select(-.data$elapsed, -.data$first_num)
   }
-  dat_files
+  scripts_file_runned
 }
 
 
 if(FALSE) {
   library(matPkg)
-  library(tidyverse)
-  mat_show_mem()
-  dir <- mat_list_Rfiles("inst/r_scripts_fake")
-  dir
-  out <- mat_run_Rfiles(dir)
+  library(readr)
+
+  ## read
+  path_rscripts <- system.file("r_scripts_fake", package = "matPkg")
+  path_temp <- tempdir()
+  dir_dat <- mat_99_list_Rfiles(path_rscripts)
+  dir_dat
+
+  ## run
+  out <- mat_run_Rfiles(dir_dat)
   out
   mat_99_showErr(out)
-  mat_99_check_there("inst/", overwrite=FALSE)
-  mat_99_check_there("inst/", overwrite=TRUE)
-  mat_99_write(out, dir = "inst")
-  read_csv("inst/999_CHECK_RUN_report.csv")
 
-  out %>%
-    filter(has_error) %>%
-    select(filename, error)
+  ## save
+  mat_99_write(out, dir = path_temp)
+
+  ## check output
+  read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
+
+  ## rerun
+  out2 <- mat_run_Rfiles(dir_dat)
+  mat_99_write(out2, dir = path_temp)
+  read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
+
+  ## check format
+  mat_99_check_there_update(path_temp, overwrite=FALSE)
+  mat_99_check_there_update(path_temp, overwrite=TRUE)
+
 
 
   rm(heavy_vec)
