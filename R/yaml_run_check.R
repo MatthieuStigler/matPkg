@@ -69,6 +69,7 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' Run-check files 999 machinery
 #'
 #' @param echo print which file done, and gc?
+#' @param runMat_true_only run only the ones with runMat: TRUE
 #' @examples
 #' library(matPkg)
 #' library(readr)
@@ -98,7 +99,10 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' mat_99_check_there_update(path_temp, overwrite=FALSE)
 #' mat_99_check_there_update(path_temp, overwrite=TRUE)
 #' @export
-mat_99_run_Rfiles <- function(scripts_file, echo=FALSE) {
+mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE) {
+  if(runMat_true_only) scripts_file <- scripts_file %>%
+      filter(.data$runMat_val)
+
   scripts_file %>%
     mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
@@ -149,7 +153,7 @@ source_throw <- function(path, echo=TRUE) {
   t(data.matrix(sys)) %>%
     as.data.frame() %>%
     as_tibble() %>%
-    mutate(memory_used = as.numeric.bytes(mems_info["mem_diff"], unit = "MB"))
+    mutate(memory_used_mb = as.numeric.bytes(mems_info["mem_diff"], unit = "MB"))
 }
 
 #' As character for bytes

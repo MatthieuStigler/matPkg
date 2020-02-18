@@ -17,7 +17,7 @@ mat_99_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
 
 mat_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
 
-mat_99_run_Rfiles(scripts_file, echo = FALSE)
+mat_99_run_Rfiles(scripts_file, echo = FALSE, runMat_true_only = TRUE)
 
 mat_run_Rfiles(scripts_file, echo = FALSE)
 
@@ -43,6 +43,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path)
 \item{scripts_file}{file of R scripts with path to run, from mat_99_list_Rfiles()}
 
 \item{echo}{print which file done, and gc?}
+
+\item{runMat_true_only}{run only the ones with runMat: TRUE}
 
 \item{scripts_file_runned}{data from mat_99_run_Rfiles}
 
