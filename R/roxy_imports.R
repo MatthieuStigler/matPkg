@@ -2,7 +2,7 @@ globalVariables(c("n", ".", "value"))
 
 #' @importFrom magrittr "%>%"
 NULL
-#' @importFrom dplyr mutate arrange select mutate_at bind_cols bind_rows filter rename
+#' @importFrom dplyr mutate arrange select mutate_at bind_cols bind_rows filter rename distinct
 NULL
 #' @importFrom dplyr group_by ungroup summarise_all desc pull funs vars left_join inner_join n
 NULL
@@ -28,5 +28,5 @@ NULL
 #' @importFrom ggplot2 ggplot aes geom_col facet_grid geom_errorbar
 NULL
 
-#' @importFrom stringr str_extract str_replace str_replace_all
+#' @importFrom stringr str_extract str_replace str_replace_all str_extract_all str_remove_all str_remove
 NULL
