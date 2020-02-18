@@ -9,6 +9,6 @@
 ################################
 #'## Read data
 ################################
-
+library(stats)
 stop("You can't do that maan")
 
