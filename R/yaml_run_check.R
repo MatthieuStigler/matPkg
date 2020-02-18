@@ -141,7 +141,7 @@ source_throw <- function(path, echo=TRUE) {
                  mem_diff=mem_after-mem_before,
                  mem_final=mem_final)
   if(echo) {
-    mems_info_char <- as.character.bytes(mems_info)
+    mems_info_char <- as.character.bytes(mems_info, unit="MB")
     mems_info_char2 <- paste(stringr::str_remove(names(mems_info), "mem_"), mems_info_char, sep=": ")
     cat("Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
     cat(paste("Done with file", path, "\n"))
@@ -149,26 +149,49 @@ source_throw <- function(path, echo=TRUE) {
   t(data.matrix(sys)) %>%
     as.data.frame() %>%
     as_tibble() %>%
-    mutate(memory_used = as.character.bytes(mems_info["mem_diff"]))
+    mutate(memory_used = as.numeric.bytes(mems_info["mem_diff"], unit = "MB"))
 }
 
 #' As character for bytes
 #'
 #' Simply copied from pryr:::print.bytes
 #' @noRd
-as.character.bytes <- function (x, digits = 3, ...) {
-  power <- min(floor(log(abs(x), 1000)), 4)
-  if (power < 1) {
-    unit <- "B"
+as.character.bytes <- function (x, digits = 3, unit=NULL, ...) {
+
+  if(is.null(unit)) {
+    power <- min(floor(log(abs(x), 1000)), 4)
+    unit <- c("B", "kB", "MB", "GB", "TB")[power+1]
+  } else {
+    unit <- match.arg(unit, choices=c("B", "kB", "MB", "GB", "TB"))
   }
-  else {
-    unit <- c("kB", "MB", "GB", "TB")[[power]]
-    x <- x/(1000^power)
-  }
+  x <-  as.numeric.bytes(x, unit=unit)
   formatted <- format(signif(x, digits = digits), big.mark = ",",
                       scientific = FALSE)
   paste(formatted,  unit)
 }
+
+#' As numeric for bytes, add argument unit
+#'
+#' @noRd
+as.numeric.bytes <- function (x, unit = c("B", "kB", "MB", "GB", "TB")) {
+  unit <-  match.arg(unit)
+  power <-  match(unit, c("B", "kB", "MB", "GB", "TB")) -1
+  as.numeric(x/(1000^power))
+}
+
+## Cechk bytes
+if(FALSE) {
+  val_bytes <- 122661728
+  class(val_bytes) <- "bytes"
+  val_bytes
+  as.character(val_bytes)
+  as.numeric(val_bytes)
+
+  sapply(c("B", "kB",  "MB", "GB"), function(unit) as.numeric.bytes(val_bytes, unit))
+  sapply(c("B", "kB",  "MB", "GB"), function(unit) as.character.bytes(val_bytes, unit=unit))
+
+}
+
 
 #' @export
 #' @rdname mat_99_run_Rfiles
