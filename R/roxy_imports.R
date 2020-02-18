@@ -28,5 +28,5 @@ NULL
 #' @importFrom ggplot2 ggplot aes geom_col facet_grid geom_errorbar
 NULL
 
-#' @importFrom stringr str_extract str_replace str_replace_all str_extract_all str_remove_all str_remove
+#' @importFrom stringr str_extract str_replace str_replace_all str_extract_all str_remove_all str_remove str_detect
 NULL
