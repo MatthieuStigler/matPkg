@@ -112,7 +112,7 @@ mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, d
 
 #' @export
 #' @rdname mat_88_list_pkgs
-mat_88_check_paths <- function(scripts_file,  dir_path=".", file_ignore) {
+mat_88_check_paths <- function(scripts_file,  dir_path=".", file_ignore=NULL) {
   out <- mat_88_list_paths(scripts_file=scripts_file, warn_missing = TRUE, unique =TRUE, dir_path=dir_path, file_ignore = file_ignore) %>%
     filter(!.data$exists)
   if(nrow(out)==0) print("Ok!")
