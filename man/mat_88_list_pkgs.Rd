@@ -15,10 +15,11 @@ mat_88_list_paths(
   scripts_file,
   warn_missing = TRUE,
   unique = TRUE,
-  dir_path = "."
+  dir_path = ".",
+  file_ignore = NULL
 )
 
-mat_88_check_paths(scripts_file, dir_path = ".")
+mat_88_check_paths(scripts_file, dir_path = ".", file_ignore)
 }
 \arguments{
 \item{scripts_file}{data from \code{\link{mat_99_run_Rfiles}}}
@@ -28,6 +29,8 @@ mat_88_check_paths(scripts_file, dir_path = ".")
 \item{unique}{Should (yes) return only distinct packages. Otherwise returns also script name.}
 
 \item{dir_path}{additional directory}
+
+\item{file_ignore}{files to ignore. NULL}
 }
 \description{
 List required packages

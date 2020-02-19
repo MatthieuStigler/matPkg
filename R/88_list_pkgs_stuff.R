@@ -68,14 +68,22 @@ mat_88_check_pkgs <- function(scripts_file) {
 
 
 #' @param dir_path additional directory
+#' @param file_ignore files to ignore. NULL
 #' @export
 #' @rdname mat_88_list_pkgs
-mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, dir_path=".") {
+mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, dir_path=".",
+                              file_ignore=NULL) {
 
-  # Argcheck
+  # Arg check
   dir_path <- str_remove(dir_path, "/$")
 
-  #
+  ## remove some files
+  if(!is.null(file_ignore)) {
+    scripts_file <- scripts_file %>%
+      filter(!str_detect(.data$filename, file_ignore))
+  }
+
+  # Main call
   out <- scripts_file %>%
     mutate(script = map(.data$full_path, ~readLines(., warn=FALSE)),
            path_data = map(.data$script, ~tibble::enframe(intrl_get_path(.), value = "path", name=NULL))) %>%
@@ -104,8 +112,8 @@ mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, d
 
 #' @export
 #' @rdname mat_88_list_pkgs
-mat_88_check_paths <- function(scripts_file,  dir_path=".") {
-  out <- mat_88_list_paths(scripts_file=scripts_file, warn_missing = TRUE, unique =TRUE, dir_path=dir_path) %>%
+mat_88_check_paths <- function(scripts_file,  dir_path=".", file_ignore) {
+  out <- mat_88_list_paths(scripts_file=scripts_file, warn_missing = TRUE, unique =TRUE, dir_path=dir_path, file_ignore = file_ignore) %>%
     filter(!.data$exists)
   if(nrow(out)==0) print("Ok!")
 }
