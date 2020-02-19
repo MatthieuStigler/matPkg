@@ -86,7 +86,8 @@ mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, d
 
   if(warn_missing & nrow(filter(out, !.data$exists))) {
     miss <- filter(out, !.data$exists)
-    warning("Some missing folders?", miss)
+    warning("Some missing folders?")
+    print(miss)
   }
   out
 }
