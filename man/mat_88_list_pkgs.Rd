@@ -19,7 +19,12 @@ mat_88_list_paths(
   file_ignore = NULL
 )
 
-mat_88_check_paths(scripts_file, dir_path = ".", file_ignore)
+mat_88_check_paths(
+  scripts_file,
+  dir_path = ".",
+  file_ignore = NULL,
+  unique = TRUE
+)
 }
 \arguments{
 \item{scripts_file}{data from \code{\link{mat_99_run_Rfiles}}}
