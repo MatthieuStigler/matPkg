@@ -57,6 +57,16 @@ mat_88_list_pkgs <- function(scripts_file, warn_missing = TRUE, unique =TRUE) {
   out
 }
 
+
+#' @export
+#' @rdname mat_88_list_pkgs
+mat_88_check_pkgs <- function(scripts_file) {
+  out <- mat_88_list_pkgs(scripts_file=scripts_file, warn_missing = TRUE, unique =TRUE) %>%
+    filter(!.data$is_installed)
+  if(nrow(out)==0) print("Ok!")
+}
+
+
 #' @param dir_path additional directory
 #' @export
 #' @rdname mat_88_list_pkgs
@@ -92,6 +102,13 @@ mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, d
   out
 }
 
+#' @export
+#' @rdname mat_88_list_pkgs
+mat_88_check_paths <- function(scripts_file,  dir_path=".") {
+  out <- mat_88_list_paths(scripts_file=scripts_file, warn_missing = TRUE, unique =TRUE, dir_path=dir_path) %>%
+    filter(!.data$exists)
+  if(nrow(out)==0) print("Ok!")
+}
 
 ################################
 ### TEST

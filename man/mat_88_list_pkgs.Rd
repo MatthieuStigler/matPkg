@@ -2,10 +2,14 @@
 % Please edit documentation in R/88_list_pkgs_stuff.R
 \name{mat_88_list_pkgs}
 \alias{mat_88_list_pkgs}
+\alias{mat_88_check_pkgs}
 \alias{mat_88_list_paths}
+\alias{mat_88_check_paths}
 \title{List required packages}
 \usage{
 mat_88_list_pkgs(scripts_file, warn_missing = TRUE, unique = TRUE)
+
+mat_88_check_pkgs(scripts_file)
 
 mat_88_list_paths(
   scripts_file,
@@ -13,6 +17,8 @@ mat_88_list_paths(
   unique = TRUE,
   dir_path = "."
 )
+
+mat_88_check_paths(scripts_file, dir_path = ".")
 }
 \arguments{
 \item{scripts_file}{data from \code{\link{mat_99_run_Rfiles}}}
