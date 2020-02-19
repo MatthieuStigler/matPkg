@@ -1,3 +1,5 @@
+intrl_URLdecode_vec <- function(x) Vectorize(utils::URLdecode)(x)
+
 
 #' List files in a directory
 #'
@@ -9,11 +11,11 @@
 #' @export
 #' @examples
 #' mat_list_dir(path = ".", pattern = "R")
-mat_list_dir <- function(path, pattern = "\\.tif", recursive = TRUE, add_ext = FALSE, ...) {
+mat_list_dir <- function(path, pattern = "\\.R", recursive = TRUE, add_ext = FALSE, ...) {
 
   ## check
-  if(str_detect(path, "%20")) path <- utils::URLdecode(path)
-  if(!file.exists(path)) stop("Missing folder?")
+  if(any(str_detect(path, "%20"))) path <- intrl_URLdecode_vec(path)
+  if(!any(file.exists(path))) stop("Missing folder?")
 
   ## read
   li <- list.files(path, full.names = TRUE, pattern=pattern, recursive = recursive, ...)
