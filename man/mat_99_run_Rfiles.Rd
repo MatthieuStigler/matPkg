@@ -13,7 +13,7 @@
 \alias{mat_99_arrange_by_last}
 \title{Run-check files 999 machinery}
 \usage{
-mat_99_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
+mat_99_list_Rfiles(dir_path = "code_setup", no_old = TRUE, recursive = FALSE)
 
 mat_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
 

@@ -36,8 +36,9 @@ mat_parse_yaml <- function(file_path){
 #' @param recursive Look into recursive folders?
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
-  dir_df <- mat_list_dir(dir_path, pattern="\\.R", add_ext = TRUE, recursive = recursive)
+mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=FALSE) {
+  dir_df <- mat_list_dir(dir_path, pattern="\\.R$", add_ext = TRUE, recursive = recursive) %>%
+    mutate(folder = basename(dirname(.data$full_path)))
 
   res <- dir_df %>%
     mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
