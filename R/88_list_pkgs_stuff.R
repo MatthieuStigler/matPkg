@@ -35,7 +35,7 @@ mat_88_list_pkgs <- function(scripts_file, warn_missing = TRUE, unique =TRUE) {
   pkgs_here <- as_tibble(utils::installed.packages())
 
   out <- scripts_file %>%
-    mutate(script = map(.data$full_path, readLines),
+    mutate(script = map(.data$full_path, ~readLines(., warn=FALSE)),
            pkgs = map(.data$script, ~intrl_get_pkg(.) %>%  tibble::enframe(name=NULL, value="package"))) %>%
     select(.data$filename, .data$pkgs) %>%
     unnest(.data$pkgs) %>%
@@ -67,7 +67,7 @@ mat_88_list_paths <- function(scripts_file, warn_missing = TRUE, unique =TRUE, d
 
   #
   out <- scripts_file %>%
-    mutate(script = map(.data$full_path, readLines),
+    mutate(script = map(.data$full_path, ~readLines(., warn=FALSE)),
            path_data = map(.data$script, ~tibble::enframe(intrl_get_path(.), value = "path", name=NULL))) %>%
     select(.data$filename, .data$path_data) %>%
     mutate(n_path = map_int(.data$path_data, nrow)) %>%
@@ -109,11 +109,6 @@ if(FALSE){
   mat_88_list_paths(dir_dat, dir_path = "/home/matifou/Dropbox/Documents/Uni/Stanford/Crop Insurance Project/analysis/cropIns_gCloud") %>%
     filter(!exists)
 
-  dir_dat %>%
-    mutate(script = map(full_path, readLines),
-           pkgs = map(script, ~get_pkg(.) %>%  enframe(name=NULL, value="package"))) %>%
-    select(filename, pkgs) %>%
-    unnest(pkgs)
 
 
 }
