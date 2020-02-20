@@ -1,9 +1,12 @@
-## internals
-intrl_session_clean <- function(.data, var) dplyr::if_else(duplicated(.data$time), "", as.character({{var}}))
-intrl_dir_to_file <- function(dir) paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
+################################
+### Internal utilities
+################################
+
+intrnl_session_clean <- function(.data, var) dplyr::if_else(duplicated(.data$time), "", as.character({{var}}))
+intrnl_dir_to_file <- function(dir) paste(dir, "999_CHECK_RUN_report.csv", sep = "/") %>%
   str_replace("//", "/")
 
-intrl_cols_need <- c("session", "session_time",
+intrnl_cols_need <- c("session", "session_time",
                      "user_node",
                      "filename", "folder",
                      "error", "has_error",
@@ -12,6 +15,23 @@ intrl_cols_need <- c("session", "session_time",
                      "sys.child", "ext", "number_char", "number", "error_parse",
                      "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
                      "date", "time")
+
+
+intrnl_time_format <- function(x) {
+  if(is.na(x)) return(NA_character_)
+  if(x<1) return("<1 Sec")
+  x <-  x/60
+  if(x<1) return("<1 Min")
+  if(x >60) {
+    H <- x %/% 60
+    Min <- x %% 60
+    H_Min <- paste0(H, ":", stringr::str_pad(round(Min),width = 2, pad = "0"))
+    return(paste0(H_Min, " Hour"))
+  }
+  return(paste(round(x), "Min"))
+}
+
+intrnl_time_format_vec <- function(x) sapply(x, intrnl_time_format)
 
 #' @importFrom utils getFromNamespace
 read_utf8 = getFromNamespace("read_utf8", "rmarkdown")
@@ -30,6 +50,9 @@ mat_parse_yaml <- function(file_path){
 
 }
 
+################################
+### Step 1: list R scripts
+################################
 
 
 #' @param dir_path directory of files
@@ -133,6 +156,7 @@ as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.fram
 
 source_throw <- function(path, echo=TRUE) {
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
+  gc()
   mem_before <- pryr::mem_used()
   env_random <-  new.env()
   sys <- system.time(sys.source(path, envir = env_random))
@@ -140,12 +164,12 @@ source_throw <- function(path, echo=TRUE) {
   ls_env <- ls(envir = env_random)
   rm(list = ls_env, envir = env_random)
   rm(env_random)
-  a <- gc()
+  gc()
 
   # memory count
   mem_final <- pryr::mem_used()
   mems_info <- c(mem_before=mem_before, mem_after=mem_after,
-                 mem_diff=mem_after-mem_before,
+                 mem_diff=mem_after-mem_before,1,
                  mem_final=mem_final)
   if(echo) {
     mems_info_char <- as.character.bytes(mems_info, unit="MB")
@@ -156,7 +180,8 @@ source_throw <- function(path, echo=TRUE) {
   t(data.matrix(sys)) %>%
     as.data.frame() %>%
     as_tibble() %>%
-    mutate(memory_used_mb = as.numeric.bytes(mems_info["mem_diff"], unit = "MB"))
+    mutate(memory_used_mb = as.numeric.bytes(mems_info["mem_diff"], unit = "MB")) %>%
+    mutate_at(c("memory_used_mb", "elapsed"), round, 1)
 }
 
 #' As character for bytes
@@ -217,7 +242,7 @@ mat_99_showErr <- function(scripts_file_runned) {
 #' @export
 #' @rdname mat_99_run_Rfiles
 mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
-  file_out <- intrl_dir_to_file(dir_path)
+  file_out <- intrnl_dir_to_file(dir_path)
 
   is_there <- file.exists(file_out)
   if (is_there) {
@@ -225,8 +250,8 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
     file_old <- readr::read_csv(file_out, col_types = readr::cols())
 
     ## add columns if needed
-    if (!all(intrl_cols_need %in% colnames(file_old))) {
-      cols_miss <- intrl_cols_need[!intrl_cols_need %in% colnames(file_old)]
+    if (!all(intrnl_cols_need %in% colnames(file_old))) {
+      cols_miss <- intrnl_cols_need[!intrnl_cols_need %in% colnames(file_old)]
       if("session" %in% cols_miss && !"date" %in% cols_miss) {
         cols_miss <-  cols_miss[-which(cols_miss=="session")]
         file_old <-  file_old %>%
@@ -237,7 +262,7 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
                                                    collapse = " "))
       file_old[cols_miss] <- NA
       file_old <- file_old %>%
-        select(tidyselect::all_of(intrl_cols_need))
+        select(tidyselect::all_of(intrnl_cols_need))
       print(file_old)
       if(overwrite)  {
         readr::write_csv(file_old, file_out)
@@ -246,19 +271,19 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
     }
 
     ## Check too many columns?
-    if (!all(colnames(file_old) %in% intrl_cols_need )) {
-      cols_old_superflous <- colnames(file_old)[!colnames(file_old) %in% intrl_cols_need]
-      cols_old_necessary <- colnames(file_old)[colnames(file_old) %in% intrl_cols_need]
+    if (!all(colnames(file_old) %in% intrnl_cols_need )) {
+      cols_old_superflous <- colnames(file_old)[!colnames(file_old) %in% intrnl_cols_need]
+      cols_old_necessary <- colnames(file_old)[colnames(file_old) %in% intrnl_cols_need]
       warning("Supplementary columns: ", paste(cols_old_superflous, collapse = ", "))
       file_old <- file_old %>%
         select(tidyselect::all_of(cols_old_necessary))
     }
 
     ## reorder columns if needed
-    if(!all(intrl_cols_need == colnames(file_old))){
-      print("Change order")
+    if(!all(intrnl_cols_need == colnames(file_old))){
+      print("Change order of columns")
       file_old <- file_old %>%
-        select(tidyselect::all_of(intrl_cols_need))
+        select(tidyselect::all_of(intrnl_cols_need))
       if(overwrite)  {
         readr::write_csv(file_old, file_out)
         file_old <- readr::read_csv(file_out, col_types = readr::cols())
@@ -287,7 +312,7 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
         mutate(session_id = paste(.data$session, .data$session_time, sep="_"),
                session = dplyr::if_else(duplicated(.data$session_id) | is.na(.data$session), "", as.character(.data$session))) %>%
         select(-.data$session_id) %>%
-               # session_time = intrl_session_clean(., session_time)) %>%
+               # session_time = intrnl_session_clean(., session_time)) %>%
         readr::write_csv(file_out)
     }
   }
@@ -305,7 +330,7 @@ mat_99_check_there <- function (dir_path="code_setup", overwrite=TRUE) {
 #' @export
 #' @rdname mat_99_run_Rfiles
 mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
-  file_out <- intrl_dir_to_file(dir_path)
+  file_out <- intrnl_dir_to_file(dir_path)
   is_there <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
   time <- Sys.time() %>%
@@ -323,7 +348,7 @@ mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
            time = Sys.time() %>% as.character(),
            folder = basename(dirname(.data$full_path)),
            user_node =user) %>%
-    select(tidyselect::all_of(intrl_cols_need))
+    select(tidyselect::all_of(intrnl_cols_need))
 
   readr::write_csv(df_new, file_out, append=is_there)
 
@@ -333,7 +358,7 @@ mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
 #' @export
 #' @rdname mat_99_run_Rfiles
 mat_99_add_info_last <- function(scripts_file_runned, dir_path="code_setup", warn=TRUE) {
-  file_out <- intrl_dir_to_file(dir_path)
+  file_out <- intrnl_dir_to_file(dir_path)
 
   if(file.exists(file_out)) {
     df_out <- readr::read_csv(file_out) %>%
