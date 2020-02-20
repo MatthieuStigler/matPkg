@@ -3,6 +3,7 @@
 #' to do... can I get a list of functions? Just document them!
 #'
 #' Should run:
+#'
 #' remotes::install_github("MatthieuStigler/matPkg", upgrade = "never")
 #'
 #'

@@ -1,6 +1,6 @@
 # matPkg
 
-The goal of matPkg is to have a few custom functions
+Just a collection of a few custom functions I use often. 
 
 ## Installation
 
