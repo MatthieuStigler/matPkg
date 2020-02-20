@@ -7,7 +7,8 @@ intrl_cols_need <- c("session", "session_time",
                      "user_node",
                      "filename", "folder",
                      "error", "has_error",
-                     "elapsed", "user.self", "sys.self", "user.child",
+                     "elapsed", "memory_used_mb",
+                     "user.self", "sys.self", "user.child",
                      "sys.child", "ext", "number_char", "number", "error_parse",
                      "has_error_parse", "has_yaml", "has_runMat", "runMat_val",
                      "date", "time")
@@ -112,7 +113,8 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE) {
            timing = map2(.data$try, .data$has_error, ~if(.y) df_null else .x$result)) %>%
     unnest(.data$timing) %>%
     select("filename", "has_error", "error",
-           "user.self", "sys.self", "elapsed", "user.child", "sys.child",
+           "elapsed", "memory_used_mb",
+           "user.self", "sys.self", "user.child", "sys.child",
            tidyselect::everything())
 
 }
@@ -294,7 +296,7 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
 
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_check_there <- function (dir_path, overwrite=TRUE) {
+mat_99_check_there <- function (dir_path="code_setup", overwrite=TRUE) {
   warning("Deprecated, use rather 'mat_99_check_there_update'")
   mat_99_check_there_update(dir_path=dir_path, overwrite=overwrite)
 }
@@ -302,7 +304,7 @@ mat_99_check_there <- function (dir_path, overwrite=TRUE) {
 #' @param scripts_file_runned data from mat_99_run_Rfiles
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_write <- function(scripts_file_runned, dir_path) {
+mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
   file_out <- intrl_dir_to_file(dir_path)
   is_there <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
@@ -330,7 +332,7 @@ mat_99_write <- function(scripts_file_runned, dir_path) {
 #' @param warn Should it warn if file is actually missing?
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_add_info_last <- function(scripts_file_runned, dir_path, warn=TRUE) {
+mat_99_add_info_last <- function(scripts_file_runned, dir_path="code_setup", warn=TRUE) {
   file_out <- intrl_dir_to_file(dir_path)
 
   if(file.exists(file_out)) {
@@ -352,7 +354,7 @@ mat_99_add_info_last <- function(scripts_file_runned, dir_path, warn=TRUE) {
 #' @param scripts_file file of R scripts with path to run, from mat_99_list_Rfiles()
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_arrange_by_last <- function(scripts_file_runned, dir_path) {
+mat_99_arrange_by_last <- function(scripts_file_runned, dir_path="code_setup") {
 
   if(file.exists(dir_path)) {
     df_out <- readr::read_csv(dir_path) %>%
@@ -394,6 +396,7 @@ if(FALSE) {
 
   ## rerun
   out2 <- mat_99_run_Rfiles(dir_dat)
+  mat_99_check_there_update(path_temp, overwrite=FALSE)
   mat_99_write(out2, dir = path_temp)
   read_csv(paste(path_temp, "999_CHECK_RUN_report.csv", sep="/"), col_types = cols())
 
@@ -401,9 +404,6 @@ if(FALSE) {
   mat_99_check_there_update(path_temp, overwrite=FALSE)
   mat_99_check_there_update(path_temp, overwrite=TRUE)
 
-
-
   rm(heavy_vec)
-  file.remove("inst/999_CHECK_RUN_report.csv")
 
 }
