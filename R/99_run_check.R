@@ -312,7 +312,7 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
         mutate(session_id = paste(.data$session, .data$session_time, sep="_"),
                session = dplyr::if_else(duplicated(.data$session_id) | is.na(.data$session), "", as.character(.data$session))) %>%
         select(-.data$session_id) %>%
-               # session_time = intrnl_session_clean(., session_time)) %>%
+        mutate(session_time = intrnl_time_format_vec(.data$session_time)) %>%
         readr::write_csv(file_out)
     }
   }

@@ -9,5 +9,6 @@ to do... can I get a list of functions? Just document them!
 }
 \details{
 Should run:
+
 remotes::install_github("MatthieuStigler/matPkg", upgrade = "never")
 }
