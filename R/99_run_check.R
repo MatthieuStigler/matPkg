@@ -8,7 +8,7 @@ intrnl_dir_to_file <- function(dir) paste(dir, "999_CHECK_RUN_report.csv", sep =
 
 intrnl_cols_need <- c("session", "session_time",
                      "user_node",
-                     "filename", "folder",
+                     "filename", "folder", "subfolder",
                      "error", "has_error",
                      "elapsed", "memory_used_mb",
                      "user.self", "sys.self", "user.child",
@@ -62,7 +62,8 @@ mat_parse_yaml <- function(file_path){
 #' @rdname mat_99_run_Rfiles
 mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=FALSE) {
   dir_df <- mat_list_dir(dir_path, pattern="\\.R$", add_ext = TRUE, recursive = recursive) %>%
-    mutate(folder = basename(dirname(.data$full_path)))
+    mutate(folder = dirname(.data$full_path),
+           subfolder = basename(dirname(.data$full_path)))
 
   res <- dir_df %>%
     mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
@@ -346,7 +347,8 @@ mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
            session_time = sum(.data$elapsed, na.rm=TRUE),
            date = today,
            time = Sys.time() %>% as.character(),
-           folder = basename(dirname(.data$full_path)),
+           folder = dirname(.data$full_path),
+           subfolder = basename(dirname(.data$full_path)),
            user_node =user) %>%
     select(tidyselect::all_of(intrnl_cols_need))
 
