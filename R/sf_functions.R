@@ -21,12 +21,19 @@ mat_st_read <-  function(dsn, ..., quiet = TRUE, stringsAsFactors = FALSE) {
 #'@export
 mat_st_to_df <- function(shp, add_xy = FALSE) {
 
+  if(!inherits(shp, c("sf", "sfc"))) {
+    return(as_tibble(shp))
+  }
+
   res <-   shp %>%
     sf::st_set_geometry(NULL) %>%
     as_tibble()
 
   if(add_xy) {
-    if(!all(sf::st_geometry_type(shp)=="POINT")) warning("Needs all points?")
+    if(!all(sf::st_geometry_type(shp)=="POINT")) {
+      warning("Not points!? Taking centroids!")
+      shp <- sf::st_centroid(shp)
+    }
     coords_df <-  as_tibble(sf::st_coordinates(shp)) %>%
       select("X", "Y")
     res <- res %>%
