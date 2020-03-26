@@ -50,7 +50,7 @@ mat_keep_first <- function(x, fill="", warn = TRUE) {
   ifelse(duplicated(x_char), fill, x_char)
 }
 
-2#' Show method called on object
+#' Show method called on object
 #' @param generic the generic
 #' @param \ldots the object on which to use the generic
 #' @export
@@ -63,6 +63,28 @@ mat_find_method <- function(generic, ...) {
   f <- X <- function(x, ...) UseMethod("X")
   for(m in utils::methods(ch)) assign(sub(ch, "X", m, fixed = TRUE), "body<-"(f, value = m))
   X(...)
+}
+
+
+#' Cor with NA
+#' @param x,y,use,method as in cor
+#' @export
+#' @examples
+#' iris2 <- iris[, 1:4]
+#' iris2[c(3, 8),1] <-  NA
+#' mat_cor_na(iris2)
+#' with(iris2, mat_cor_na(Sepal.Length, Petal.Width))
+#' with(iris2, mat_cor_na_df(Sepal.Length, Petal.Width))
+mat_cor_na <- function(x, y = NULL, use = "pairwise.complete.obs", method = "pearson") {
+  stats::cor(x=x, y = y, use = use, method = method)
+}
+
+#' @export
+#' @rdname mat_cor_na
+mat_cor_na_df <- function(x, y=NULL, use = "pairwise.complete.obs", method = "pearson") {
+  if(is.null(y)) stop("Need 2 univariate x, y. Use instead mat_cor_na() %>% mat_cor_to_df")
+  stats::cor(x=x, y = y, use = use, method = method) %>%
+    tibble::enframe(name=NULL, value="cor")
 }
 
 #' Check number even

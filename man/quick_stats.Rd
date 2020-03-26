@@ -4,7 +4,9 @@
 \name{quick_stats}
 \alias{quick_stats}
 \title{Reshuffled quick stats, dirty data example}
-\format{A tibble}
+\format{
+A tibble
+}
 \usage{
 quick_stats
 }

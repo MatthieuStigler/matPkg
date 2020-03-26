@@ -4,7 +4,9 @@
 \name{iris_tb}
 \alias{iris_tb}
 \title{iris as tibble}
-\format{A tibble}
+\format{
+A tibble
+}
 \usage{
 iris_tb
 }

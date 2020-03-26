@@ -4,7 +4,9 @@
 \name{CDL_colors}
 \alias{CDL_colors}
 \title{CDL crop and color table}
-\format{A data-frame}
+\format{
+A data-frame
+}
 \usage{
 CDL_colors
 }

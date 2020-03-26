@@ -4,7 +4,9 @@
 \name{coefs_out_iris}
 \alias{coefs_out_iris}
 \title{Coef out when used from mat_tidy_do}
-\format{A tibble}
+\format{
+A tibble
+}
 \usage{
 coefs_out_iris
 }
