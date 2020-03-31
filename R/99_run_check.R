@@ -295,10 +295,10 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
     if(all(c("time", "elapsed") %in% colnames(file_old))) {
       file_old <- file_old %>%
         group_by(.data$time) %>%
-        mutate(session_time = ifelse(!is.na(.data$session_time),
-                                     .data$session_time,
-                                     round(sum(.data$elapsed, na.rm=TRUE)))) %>%
-        ungroup()
+        mutate(session_time = sum(.data$elapsed, na.rm=TRUE)) %>%
+        ungroup() %>%
+        mutate(session_time = intrnl_time_format_vec(.data$session_time))
+
       if(overwrite)  {
         readr::write_csv(file_old, file_out)
         # file_old <- readr::read_csv(file_out, col_types = readr::cols())
@@ -307,13 +307,12 @@ mat_99_check_there_update <- function (dir_path="code_setup", overwrite=TRUE) {
       warning("Missing columns 'time' and 'elapsed'")
     }
 
-    ## last run nake sure clean columns
+    ## last run make sure clean session column
     if(overwrite)  {
       readr::read_csv(file_out, col_types = readr::cols()) %>%
         mutate(session_id = paste(.data$session, .data$session_time, sep="_"),
                session = dplyr::if_else(duplicated(.data$session_id) | is.na(.data$session), "", as.character(.data$session))) %>%
         select(-.data$session_id) %>%
-        mutate(session_time = intrnl_time_format_vec(.data$session_time)) %>%
         readr::write_csv(file_out)
     }
   }
@@ -344,7 +343,8 @@ mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
     dplyr::select_if(~!is.list(.)) %>%
     mutate(session = today,
            session = dplyr::if_else(duplicated(.data$session), "", .data$session),
-           session_time = sum(.data$elapsed, na.rm=TRUE),
+           session_time = sum(.data$elapsed, na.rm=TRUE) %>%
+             intrnl_time_format_vec(),
            date = today,
            time = Sys.time() %>% as.character(),
            folder = dirname(.data$full_path),
