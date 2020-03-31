@@ -4,9 +4,15 @@
 ################################
 
 intrl_get_pkg <- function(x) {
-  out <- str_extract_all(x, "library\\(.+\\)")
-  out2 <- unlist(out[sapply(out, length)>0])
-  str_remove_all(out2, "library\\(|\\)")
+  ## extract if has library()
+  out_lib <- str_extract_all(x, "(?<=library\\()[aA-zZ0-9\\.]+(?=\\))")
+
+  ## extract if has ::
+  out_dot2 <- str_extract_all(x, "[aA-zZ0-9\\.]+(?=\\:\\:)")
+
+  ## get both, clean
+  out_both <- c(out_lib, out_dot2)
+  unlist(out_both[sapply(out_both, length)>0])
 }
 
 intrl_get_path <- function(x) {
@@ -36,7 +42,9 @@ mat_88_list_pkgs <- function(scripts_file, warn_missing = TRUE, unique =TRUE) {
 
   out <- scripts_file %>%
     mutate(script = map(.data$full_path, ~readLines(., warn=FALSE)),
-           pkgs = map(.data$script, ~intrl_get_pkg(.) %>%  tibble::enframe(name=NULL, value="package"))) %>%
+           pkgs = map(.data$script, ~intrl_get_pkg(.) %>%
+                        tibble::enframe(name=NULL, value="package") %>%
+                        mutate(package = as.character(package)))) %>%
     select(.data$filename, .data$pkgs) %>%
     unnest(.data$pkgs) %>%
     mutate(is_installed = map_lgl(.data$package, ~. %in% pkgs_here$Package))
@@ -123,12 +131,13 @@ mat_88_check_paths <- function(scripts_file,  dir_path=".", file_ignore=NULL, un
 ################################
 
 if(FALSE){
+  library(matPkg)
   ## read stuff
   path_rscripts <- system.file("r_scripts_fake", package = "matPkg")
   dir_dat <- mat_99_list_Rfiles(path_rscripts)
 
   ##
-  mat_88_list_pkgs(dir_dat)
+  mat_88_list_pkgs(scripts_file = dir_dat)
   mat_88_list_paths(scripts_file = dir_dat)
 
 
