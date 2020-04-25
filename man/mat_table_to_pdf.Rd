@@ -9,6 +9,7 @@ mat_table_to_pdf(
   x,
   filename = "input.tex",
   quiet = TRUE,
+  is_path_x = FALSE,
   clean_tex = TRUE,
   clean_rest = TRUE,
  
@@ -24,6 +25,8 @@ table_to_pdf(x)
 
 \item{quiet}{passed to tools::texi2pdf}
 
+\item{is_path_x}{whether x is a file on disk}
+
 \item{clean_tex, clean_rest}{Should remove other files, and tex too?}
 
 \item{plus}{additional lattex stuff}
@@ -38,6 +41,11 @@ tab_xt <- print(xtable::xtable(tab), print.results = FALSE)
 
 mat_table_to_pdf(tab_xt, filename = "filename_test")
 file.remove("filename_test.pdf")
+## case 2: file is already on disk, use is_path_x
+tmp_file <- tempfile()
+print(xtable::xtable(tab), file = tmp_file)
+mat_table_to_pdf(tmp_file, filename = "filename_test2", is_path_x = TRUE)
+file.remove("filename_test2.pdf")
 }
 }
 \seealso{

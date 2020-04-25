@@ -2,6 +2,7 @@
 #'
 #' Use tools::texi2pdf
 #'@param x the table input
+#'@param is_path_x whether x is a file on disk
 #'@param filename output name
 #'@param quiet passed to tools::texi2pdf
 #'@param clean_tex,clean_rest Should remove other files, and tex too?
@@ -14,9 +15,70 @@
 #'
 #'mat_table_to_pdf(tab_xt, filename = "filename_test")
 #'file.remove("filename_test.pdf")
+#'## case 2: file is already on disk, use is_path_x
+#'tmp_file <- tempfile()
+#'print(xtable::xtable(tab), file = tmp_file)
+#'mat_table_to_pdf(tmp_file, filename = "filename_test2", is_path_x = TRUE)
+#'file.remove("filename_test2.pdf")
 #'}
 #'@export
 mat_table_to_pdf <- function(x, filename = "input.tex",  quiet=TRUE,
+                             is_path_x = FALSE,
+                             clean_tex = TRUE, clean_rest = TRUE,
+                             plus= "\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}") {
+
+  if(inherits(x, "xtable") ) {
+    warning("xtable object is actually not character, use print/capture.output")
+    x <-  print(x)
+  }
+  if(!clean_tex | !clean_rest) warning("clean_rest or clean_tex not useful anymore")
+  if(stringr::str_detect(filename, "\\.pdf$|\\.png$")) warning("filneame should be raw")
+  if(!stringr::str_detect(filename, "\\.tex"))   filename <- paste(filename, ".tex", sep="")
+
+  ## read x if is path
+  if(is_path_x) {
+    x <- readLines(x)
+  }
+
+  ## format text
+  ## format x if length(x) %>%  1
+  if(length(x)>1) x <-  paste(x, collapse = "\n")
+  first <- c("\\documentclass[varwidth=\\maxdimen]{standalone}[2011/12/21]",  "\\begin{document}")
+  last <- "\\end{document}"
+  text <- paste(first[1], plus, first[2], x, last, sep="\n")
+
+  ## write down formatted file in temp file
+  tmp_dir <- tempdir()
+  tmp_file <- paste(tmp_dir, "file_temp.tex", sep = "/")
+
+  fileConn <- file(tmp_file)
+  writeLines(text, fileConn)
+  close(fileConn)
+
+  old_wd <- getwd()
+  setwd(tmp_dir)
+  if(!file.exists(tmp_file)) warning("Oups")
+  try(tools::texi2pdf(tmp_file, quiet=quiet, clean=FALSE))
+  setwd(old_wd)
+
+  ## copy now
+  file.copy(stringr::str_replace(tmp_file, "\\.tex$", ".pdf"),
+            stringr::str_replace(filename, "\\.tex$", ".pdf"), overwrite = TRUE)
+
+
+  if(any(c(clean_tex, clean_rest)) & FALSE) {
+    filename_2  <- stringr::str_remove(filename, "\\..+$")
+    all_files <- list.files(path = dirname(filename),
+                            pattern=basename(filename_2),
+                            full.names = TRUE)
+
+    if(clean_rest) file.remove(all_files[!stringr::str_detect(all_files, "\\.pdf$|\\.tex$")])
+    if(clean_tex) file.remove(all_files[stringr::str_detect(all_files, "\\.tex$")])
+  }
+}
+
+
+mat_table_to_pdf_old <- function(x, filename = "input.tex",  quiet=TRUE,
                              clean_tex = TRUE, clean_rest = TRUE,
                              plus= "\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}") {
 
