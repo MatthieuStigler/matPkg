@@ -13,16 +13,16 @@
 #'tab <-  data.frame(variable= c("A", "B"), stat = c("mean"), value = 1:2)
 #'tab_xt <- print(xtable::xtable(tab), print.results = FALSE)
 #'
-#'mat_table_to_pdf(tab_xt, filename = "filename_test")
+#'mat_table_to_pdf(tab_xt, filename = "filename_test.pdf")
 #'file.remove("filename_test.pdf")
 #'## case 2: file is already on disk, use is_path_x
 #'tmp_file <- tempfile()
 #'print(xtable::xtable(tab), file = tmp_file)
-#'mat_table_to_pdf(tmp_file, filename = "filename_test2", is_path_x = TRUE)
+#'mat_table_to_pdf(tmp_file, filename = "filename_test2.pdf", is_path_x = TRUE)
 #'file.remove("filename_test2.pdf")
 #'}
 #'@export
-mat_table_to_pdf <- function(x, filename = "input.tex",  quiet=TRUE,
+mat_table_to_pdf <- function(x, filename = "input.pdf",  quiet=TRUE,
                              is_path_x = FALSE,
                              clean_tex = TRUE, clean_rest = TRUE,
                              plus= "\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}") {
@@ -31,9 +31,9 @@ mat_table_to_pdf <- function(x, filename = "input.tex",  quiet=TRUE,
     warning("xtable object is actually not character, use print/capture.output")
     x <-  print(x)
   }
-  if(!clean_tex | !clean_rest) warning("clean_rest or clean_tex not useful anymore")
-  # if(stringr::str_detect(filename, "\\.pdf$|\\.png$")) warning("filneame should be raw")
-  if(!stringr::str_detect(filename, "\\.tex"))   filename <- paste(filename, ".tex", sep="")
+  if(!clean_tex | !clean_rest) warning("clean_rest or clean_tex not used/useful anymore")
+  if(stringr::str_detect(filename, "\\.tex$"))  warning("Old code!?")
+  if(!stringr::str_detect(filename, "\\.pdf$"))  warning("No pdf output?")
 
   ## read x if is path
   if(is_path_x) {

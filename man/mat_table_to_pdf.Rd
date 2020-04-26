@@ -7,7 +7,7 @@
 \usage{
 mat_table_to_pdf(
   x,
-  filename = "input.tex",
+  filename = "input.pdf",
   quiet = TRUE,
   is_path_x = FALSE,
   clean_tex = TRUE,
@@ -39,12 +39,12 @@ Use tools::texi2pdf
 tab <-  data.frame(variable= c("A", "B"), stat = c("mean"), value = 1:2)
 tab_xt <- print(xtable::xtable(tab), print.results = FALSE)
 
-mat_table_to_pdf(tab_xt, filename = "filename_test")
+mat_table_to_pdf(tab_xt, filename = "filename_test.pdf")
 file.remove("filename_test.pdf")
 ## case 2: file is already on disk, use is_path_x
 tmp_file <- tempfile()
 print(xtable::xtable(tab), file = tmp_file)
-mat_table_to_pdf(tmp_file, filename = "filename_test2", is_path_x = TRUE)
+mat_table_to_pdf(tmp_file, filename = "filename_test2.pdf", is_path_x = TRUE)
 file.remove("filename_test2.pdf")
 }
 }
