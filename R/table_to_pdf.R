@@ -32,7 +32,7 @@ mat_table_to_pdf <- function(x, filename = "input.tex",  quiet=TRUE,
     x <-  print(x)
   }
   if(!clean_tex | !clean_rest) warning("clean_rest or clean_tex not useful anymore")
-  if(stringr::str_detect(filename, "\\.pdf$|\\.png$")) warning("filneame should be raw")
+  # if(stringr::str_detect(filename, "\\.pdf$|\\.png$")) warning("filneame should be raw")
   if(!stringr::str_detect(filename, "\\.tex"))   filename <- paste(filename, ".tex", sep="")
 
   ## read x if is path
