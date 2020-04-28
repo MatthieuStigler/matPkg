@@ -12,6 +12,7 @@ mat_table_to_pdf(
   is_path_x = FALSE,
   clean_tex = TRUE,
   clean_rest = TRUE,
+  copy.mode = TRUE,
  
     plus = "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}"
 )
@@ -28,6 +29,8 @@ table_to_pdf(x)
 \item{is_path_x}{whether x is a file on disk}
 
 \item{clean_tex, clean_rest}{Should remove other files, and tex too?}
+
+\item{copy.mode}{Argument passed to \code{\link{file.copy}} to override or not permissions}
 
 \item{plus}{additional lattex stuff}
 }

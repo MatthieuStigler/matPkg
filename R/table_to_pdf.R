@@ -7,6 +7,7 @@
 #'@param quiet passed to tools::texi2pdf
 #'@param clean_tex,clean_rest Should remove other files, and tex too?
 #'@param plus additional lattex stuff
+#'@param copy.mode Argument passed to \code{\link{file.copy}} to override or not permissions
 #'@seealso  \code{\link{mat_pdf_to_png}}
 #'@examples
 #'\dontrun{
@@ -25,6 +26,7 @@
 mat_table_to_pdf <- function(x, filename = "input.pdf",  quiet=TRUE,
                              is_path_x = FALSE,
                              clean_tex = TRUE, clean_rest = TRUE,
+                             copy.mode = TRUE,
                              plus= "\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}") {
 
   if(inherits(x, "xtable") ) {
@@ -63,7 +65,8 @@ mat_table_to_pdf <- function(x, filename = "input.pdf",  quiet=TRUE,
 
   ## copy now
   file.copy(stringr::str_replace(tmp_file, "\\.tex$", ".pdf"),
-            stringr::str_replace(filename, "\\.tex$", ".pdf"), overwrite = TRUE)
+            stringr::str_replace(filename, "\\.tex$", ".pdf"),
+            overwrite = TRUE, copy.mode = copy.mode)
 
 
   if(any(c(clean_tex, clean_rest)) & FALSE) {
