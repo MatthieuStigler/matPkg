@@ -27,7 +27,7 @@ mat_99_check_there_update(dir_path = "code_setup", overwrite = TRUE)
 
 mat_99_check_there(dir_path = "code_setup", overwrite = TRUE)
 
-mat_99_write(scripts_file_runned, dir_path = "code_setup")
+mat_99_write(scripts_file_runned, dir_path = "code_setup", append = TRUE)
 
 mat_99_add_info_last(scripts_file_runned, dir_path = "code_setup", warn = TRUE)
 
@@ -49,6 +49,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path = "code_setup")
 \item{scripts_file_runned}{data from mat_99_run_Rfiles}
 
 \item{overwrite}{should overwrite data?}
+
+\item{append}{Overwrite existing or append?}
 
 \item{warn}{Should it warn if file is actually missing?}
 }

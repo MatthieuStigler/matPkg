@@ -159,12 +159,18 @@ source_throw <- function(path, echo=TRUE) {
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
   gc()
   mem_before <- pryr::mem_used()
+  pkgs_before <- .packages()
   env_random <-  new.env()
   sys <- system.time(sys.source(path, envir = env_random))
   mem_after <- pryr::mem_used()
+  pkgs_after <- .packages()
   ls_env <- ls(envir = env_random)
+
+  ## clean
   rm(list = ls_env, envir = env_random)
   rm(env_random)
+  pkgs_to_remove <- pkgs_after[!pkgs_after%in% pkgs_before]
+  unloadNamespace(pkgs_to_remove)
   gc()
 
   # memory count
@@ -327,11 +333,12 @@ mat_99_check_there <- function (dir_path="code_setup", overwrite=TRUE) {
 }
 
 #' @param scripts_file_runned data from mat_99_run_Rfiles
+#' @param append Overwrite existing or append?
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
+mat_99_write <- function(scripts_file_runned, dir_path="code_setup",
+                         append=TRUE) {
   file_out <- intrnl_dir_to_file(dir_path)
-  is_there <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
   time <- Sys.time() %>%
     format(format="%H:%M:%S") %>%
@@ -352,7 +359,7 @@ mat_99_write <- function(scripts_file_runned, dir_path="code_setup") {
            user_node =user) %>%
     select(tidyselect::all_of(intrnl_cols_need))
 
-  readr::write_csv(df_new, file_out, append=is_there)
+  readr::write_csv(df_new, file_out, append=append)
 
 }
 
