@@ -62,7 +62,8 @@ mat_parse_yaml <- function(file_path){
 #' @rdname mat_99_run_Rfiles
 mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=FALSE) {
   dir_df <- mat_list_dir(dir_path, pattern="\\.R$", add_ext = TRUE, recursive = recursive) %>%
-    mutate(folder = dirname(.data$full_path),
+    mutate(full_path = str_replace_all(.data$full_path, "//", "/"),
+           folder = dirname(.data$full_path),
            subfolder = basename(dirname(.data$full_path)))
 
   res <- dir_df %>%
