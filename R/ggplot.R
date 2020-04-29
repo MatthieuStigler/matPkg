@@ -76,6 +76,14 @@ mat_gg_abline_01 <-  ggplot2::geom_abline(slope = 1, intercept = 0, linetype = 2
 
 #' @rdname gg_helpers
 #' @export
+mat_gg_hline_0 <-  ggplot2::geom_hline(yintercept = 0, linetype = 2)
+
+#' @rdname gg_helpers
+#' @export
+mat_gg_vline_0 <-  ggplot2::geom_vline(xintercept = 0, linetype = 2)
+
+#' @rdname gg_helpers
+#' @export
 mat_gg_legend_bottom <- ggplot2::theme(legend.position="bottom")
 
 #' @rdname gg_helpers

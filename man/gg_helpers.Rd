@@ -5,6 +5,8 @@
 \alias{gg_helpers}
 \alias{mat_gg_helpers}
 \alias{mat_gg_abline_01}
+\alias{mat_gg_hline_0}
+\alias{mat_gg_vline_0}
 \alias{mat_gg_legend_bottom}
 \alias{mat_gg_legend_none}
 \alias{mat_gg_title_center}
@@ -14,6 +16,10 @@
 \alias{mat_gg_scale_X_isperc}
 \title{ggplot2 helpers}
 \format{
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 11.
+
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 11.
+
 An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 11.
 
 An object of class \code{theme} (inherits from \code{gg}) of length 1.
@@ -32,6 +38,10 @@ An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleCont
 }
 \usage{
 mat_gg_abline_01
+
+mat_gg_hline_0
+
+mat_gg_vline_0
 
 mat_gg_legend_bottom
 
