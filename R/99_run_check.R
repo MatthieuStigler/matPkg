@@ -170,8 +170,9 @@ source_throw <- function(path, echo=TRUE) {
   ## clean
   rm(list = ls_env, envir = env_random)
   rm(env_random)
-  pkgs_to_remove <- pkgs_after[!pkgs_after%in% pkgs_before]
-  unloadNamespace(pkgs_to_remove)
+  pkgs_to_remove <- pkgs_after[!pkgs_after%in% c(pkgs_before, "matPkg")]
+  # unloadNamespace(pkgs_to_remove)
+  detach(paste0("package:",pkgs_to_remove),  unload=FALSE, character.only =TRUE) # otherwise try: devtools::unload("sf")
   gc()
 
   # memory count
