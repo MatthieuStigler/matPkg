@@ -4,7 +4,7 @@
 \alias{st_as_sf.Extent}
 \title{Extent to sf}
 \usage{
-st_as_sf.Extent(x)
+\method{st_as_sf}{Extent}(x)
 }
 \arguments{
 \item{x}{raster Extent object}
@@ -19,6 +19,6 @@ r1 <- raster(nrows=108, ncols=21, xmn=0, xmx=100)
 r2 <- raster(nrows=108, ncols=21, xmn=50, xmx=150)
 st2 <- rbind(st_as_sf(extent(r1)),
              st_as_sf(extent(r2)))
-             plot(st2, border = 1:2)
+plot(st2, border = 1:2)
 
 }
