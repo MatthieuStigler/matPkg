@@ -32,7 +32,8 @@ Imports:
     methods,
     lmtest,
     pryr,
-    readr
+    readr,
+    pkgload
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Suggests: 
