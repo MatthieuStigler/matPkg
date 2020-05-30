@@ -430,3 +430,26 @@ mat_col_check_same <- function(df, col_1, col_2, tol = 0.00000001) {
   df %>%
     mutate(is_same = abs({{col_1}}- {{col_2}}) < tol)
 }
+
+
+#' enframe wide
+#'
+#' Add a col diff
+#' @param x a vector
+#' @param names vector of names
+#' @examples
+#' mat_enframe_wide(x=c(a=1,b=22))
+#' mat_enframe_wide(x=c(1,22))
+#' mat_enframe_wide(x=c(a=1,22, c=9, 8))
+#' @export
+mat_enframe_wide <- function(x, names=NULL){
+  x_names <- if(!is.null(names)) names else  names(x)
+  if(is.null(x_names)) x_names <- paste("col", 1:length(x), sep="_")
+  if(any(x_names=="")) x_names[x_names==""] <- paste("col", which(x_names==""), sep="_")
+  names(x) <- x_names
+  x %>%
+    tibble::enframe() %>%
+    tidyr::pivot_wider(names_from = "name",
+                       values_from="value", names_sort=FALSE)
+}
+
