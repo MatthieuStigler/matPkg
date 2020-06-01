@@ -162,7 +162,8 @@ source_throw <- function(path, echo=TRUE) {
   mem_before <- pryr::mem_used()
   pkgs_before <- .packages()
   env_random <-  new.env()
-  sys <- system.time(sys.source(path, envir = env_random))
+  sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
+                                                 keep.source=FALSE, keep.parse.data=FALSE)))
   mem_after <- pryr::mem_used()
   pkgs_after <- .packages()
   ls_env <- ls(envir = env_random)
@@ -445,5 +446,5 @@ if(FALSE) {
 
 
   ##
-  matPkg:::source_throw(path = dir_dat$full_path[[1]], echo=TRUE)
+  a <- matPkg:::source_throw(path = dir_dat$full_path[[7]], echo=TRUE)
 }
