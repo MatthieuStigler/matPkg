@@ -185,8 +185,8 @@ source_throw <- function(path, echo=TRUE) {
   if(echo) {
     mems_info_char <- as.character.bytes(x=mems_info, unit="MB")
     mems_info_char2 <- paste(stringr::str_remove(names(mems_info), "mem_"), mems_info_char, sep=": ")
-    cat("Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
-    cat(paste("Done with file", path, "\n"))
+    cat("\t-Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
+    cat(paste("\t-Done with file", path, "\n"))
   }
   t(data.matrix(sys)) %>%
     as.data.frame() %>%
