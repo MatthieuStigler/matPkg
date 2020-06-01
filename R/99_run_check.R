@@ -134,7 +134,8 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE) {
     mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
            has_error= map_lgl(.data$error, ~!is.null(.)),
-           error=map_chr(.data$error, ~ifelse(is.null(.), NA, .) %>% as.character),
+           error=map_chr(.data$error, ~ifelse(is.null(.), NA, as.character(.) %>%
+                                                str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n"))),
            timing = map2(.data$try, .data$has_error, ~if(.y) df_null else .x$result)) %>%
     unnest(.data$timing) %>%
     select("filename", "has_error", "error",
