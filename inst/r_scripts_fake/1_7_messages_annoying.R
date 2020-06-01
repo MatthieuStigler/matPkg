@@ -1,5 +1,5 @@
 #' ---
-#' Title: "Light error code"
+#' Title: "Annoying message"
 #' Author: "Matthieu"
 #' Date: 2019-03-11
 #' runMat: TRUE
@@ -9,7 +9,9 @@
 ################################
 #'## Read data
 ################################
-library(stats)
-dplyr::select(iris, lk)
-stop("You can't do that maan")
 
+library(tidyverse)
+file_tmp <- tempfile()
+write_csv(iris, file_tmp)
+a <- read_csv(file_tmp)
+file.remove(file_tmp)
