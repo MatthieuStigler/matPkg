@@ -179,10 +179,10 @@ source_throw <- function(path, echo=TRUE) {
   # memory count
   mem_final <- pryr::mem_used()
   mems_info <- c(mem_before=mem_before, mem_after=mem_after,
-                 mem_diff=mem_after-mem_before,1,
+                 mem_diff=mem_after-mem_before,
                  mem_final=mem_final)
   if(echo) {
-    mems_info_char <- as.character.bytes(mems_info, unit="MB")
+    mems_info_char <- as.character.bytes(x=mems_info, unit="MB")
     mems_info_char2 <- paste(stringr::str_remove(names(mems_info), "mem_"), mems_info_char, sep=": ")
     cat("Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
     cat(paste("Done with file", path, "\n"))
@@ -198,7 +198,7 @@ source_throw <- function(path, echo=TRUE) {
 #'
 #' Simply copied from pryr:::print.bytes
 #' @noRd
-as.character.bytes <- function (x, digits = 3, unit=NULL, ...) {
+as.character.bytes <- function (x, digits = 1, unit=NULL, ...) {
 
   if(is.null(unit)) {
     power <- min(floor(log(abs(x), 1000)), 4)
@@ -207,8 +207,8 @@ as.character.bytes <- function (x, digits = 3, unit=NULL, ...) {
     unit <- match.arg(unit, choices=c("B", "kB", "MB", "GB", "TB"))
   }
   x <-  as.numeric.bytes(x, unit=unit)
-  formatted <- format(signif(x, digits = digits), big.mark = ",",
-                      scientific = FALSE)
+  formatted <- map_chr(x, ~format(signif(., digits = digits), big.mark = ",",
+                     scientific = FALSE))
   paste(formatted,  unit)
 }
 
@@ -421,7 +421,7 @@ if(FALSE) {
   dir_dat
 
   ## run
-  out <- mat_99_run_Rfiles(dir_dat)
+  out <- mat_99_run_Rfiles(scripts_file=dir_dat, echo=TRUE)
   out
   mat_99_showErr(out)
 
@@ -443,4 +443,7 @@ if(FALSE) {
 
   rm(heavy_vec)
 
+
+  ##
+  matPkg:::source_throw(path = dir_dat$full_path[[1]], echo=TRUE)
 }
