@@ -8,8 +8,9 @@
 #' mat_is_unique_combo(iris, Sepal.Length, Sepal.Width, Petal.Width, Petal.Length, Species)
 #' @export
 mat_is_unique_combo <- function(df, ..., .print=TRUE) {
+  by_quos <- rlang::enquos(..., .named = TRUE)
   df_c <- df %>%
-    dplyr::add_count(!!!enquos(...), name = "n_occur")
+    dplyr::add_count(!!!by_quos, name = "n_occur")
   is_unique <- all(df_c$n_occur==1)
   if(!is_unique) {
     cat("Not unique! Some combinations have n>1\n")
@@ -19,7 +20,7 @@ mat_is_unique_combo <- function(df, ..., .print=TRUE) {
 
     ## first group
     res_groups <- dplyr::filter(df_c, .data$n_occur>1) %>%
-      mutate(group = dplyr::group_indices(., !!!enquos(...))) %>%
+      mutate(group = dplyr::group_indices(dplyr::group_by(., !!!by_quos))) %>%
       select(.data$group, everything()) %>%
       filter(.data$group==1) %>%
       mat_remo_cols_1val()
