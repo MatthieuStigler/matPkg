@@ -27,7 +27,7 @@ mat_99_check_there_update(dir_path = "code_setup", overwrite = TRUE)
 
 mat_99_check_there(dir_path = "code_setup", overwrite = TRUE)
 
-mat_99_write(scripts_file_runned, dir_path = "code_setup", append = TRUE)
+mat_99_write(scripts_file_runned, dir_path = "code_setup", append = NULL)
 
 mat_99_add_info_last(scripts_file_runned, dir_path = "code_setup", warn = TRUE)
 

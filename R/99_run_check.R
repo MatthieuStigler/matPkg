@@ -342,8 +342,9 @@ mat_99_check_there <- function (dir_path="code_setup", overwrite=TRUE) {
 #' @export
 #' @rdname mat_99_run_Rfiles
 mat_99_write <- function(scripts_file_runned, dir_path="code_setup",
-                         append=TRUE) {
+                         append=NULL) {
   file_out <- intrnl_dir_to_file(dir_path)
+  if(is.null(append)) append <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
   time <- Sys.time() %>%
     format(format="%H:%M:%S") %>%
