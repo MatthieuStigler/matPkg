@@ -175,7 +175,7 @@ source_throw <- function(path, echo=TRUE) {
   pkgs_to_remove <- pkgs_after[!pkgs_after%in% c(pkgs_before, "matPkg")]
   # unloadNamespace(pkgs_to_remove)
   # detach(paste0("package:",pkgs_to_remove),  unload=FALSE, character.only =TRUE) # otherwise try:
-  purrr::walk(c("tsDyn", "plm"), ~purrr::safely(pkgload::unload)(), quiet=TRUE)
+  # purrr::walk(c("tsDyn", "plm"), ~purrr::safely(pkgload::unload)(), quiet=TRUE)
   gc()
 
   # memory count
