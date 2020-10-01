@@ -4,10 +4,12 @@
 \alias{mat_str_to_expr}
 \title{Converting to expression for plots}
 \usage{
-mat_str_to_expr(x)
+mat_str_to_expr(x, echo = FALSE)
 }
 \arguments{
 \item{x}{A single charracter string}
+
+\item{echo}{Print before eval? For de-bugging}
 }
 \value{
 An expression
@@ -18,4 +20,8 @@ Simply add annoying ~ as space, and converts as expression
 \examples{
 plot(1)
 title(mat_str_to_expr("This is R^2"))
+plot(1)
+title(mat_str_to_expr(x="This is R^2 in 1\%", echo=TRUE))
+plot(1)
+title(mat_str_to_expr(x="This is R^2 in \%", echo=TRUE))
 }
