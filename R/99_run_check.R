@@ -163,8 +163,9 @@ source_throw <- function(path, echo=TRUE) {
   mem_before <- pryr::mem_used()
   pkgs_before <- .packages()
   env_random <-  new.env()
-  sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
-                                                 keep.source=FALSE, keep.parse.data=FALSE)))
+  ## main oline: source file, measuring time and memory!
+  mem_change <- pryr::mem_change(sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
+                                                                                keep.source=FALSE, keep.parse.data=FALSE))))
   mem_after <- pryr::mem_used()
   pkgs_after <- .packages()
   ls_env <- ls(envir = env_random)
@@ -182,6 +183,7 @@ source_throw <- function(path, echo=TRUE) {
   mem_final <- pryr::mem_used()
   mems_info <- c(mem_before=mem_before, mem_after=mem_after,
                  mem_diff=mem_after-mem_before,
+                 mem_change = mem_change,
                  mem_final=mem_final)
   if(echo) {
     mems_info_char <- as.character.bytes(x=mems_info, unit="MB")
