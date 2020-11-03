@@ -157,7 +157,7 @@ df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.
 
 as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
 
-source_throw <- function(path, echo=TRUE) {
+source_throw <- function(path, echo=TRUE, all.names=TRUE) {
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
   gc()
   mem_before <- pryr::mem_used()
@@ -168,9 +168,10 @@ source_throw <- function(path, echo=TRUE) {
                                                                                 keep.source=FALSE, keep.parse.data=FALSE))))
   mem_after <- pryr::mem_used()
   pkgs_after <- .packages()
-  ls_env <- ls(envir = env_random)
+  ls_env <- ls(envir = env_random, all.names = all.names)
 
   ## clean
+  ggplot2::set_last_plot(NULL) ## this will remove the ".last_plot" from ggplot, see https://stackoverflow.com/questions/64654252/r-deleting-ggplot2-object-does-not-free-space-possible-memory-leakage
   rm(list = ls_env, envir = env_random)
   rm(env_random)
   pkgs_to_remove <- pkgs_after[!pkgs_after%in% c(pkgs_before, "matPkg")]
