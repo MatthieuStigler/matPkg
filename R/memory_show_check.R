@@ -1,5 +1,8 @@
-#' Show memory usage, by object
-#' @param df_input input df. If empty, will evaluate ls()
+#' Show memory usage, by object, or from workspace
+#' @param df_input input data. Can be a df, a list of objects, or a vector of characters. If empty, will evaluate ls()
+#' @param is_ls Is 'df_input' actually a list of characters (if yes, runs get() first)
+#' @param all.names Whether should use all.names when calling ls()
+#'
 #' @export
 #' @examples
 #' mat_show_mem()
@@ -12,10 +15,14 @@
 #'   mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) %>%
 #'   select(-data)
 #' mat_show_mem(iris_regs$reg_out)
-mat_show_mem <-  function(df_input) {
+#'
+#' ## Check a workspace
+#' mat_show_mem(ls(), is_ls=TRUE)
+mat_show_mem <-  function(df_input, is_ls=FALSE, all.names=TRUE) {
 
-  if(missing(df_input)) {
-    df_size <- tibble(object = ls(.GlobalEnv)) %>%
+  if(missing(df_input)|is_ls) {
+    if(missing(df_input)) df_input <- ls(.GlobalEnv, all.names=all.names)
+    df_size <- tibble(object = df_input) %>%
       mutate(obj_size = map(.data$object, ~pryr::object_size(get(., envir = .GlobalEnv)))) %>%
       mutate(class_first = map_chr(.data$object, ~ class(get(., envir = .GlobalEnv))[1]))
   } else {
