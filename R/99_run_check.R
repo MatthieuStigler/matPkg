@@ -58,14 +58,17 @@ mat_parse_yaml <- function(file_path){
 #' @param dir_path directory of files
 #' @param no_old Avoid scripts in directory old?
 #' @param recursive Look into recursive folders?
+#' @param keep_field Additional YAML fields to keep
 #' @export
 #' @rdname mat_99_run_Rfiles
-mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=FALSE) {
+mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=FALSE,
+                                keep_field=NULL) {
   dir_df <- mat_list_dir(dir_path, pattern="\\.R$", add_ext = TRUE, recursive = recursive) %>%
     mutate(full_path = str_replace_all(.data$full_path, "//", "/"),
            folder = dirname(.data$full_path),
            subfolder = basename(dirname(.data$full_path)))
 
+  ## get yaml
   res <- dir_df %>%
     mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
              str_replace("_$", ""),
@@ -73,18 +76,68 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
              str_replace("_", "\\.") %>%
              str_replace_all("_", "") %>%
              as.numeric(),
-           yaml = map(.data$full_path, ~purrr::safely(mat_parse_yaml)(.))) %>%
-  mat_safely_unnest(col_name=.data$yaml, result_name="yaml") %>%
-    rename(has_error_parse=.data$has_error,
-           error_parse=.data$error) %>%
-    mutate(has_yaml=map_lgl(.data$yaml, ~ !rlang::is_empty(.)),
-           has_runMat  = map2_lgl(.data$has_yaml, .data$yaml, ~if(.x)  "runMat" %in% names(.y) else FALSE ),
-           runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
+           yaml = map(.data$full_path, ~purrr::safely(mat_parse_yaml)(.)))
+
+  ## process yaml
+  res_yaml_df <- res %>%
+    tidyr::unnest_wider(.data$yaml) %>%
+    tidyr::unnest_wider(.data$result) %>%
+    mutate(has_runMat = !is.na(.data$runMat),
+           runMat_val = .data$runMat & !is.na(.data$runMat),
+           yaml=  purrr::transpose(res$yaml) %>% purrr::pluck("result"),
+           has_yaml=map_lgl(.data$yaml, ~ !rlang::is_empty(.)))
+           # has_yaml = map_lgl(yaml, ~length(.$result)>0|!is.null(.$result)))
+
+  if(!"error" %in% colnames(res_yaml_df)){
+    res_yaml_df <- res_yaml_df %>%
+      mutate(has_error_parse=FALSE,
+             error_parse=NA_character_)
+  } else {
+    res_yaml_df <- res_yaml_df %>%
+      mutate(has_error_parse=map_lgl(.data$error, ~!is.null(.)),
+             error_parse=map_chr(.data$error, ~dplyr::if_else(is.null(.x), NA_character_, .x$message))) %>%
+      select(-.data$error)
+  }
+
+  vars <- c("filename", "ext", "folder", "subfolder", "number_char", "number",
+            "yaml", "error_parse", "has_error_parse", "has_yaml", "has_runMat",
+            "runMat_val", "full_path", keep_field)
+  res_yaml_df <- res_yaml_df %>%
+    select(tidyselect::all_of(vars)) %>%
+    # select(-Title, -Author,  -Date) %>%
     select(-.data$full_path, .data$full_path)
-  if(no_old) res <-  res %>%
+
+  if(no_old) res_yaml_df <-  res_yaml_df %>%
     filter(!stringr::str_detect(.data$full_path, "old.*/"))
-  res
+  res_yaml_df
 }
+
+
+# mat_99_list_Rfiles_old <- function(dir_path="code_setup", no_old = TRUE, recursive=FALSE) {
+#   dir_df <- mat_list_dir(dir_path, pattern="\\.R$", add_ext = TRUE, recursive = recursive) %>%
+#     mutate(full_path = str_replace_all(.data$full_path, "//", "/"),
+#            folder = dirname(.data$full_path),
+#            subfolder = basename(dirname(.data$full_path)))
+#
+#   res <- dir_df %>%
+#     mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
+#              str_replace("_$", ""),
+#            number = .data$number_char %>%
+#              str_replace("_", "\\.") %>%
+#              str_replace_all("_", "") %>%
+#              as.numeric(),
+#            yaml = map(.data$full_path, ~purrr::safely(mat_parse_yaml)(.))) %>%
+#     mat_safely_unnest(col_name=.data$yaml, result_name="yaml") %>%
+#     rename(has_error_parse=.data$has_error,
+#            error_parse=.data$error) %>%
+#     mutate(has_yaml=map_lgl(.data$yaml, ~ !rlang::is_empty(.)),
+#            has_runMat  = map2_lgl(.data$has_yaml, .data$yaml, ~if(.x)  "runMat" %in% names(.y) else FALSE ),
+#            runMat_val = map2_lgl(.data$has_runMat, .data$yaml, ~if(.x)  .y$runMat else FALSE )) %>%
+#     select(-.data$full_path, .data$full_path)
+#   if(no_old) res <-  res %>%
+#     filter(!stringr::str_detect(.data$full_path, "old.*/"))
+#   res
+# }
 
 #' @rdname mat_99_run_Rfiles
 #' @export

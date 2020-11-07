@@ -13,7 +13,12 @@
 \alias{mat_99_arrange_by_last}
 \title{Run-check files 999 machinery}
 \usage{
-mat_99_list_Rfiles(dir_path = "code_setup", no_old = TRUE, recursive = FALSE)
+mat_99_list_Rfiles(
+  dir_path = "code_setup",
+  no_old = TRUE,
+  recursive = FALSE,
+  keep_field = NULL
+)
 
 mat_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
 
@@ -39,6 +44,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path = "code_setup")
 \item{no_old}{Avoid scripts in directory old?}
 
 \item{recursive}{Look into recursive folders?}
+
+\item{keep_field}{Additional YAML fields to keep}
 
 \item{scripts_file}{file of R scripts with path to run, from mat_99_list_Rfiles()}
 
