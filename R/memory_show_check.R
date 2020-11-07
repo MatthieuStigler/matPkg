@@ -45,4 +45,9 @@ mat_show_mem <-  function(df_input, is_ls=FALSE, all.names=TRUE) {
     select(.data$object, .data$size, .data$object_size, .data$unit, .data$class_first)
 }
 
-
+# lsos_tidy <- function(envir=.GlobalEnv, unit="MB"){
+#   names_df <- tibble::enframe(ls(all.names = TRUE, envir=envir),name = NULL, value = "object")
+#   sizes <- purrr::map_chr(names_df$object, ~utils:::format.object_size(pryr::object_size(get(., envir=envir)), units=unit))
+#   dplyr::mutate(names_df,
+#                 size=sizes)
+# }
