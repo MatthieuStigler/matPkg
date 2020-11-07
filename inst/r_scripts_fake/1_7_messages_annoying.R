@@ -2,7 +2,6 @@
 #' Title: "Annoying message"
 #' Author: "Matthieu"
 #' Date: 2019-03-11
-#' runMat: TRUE
 #' ---
 
 
