@@ -32,6 +32,11 @@ intrnl_time_format <- function(x) {
 }
 
 intrnl_time_format_vec <- function(x) sapply(x, intrnl_time_format)
+intrnl_err_to_chr <- function(x){
+  as.character(x) %>%
+    str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n")
+}
+
 
 #' @importFrom utils getFromNamespace
 read_utf8 = getFromNamespace("read_utf8", "rmarkdown")
@@ -184,11 +189,11 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE) {
       filter(.data$runMat_val)
 
   scripts_file %>%
-    mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
+    # mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
+    mutate(try = map(.data$full_path, ~source_throw(., echo=echo))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
            has_error= map_lgl(.data$error, ~!is.null(.)),
-           error=map_chr(.data$error, ~ifelse(is.null(.), NA, as.character(.) %>%
-                                                str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n"))),
+           error=map_chr(.data$error, ~ifelse(is.null(.), NA, intrnl_err_to_chr(.))),
            timing = map2(.data$try, .data$has_error, ~if(.y) df_null else .x$result)) %>%
     unnest(.data$timing) %>%
     select("filename", "has_error", "error",
@@ -217,11 +222,19 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE) {
   pkgs_before <- .packages()
   env_random <-  new.env()
   ## main oline: source file, measuring time and memory!
-  mem_change <- pryr::mem_change(sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
-                                                                                keep.source=FALSE, keep.parse.data=FALSE))))
+  # mem_change <- pryr::mem_change(sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
+  #                                                                               keep.source=FALSE, keep.parse.data=FALSE))))
+  time_before <- Sys.time()
+  sys <- purrr::safely(~system.time(suppressMessages(sys.source(., envir = env_random,
+                                                                keep.source=FALSE, keep.parse.data=FALSE))))(path)
+  time_after <- Sys.time()
   mem_after <- pryr::mem_used()
   pkgs_after <- .packages()
   ls_env <- ls(envir = env_random, all.names = all.names)
+
+
+  ## errors:
+  has_error <- !is.null(sys$error)
 
   ## clean
   ggplot2::set_last_plot(NULL) ## this will remove the ".last_plot" from ggplot, see https://stackoverflow.com/questions/64654252/r-deleting-ggplot2-object-does-not-free-space-possible-memory-leakage
@@ -237,19 +250,32 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE) {
   mem_final <- pryr::mem_used()
   mems_info <- c(mem_before=mem_before, mem_after=mem_after,
                  mem_diff=mem_after-mem_before,
-                 mem_change = mem_change,
                  mem_final=mem_final)
   if(echo) {
     mems_info_char <- as.character.bytes(x=mems_info, unit="MB")
     mems_info_char2 <- paste(stringr::str_remove(names(mems_info), "mem_"), mems_info_char, sep=": ")
     cat("\t-Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
+    cat("\t-Approx time: ", intrnl_time_format(time_after-time_before), "\n")
+    if(has_error){
+      cat("\t-ERROR: ", intrnl_err_to_chr(sys$error), "\n")
+      # message(sys$error)
+      # cat("\n")
+    }
     cat(paste("\t-Done with file", path, "\n"))
   }
-  t(data.matrix(sys)) %>%
-    as.data.frame() %>%
-    as_tibble() %>%
-    mutate(memory_used_mb = as.numeric.bytes(mems_info["mem_diff"], unit = "MB")) %>%
-    mutate_at(c("memory_used_mb", "elapsed"), round, 1)
+  # if(has_error) {
+  #   return(sys)
+  # } else {
+  #   sys <- sys$result
+  # }
+  if(!has_error) {
+    sys$result <- t(data.matrix(sys$result)) %>%
+      as.data.frame() %>%
+      as_tibble() %>%
+      mutate(memory_used_mb = as.numeric.bytes(mems_info["mem_diff"], unit = "MB")) %>%
+      mutate_at(c("memory_used_mb", "elapsed"), round, 1)
+  }
+  sys
 }
 
 #' As character for bytes
