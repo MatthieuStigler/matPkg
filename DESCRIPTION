@@ -4,8 +4,9 @@ Version: 0.2.0.9000
 Authors@R: 
     person(given = "Matthieu",
            family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com")
+           role = c("aut", "cre", "cph"),
+           email = "first.last@example.com",
+           comment =c(ORCID="0000-0002-6802-4290"))
 Description: My own custom functions.
 License: MIT + file LICENSE
 Encoding: UTF-8
