@@ -23,7 +23,7 @@
 #'file.remove("filename_test2.pdf")
 #'}
 #'@export
-mat_table_to_pdf <- function(x, filename = "input.pdf",  quiet=TRUE,
+mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
                              is_path_x = FALSE,
                              clean_tex = TRUE, clean_rest = TRUE,
                              copy.mode = TRUE,
@@ -34,13 +34,22 @@ mat_table_to_pdf <- function(x, filename = "input.pdf",  quiet=TRUE,
     x <-  print(x)
   }
   if(!clean_tex | !clean_rest) warning("clean_rest or clean_tex not used/useful anymore")
-  if(stringr::str_detect(filename, "\\.tex$"))  warning("Old code!?")
-  if(!stringr::str_detect(filename, "\\.pdf$"))  warning("No pdf output?")
 
   ## read x if is path
   if(is_path_x) {
     x <- readLines(x)
   }
+
+  ## Filename default
+  if(is.null(filename)){
+    if(is_path_x) {
+      filename <- str_replace(filename, "\\.tex$", ".pdf")
+    } else {
+      filename <- "input.pdf"
+    }
+  }
+  if(stringr::str_detect(filename, "\\.tex$"))  warning("Old code!?")
+  if(!stringr::str_detect(filename, "\\.pdf$"))  warning("No pdf output?")
 
   ## Check for problems
   if(any(str_detect(x, "usepackage"))) {

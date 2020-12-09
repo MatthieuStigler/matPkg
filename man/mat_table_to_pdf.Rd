@@ -7,7 +7,7 @@
 \usage{
 mat_table_to_pdf(
   x,
-  filename = "input.pdf",
+  filename = NULL,
   quiet = TRUE,
   is_path_x = FALSE,
   clean_tex = TRUE,
