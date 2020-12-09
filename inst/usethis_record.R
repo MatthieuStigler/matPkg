@@ -1,8 +1,11 @@
+library(usethis)
+
+## Incremental version update:
+usethis::use_version(which = "dev")
 
 
 ## from: https://github.com/r-lib/usethis
 
-library(usethis)
 path <- "/home/matifou/gitReps/my_github/matPkg"
 # create_package(path)
 
@@ -35,13 +38,11 @@ use_package("pkgload", "Imports")
 ## for the example
 use_package("sandwich", "Suggests")
 
-use_roxygen_md()
-
-use_readme_md()
 
 
-use_git()
-
-use_mit_license("matPkg")
-
-use_build_ignore("data_raw", escape = TRUE)
+## Initial commands
+# use_roxygen_md()
+# use_readme_md()
+# use_git()
+# use_mit_license("matPkg")
+# use_build_ignore("data_raw", escape = TRUE)
