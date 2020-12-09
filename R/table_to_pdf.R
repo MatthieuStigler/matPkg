@@ -42,6 +42,14 @@ mat_table_to_pdf <- function(x, filename = "input.pdf",  quiet=TRUE,
     x <- readLines(x)
   }
 
+  ## Check for problems
+  if(any(str_detect(x, "usepackage"))) {
+    detect_pkg <- str_extract(x, "(?<=usepackage\\{).+(?=\\})") %>%
+      purrr::discard(is.na)
+    warning(paste("Document should not contain calls with 'usepackage', found:", paste(detect_pkg, collapse = ", ")))
+  }
+  if(any(str_detect(x, "begin\\{+document"))) warning("Document should not contain calls with 'begin{document'")
+
   ## format text
   ## format x if length(x) %>%  1
   if(length(x)>1) x <-  paste(x, collapse = "\n")
