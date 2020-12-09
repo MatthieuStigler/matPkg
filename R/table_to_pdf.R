@@ -35,11 +35,6 @@ mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
   }
   if(!clean_tex | !clean_rest) warning("clean_rest or clean_tex not used/useful anymore")
 
-  ## read x if is path
-  if(is_path_x) {
-    x <- readLines(x)
-  }
-
   ## Filename default
   if(is.null(filename)){
     if(is_path_x) {
@@ -50,6 +45,11 @@ mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
   }
   if(stringr::str_detect(filename, "\\.tex$"))  warning("Old code!?")
   if(!stringr::str_detect(filename, "\\.pdf$"))  warning("No pdf output?")
+
+  ## read x if is path
+  if(is_path_x) {
+    x <- readLines(x)
+  }
 
   ## Check for problems
   if(any(str_detect(x, "usepackage"))) {
