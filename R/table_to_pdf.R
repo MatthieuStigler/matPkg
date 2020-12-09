@@ -43,7 +43,7 @@ mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
   ## Filename default
   if(is.null(filename)){
     if(is_path_x) {
-      filename <- str_replace(filename, "\\.tex$", ".pdf")
+      filename <- str_replace(x, "\\.tex$", ".pdf")
     } else {
       filename <- "input.pdf"
     }
