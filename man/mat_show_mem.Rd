@@ -26,8 +26,9 @@ library(tidyr)
 iris_regs <- nest(iris, data=-Species) \%>\%
   mutate(reg_out = map(data, ~lm(Petal.Width~Petal.Length, data=as_tibble(.)))) \%>\%
   select(-data)
-mat_show_mem(iris_regs$reg_out)
+# DOES NOT WORK ANYMORE!?
+# mat_show_mem(iris_regs$reg_out)
 
 ## Check a workspace
-mat_show_mem(ls(), is_ls=TRUE)
+#mat_show_mem(ls(), is_ls=TRUE)
 }
