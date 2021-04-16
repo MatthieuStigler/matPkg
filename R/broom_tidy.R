@@ -46,6 +46,7 @@ mat_tidy_clean <- function(df) {
 
 #' For broom coef tidy output: bar plot for coefs
 #'
+#' DEPRECATED! Use instead \code{\link{mat_plot_coefs_tidy}}
 #' @param df data
 #' @param x_var var used in x axis (y is estimate)
 #' @param fill_var var used to have multiple x

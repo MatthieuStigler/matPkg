@@ -16,5 +16,5 @@ mat_tidy_coef_plot(df, x_var, fill_var, fac_1 = NULL, fac_2 = NULL)
 \item{fac_1, fac_2}{vars for facetting}
 }
 \description{
-For broom coef tidy output: bar plot for coefs
+DEPRECATED! Use instead \code{\link{mat_plot_coefs_tidy}}
 }
