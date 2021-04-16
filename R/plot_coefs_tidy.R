@@ -5,6 +5,7 @@
 #' @param fac1_var,fac2_var facet variable
 #' @param angle angle in \code{element_text()}
 #' @param x_var x variable, default term
+#' @param geom Use bar or points?
 #' @param scales,fac_space argument to \code{facet_grid}
 #'
 #' @examples
@@ -16,9 +17,14 @@
 #' ## handle duplicates
 #' mat_plot_coefs_tidy(coefs_out_iris)
 #' @export
-mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, angle = 0, x_var=term, scales = "fixed",
-                                fac_space = "fixed") {
+mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, angle = 0, x_var=term,
+                                scales = "fixed", fac_space = "fixed",
+                                geom= c("bar", "point")) {
 
+  # prep args
+  geom_for_coef <- switch (match.arg(geom),
+                           bar = ggplot2::geom_col(position = "dodge"),
+                           point=ggplot2::geom_point())
 
   grps <- rlang::enquos(x_var,  fill_var, fac1_var, fac2_var, .ignore_empty = "all")
   grps <- grps[purrr::map_lgl(grps, ~ !rlang::quo_is_null(.))]
@@ -40,7 +46,7 @@ mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL,
 
   out <- df %>%
     ggplot2::ggplot(aes(x=!!enquo(x_var), y= .data$estimate, fill=!!enquo(fill_var), colour=!!enquo(fill_var)))+
-    ggplot2::geom_col(position = "dodge") +
+    geom_for_coef +
     ggplot2::theme(axis.text.x  = ggplot2::element_text(angle = angle)) +
     ggplot2::theme(legend.position = "bottom") +
     ggplot2::xlab(rlang::quo_text(enquo(x_var))) + ggplot2::ylab("Coefficient")

@@ -12,7 +12,8 @@ mat_plot_coefs_tidy(
   angle = 0,
   x_var = term,
   scales = "fixed",
-  fac_space = "fixed"
+  fac_space = "fixed",
+  geom = c("bar", "point")
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ mat_plot_coefs_tidy(
 \item{x_var}{x variable, default term}
 
 \item{scales, fac_space}{argument to \code{facet_grid}}
+
+\item{geom}{Use bar or points?}
 }
 \description{
 Plot coefficients from tidy output
