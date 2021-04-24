@@ -38,9 +38,19 @@ mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NU
 #' mat_tidy_clean(out_1)
 #' mat_tidy_clean(out_2)
 mat_tidy_clean <- function(df) {
-  df %>%
-    setNames(stringr::str_replace_all(colnames(df), "\\.", "_")) %>%
-    mutate_at(vars(mat_one_of_quiet('term')),  ~str_replace(., "\\(Intercept\\)", "Intercept"))
+  df_out <- df %>%
+    setNames(stringr::str_replace_all(colnames(df), "\\.", "_"))
+
+  ## rename (Intercept)
+  if("term" %in% colnames(df_out) && any(str_detect(df_out$term, "\\(Intercept\\)"))){
+    if(is.factor(df_out$term)) {
+      levels(df_out$term) <- str_replace(df_out$term, "\\(Intercept\\)", "Intercept")
+    } else {
+      df_out <- df_out %>%
+        mutate(dplyr::across(tidyselect::any_of('term'),  ~str_replace(., "\\(Intercept\\)", "Intercept")))
+    }
+  }
+  df_out
 }
 
 
