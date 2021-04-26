@@ -155,6 +155,7 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #'
 #' @param echo print which file done, and gc?
 #' @param runMat_true_only run only the ones with runMat: TRUE
+#' @param run_function use either source (internal) or R CMD BATCH (external)
 #' @examples
 #' library(matPkg)
 #' library(readr)
@@ -184,7 +185,11 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' mat_99_check_there_update(path_temp, overwrite=FALSE)
 #' mat_99_check_there_update(path_temp, overwrite=TRUE)
 #' @export
-mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE) {
+mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
+                              run_function=c("internal", "external")) {
+  run_function <- switch(match.arg(run_function),
+                         "internal"=source_throw,
+                         "external"=source_rcmd_batch)
   if(runMat_true_only) scripts_file <- scripts_file %>%
       filter(.data$runMat_val)
 
@@ -215,68 +220,6 @@ df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.
 
 as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
 
-source_throw <- function(path, echo=TRUE, all.names=TRUE) {
-  if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
-  gc()
-  mem_before <- pryr::mem_used()
-  pkgs_before <- .packages()
-  env_random <-  new.env()
-  ## main oline: source file, measuring time and memory!
-  # mem_change <- pryr::mem_change(sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
-  #                                                                               keep.source=FALSE, keep.parse.data=FALSE))))
-  time_before <- Sys.time()
-  sys <- purrr::safely(~system.time(suppressMessages(sys.source(., envir = env_random,
-                                                                keep.source=FALSE, keep.parse.data=FALSE))))(path)
-  time_after <- Sys.time()
-  mem_after <- pryr::mem_used()
-  pkgs_after <- .packages()
-  ls_env <- ls(envir = env_random, all.names = all.names)
-
-
-  ## errors:
-  has_error <- !is.null(sys$error)
-
-  ## clean
-  ggplot2::set_last_plot(NULL) ## this will remove the ".last_plot" from ggplot, see https://stackoverflow.com/questions/64654252/r-deleting-ggplot2-object-does-not-free-space-possible-memory-leakage
-  rm(list = ls_env, envir = env_random)
-  rm(env_random)
-  pkgs_to_remove <- pkgs_after[!pkgs_after%in% c(pkgs_before, "matPkg")]
-  # unloadNamespace(pkgs_to_remove)
-  # detach(paste0("package:",pkgs_to_remove),  unload=FALSE, character.only =TRUE) # otherwise try:
-  # purrr::walk(c("tsDyn", "plm"), ~purrr::safely(pkgload::unload)(), quiet=TRUE)
-  gc()
-
-  # memory count
-  mem_final <- pryr::mem_used()
-  mems_info <- c(mem_before=mem_before, mem_after=mem_after,
-                 mem_diff=mem_after-mem_before,
-                 mem_final=mem_final)
-  if(echo) {
-    mems_info_char <- as.character.bytes(x=mems_info, unit="MB")
-    mems_info_char2 <- paste(stringr::str_remove(names(mems_info), "mem_"), mems_info_char, sep=": ")
-    cat("\t-Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
-    cat("\t-Approx time: ", intrnl_time_format(time_after-time_before), "\n")
-    if(has_error){
-      cat("\t-ERROR: ", intrnl_err_to_chr(sys$error), "\n")
-      # message(sys$error)
-      # cat("\n")
-    }
-    cat(paste("\t-Done with file", path, "\n"))
-  }
-  # if(has_error) {
-  #   return(sys)
-  # } else {
-  #   sys <- sys$result
-  # }
-  if(!has_error) {
-    sys$result <- t(data.matrix(sys$result)) %>%
-      as.data.frame() %>%
-      as_tibble() %>%
-      mutate(memory_used_mb = as.numeric.bytes(mems_info["mem_diff"], unit = "MB")) %>%
-      mutate_at(c("memory_used_mb", "elapsed"), round, 1)
-  }
-  sys
-}
 
 #' As character for bytes
 #'
@@ -528,7 +471,4 @@ if(FALSE) {
 
   rm(heavy_vec)
 
-
-  ##
-  a <- matPkg:::source_throw(path = dir_dat$full_path[[7]], echo=TRUE)
 }

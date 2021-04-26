@@ -22,7 +22,12 @@ mat_99_list_Rfiles(
 
 mat_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
 
-mat_99_run_Rfiles(scripts_file, echo = FALSE, runMat_true_only = TRUE)
+mat_99_run_Rfiles(
+  scripts_file,
+  echo = FALSE,
+  runMat_true_only = TRUE,
+  run_function = c("internal", "external")
+)
 
 mat_run_Rfiles(scripts_file, echo = FALSE)
 
@@ -52,6 +57,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path = "code_setup")
 \item{echo}{print which file done, and gc?}
 
 \item{runMat_true_only}{run only the ones with runMat: TRUE}
+
+\item{run_function}{use either source (internal) or R CMD BATCH (external)}
 
 \item{scripts_file_runned}{data from mat_99_run_Rfiles}
 
