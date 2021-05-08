@@ -1,13 +1,13 @@
 Package: matPkg
 Title: Mat functions
-Version: 0.2.0.9005
+Version: 0.2.0.9006
 Authors@R: 
     person(given = "Matthieu",
            family = "Last",
            role = c("aut", "cre", "cph"),
            email = "first.last@example.com",
            comment =c(ORCID="0000-0002-6802-4290"))
-Description: My own custom functions.
+Description: My own custom small functions for everyy day use. Anyone is free to use but there is no support and no guarantee at all. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

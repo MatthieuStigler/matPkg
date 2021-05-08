@@ -44,7 +44,7 @@ mat_tidy_clean <- function(df) {
   ## rename (Intercept)
   if("term" %in% colnames(df_out) && any(str_detect(df_out$term, "\\(Intercept\\)"))){
     if(is.factor(df_out$term)) {
-      levels(df_out$term) <- str_replace(df_out$term, "\\(Intercept\\)", "Intercept")
+      levels(df_out$term) <- str_replace(levels(df_out$term), "\\(Intercept\\)", "Intercept")
     } else {
       df_out <- df_out %>%
         mutate(dplyr::across(tidyselect::any_of('term'),  ~str_replace(., "\\(Intercept\\)", "Intercept")))
