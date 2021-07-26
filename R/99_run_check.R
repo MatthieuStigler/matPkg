@@ -113,7 +113,8 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
     select(-.data$full_path, .data$full_path)
 
   if(no_old) res_yaml_df <-  res_yaml_df %>%
-    filter(!stringr::str_detect(.data$full_path, "old.*/"))
+    filter(!stringr::str_detect(.data$full_path,
+                                stringr::regex("old.*/", ignore_case = TRUE)))
   res_yaml_df
 }
 
