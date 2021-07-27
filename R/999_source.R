@@ -1,4 +1,5 @@
-source_throw <- function(path, echo=TRUE, all.names=TRUE) {
+#' @param debug internal to show more
+source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
   gc()
   mem_before <- pryr::mem_used()
@@ -8,8 +9,16 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE) {
   # mem_change <- pryr::mem_change(sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
   #                                                                               keep.source=FALSE, keep.parse.data=FALSE))))
   time_before <- Sys.time()
-  sys <- purrr::safely(~system.time(suppressMessages(sys.source(., envir = env_random,
-                                                                keep.source=FALSE, keep.parse.data=FALSE))))(path)
+  if(!debug){
+    sys <- purrr::safely(~system.time(suppressMessages(sys.source(., envir = env_random,
+                                                                  keep.source=FALSE,
+                                                                  keep.parse.data=FALSE))))(path)
+  } else {
+    print(pkgs_before)
+    sys <- purrr::safely(~system.time(sys.source(., envir = env_random,
+                                                 keep.source=FALSE,
+                                                 keep.parse.data=FALSE)))(path)
+  }
   time_after <- Sys.time()
   mem_after <- pryr::mem_used()
   pkgs_after <- .packages()
