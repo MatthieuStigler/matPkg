@@ -4,7 +4,7 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
   gc()
   mem_before <- pryr::mem_used()
   pkgs_before <- .packages()
-  env_random <-  new.env()
+  env_random <-  new.env(parent = .GlobalEnv)
   ## main oline: source file, measuring time and memory!
   # mem_change <- pryr::mem_change(sys <- system.time(suppressMessages(sys.source(path, envir = env_random,
   #                                                                               keep.source=FALSE, keep.parse.data=FALSE))))
