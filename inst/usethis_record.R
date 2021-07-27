@@ -3,6 +3,8 @@ library(usethis)
 ## Incremental version update:
 usethis::use_version(which = "dev")
 
+## news file
+usethis::use_news_md(open = rlang::is_interactive())
 
 ## from: https://github.com/r-lib/usethis
 
