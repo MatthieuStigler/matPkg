@@ -402,6 +402,10 @@ mat_slice_by <- function(df, N=100, ...) {
 #' iris_new <- mutate(iris_orig, Sepal.Length =Sepal.Length+0.000001)
 #' mat_join_compare(df1=iris_orig, df2=iris_new, by = c("row_num", "Species"))
 #' mat_join_compare(df1=iris_orig, df2=iris_new, by =c("row_num", "Species"), tol = 0.00001)
+#' ## compare identical but smaller subset with inner_join:
+#' iris_smaller <- subset(iris_orig, Species!="setosa")
+#' mat_join_compare(df1=iris_orig, df2=iris_smaller, by = c("row_num", "Species"),
+#'                  join_fun = dplyr::full_join)
 #' @export
 mat_join_compare <- function(df1, df2, by=NULL, join_fun = dplyr::inner_join, tol = 0.00000001) {
   commonCols <- base::intersect(colnames(df1), colnames(df2))
@@ -413,7 +417,7 @@ mat_join_compare <- function(df1, df2, by=NULL, join_fun = dplyr::inner_join, to
     tidyr::pivot_longer(tidyselect::matches("\\.x$|\\.y$"),
                         names_to = c("variable", ".value"),
                         names_pattern = "(.+)\\.(x$|y$)") %>%
-    filter(abs(.data$x-.data$y) >tol)
+    filter(abs(.data$x-.data$y) >tol|!sum(c(is.na(.data$x), is.na(.data$y)))%in% c(0,2))
 }
 
 #' Compare if col_1 and col_2 equal
