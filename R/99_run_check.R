@@ -109,7 +109,6 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
             "runMat_val", "full_path", keep_field)
   res_yaml_df <- res_yaml_df %>%
     select(tidyselect::all_of(vars)) %>%
-    # select(-Title, -Author,  -Date) %>%
     select(-.data$full_path, .data$full_path)
 
   if(no_old) res_yaml_df <-  res_yaml_df %>%
@@ -194,7 +193,13 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
   if(runMat_true_only) scripts_file <- scripts_file %>%
       filter(.data$runMat_val)
 
-  scripts_file %>%
+  ## prep out data
+  vars_out <- c("filename", "has_error", "error",
+                "elapsed", "memory_used_mb",
+                "user.self", "sys.self", "user.child", "sys.child")
+
+  ## now RUN
+  out <- scripts_file %>%
     # mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
     mutate(try = map(.data$full_path, ~source_throw(., echo=echo))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
@@ -202,11 +207,14 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
            error=map_chr(.data$error, ~ifelse(is.null(.), NA, intrnl_err_to_chr(.))),
            timing = map2(.data$try, .data$has_error, ~if(.y) df_null else .x$result)) %>%
     unnest(.data$timing) %>%
-    select("filename", "has_error", "error",
-           "elapsed", "memory_used_mb",
-           "user.self", "sys.self", "user.child", "sys.child",
-           tidyselect::everything())
+    dplyr::relocate(tidyselect::any_of(vars_out))
 
+  ## small check
+  if(!"memory_used_mb" %in% colnames(out)) {
+    out <- mutate(out, memory_used_mb=NA) %>%
+      dplyr::relocate(tidyselect::all_of(vars_out))
+  }
+  out
 }
 
 #' @rdname mat_99_run_Rfiles
