@@ -34,5 +34,5 @@ mat_join_compare(df1=iris_orig, df2=iris_new, by =c("row_num", "Species"), tol =
 ## compare identical but smaller subset with inner_join:
 iris_smaller <- subset(iris_orig, Species!="setosa")
 mat_join_compare(df1=iris_orig, df2=iris_smaller, by = c("row_num", "Species"),
-                 join_fun = dplyr::inner_join)
+                 join_fun = dplyr::full_join)
 }

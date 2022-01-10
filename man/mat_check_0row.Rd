@@ -9,7 +9,8 @@ mat_check_0row(
   message_ok = "OK",
   warn_message = NULL,
   stop_message = NULL,
-  print_df = TRUE
+  print_df = TRUE,
+  n_row = 0
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ mat_check_0row(
 \item{stop_message}{message when stopping}
 
 \item{print_df}{print when error?}
+
+\item{n_row}{number of rows to check for}
 }
 \description{
 Check 0 rows
