@@ -1,4 +1,5 @@
 #' @param debug internal to show more
+#' @noRd
 source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
   gc()
