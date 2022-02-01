@@ -89,6 +89,32 @@ mat_cor_na_df <- function(x, y=NULL, use = "pairwise.complete.obs", method = "pe
     tibble::enframe(name=NULL, value="cor")
 }
 
+
+#' Add p-value and paste
+#' @param estimate Parameters of interest
+#' @param p_value p-values for the estimate
+#' @param digits rounding before pasting
+#' @param \ldots Currently unused
+#' @export
+#' @seealso \code{\link{format.pval}}
+#' @examples
+#' p_vals <- c(0.01, 0.0001, 0.05, 0.09)
+#' mat_pval_cat(p_vals, p_vals)
+#' mat_pval_cat(p_vals, p_vals, digits=4)
+mat_pval_cat <- function(estimate, p_value, digits=2, ...){
+  p_stars <- intrl_p_vals(p_value, ...)
+  paste(round(estimate, digits = digits), p_stars, sep="")
+}
+
+#' Add stars
+#' just copied from gtools::stars.pval(), gtools 3.8.2
+#' @noRd
+intrl_p_vals <- function(p_value){
+  unclass(stats::symnum(p_value, corr = FALSE, na = FALSE,
+                        cutpoints = c(0,0.001, 0.01, 0.05, 0.1, 1),
+                        symbols = c("***", "**", "*", ".", " ")))
+}
+
 #' Check number even
 #'
 #' @param x vector
