@@ -33,7 +33,7 @@ intrnl_time_format <- function(x) {
 
 intrnl_time_format_vec <- function(x) sapply(x, intrnl_time_format)
 intrnl_err_to_chr <- function(x){
-  as.character(x) %>%
+  rlang::cnd_message(x, prefix=FALSE) %>%
     str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n")
 }
 
@@ -86,7 +86,7 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
   ## process yaml
   safely_clean <- function(x) {
     if(!is.null(x$error)){
-      x$error <- x$error$message
+      x$error <- intrnl_err_to_chr(x$error)
     }
     x
   }
