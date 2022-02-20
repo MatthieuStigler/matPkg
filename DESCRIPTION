@@ -6,7 +6,7 @@ Authors@R:
     person(given = "Matthieu",
            family = "Last",
            role = c("aut", "cre", "cph"),
-           email = "Matthieu.Stigler@gmail.com"))
+           email = "Matthieu.Stigler@gmail.com")
 Description: My own custom small functions for everyy day use. Anyone is free to use but there is no support and no guarantee at all. 
 License: MIT + file LICENSE
 Encoding: UTF-8
