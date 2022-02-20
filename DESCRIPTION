@@ -1,13 +1,12 @@
 Package: matPkg
 Title: Mat functions
-Version: 0.2.0.92
-Date: 2022-02-01
+Version: 0.2.0.93
+Date: 2022-02-20
 Authors@R: 
     person(given = "Matthieu",
            family = "Last",
            role = c("aut", "cre", "cph"),
-           email = "first.last@example.com",
-           comment =c(ORCID="0000-0002-6802-4290"))
+           email = "Matthieu.Stigler@gmail.com"))
 Description: My own custom small functions for everyy day use. Anyone is free to use but there is no support and no guarantee at all. 
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -39,4 +38,6 @@ Imports:
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Suggests: 
+    testthat (>= 3.0.0),
     sandwich
+Config/testthat/edition: 3
