@@ -84,7 +84,14 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
            yaml = map(.data$full_path, ~purrr::safely(mat_parse_yaml)(.)))
 
   ## process yaml
+  safely_clean <- function(x) {
+    if(!is.null(x$error)){
+      x$error <- x$error$message
+    }
+    x
+  }
   res_yaml_df <- res %>%
+    dplyr::mutate(yaml = purrr::map(.data$yaml, safely_clean)) %>%
     tidyr::unnest_wider(.data$yaml) %>%
     tidyr::unnest_wider(.data$result) %>%
     mutate(has_runMat = !is.na(.data$runMat),
@@ -100,7 +107,7 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
   } else {
     res_yaml_df <- res_yaml_df %>%
       mutate(has_error_parse=map_lgl(.data$error, ~!is.null(.)),
-             error_parse=map_chr(.data$error, ~dplyr::if_else(is.null(.x), NA_character_, .x$message))) %>%
+             error_parse=map_chr(.data$error, ~dplyr::if_else(is.null(.x), NA_character_, .x))) %>%
       select(-.data$error)
   }
 

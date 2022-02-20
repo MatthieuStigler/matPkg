@@ -127,19 +127,19 @@ if(FALSE){
 
   ##
   matPkg:::source_throw(path=dir_dat$full_path[[1]])
-  source_rcmd_batch(path=dir_dat$full_path[[1]])
+  matPkg:::source_rcmd_batch(path=dir_dat$full_path[[1]])
 
   matPkg:::source_throw(dir_dat$full_path[[3]])
-  source_rcmd_batch(path=dir_dat$full_path[[3]])
+  matPkg:::source_rcmd_batch(path=dir_dat$full_path[[3]])
 
   matPkg:::source_throw(path=dir_dat$full_path[[8]])
-  source_rcmd_batch(path=dir_dat$full_path[[8]])
+  matPkg:::source_rcmd_batch(path=dir_dat$full_path[[8]])
 
   ## all
   out <- dir_dat %>%
     # head(2) %>%
     mutate(source_intern = map(full_path, matPkg:::source_throw),
-           source_extern = map(full_path, source_rcmd_batch))
+           source_extern = map(full_path, matPkg:::source_rcmd_batch))
 
   out2 <- out %>%
     select(filename, starts_with("source")) %>%
