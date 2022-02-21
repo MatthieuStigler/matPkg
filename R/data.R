@@ -459,3 +459,24 @@ mat_enframe_wide <- function(x, names=NULL){
                        values_from="value", names_sort=FALSE)
 }
 
+#' Take first groups
+#'
+#' @param df data
+#' @param ... grouping vars
+#' @param n_head Number of groups
+#' @examples
+#' df <- data.frame(group_a = rep(LETTERS[1:3], each=4),
+#'                  group_b = rep(letters[1:2], 6),dat = 1:12)
+#' mat_head_group(df, group_a, n_head=1)
+#' mat_head_group(df, group_a, group_b, n_head=1)
+#' @export
+mat_head_group <- function(df, ..., n_head=5){
+  .group_vars <- rlang::enquos(...)
+  nm = unname(sapply(rlang::enexprs(...), as.character))
+
+  df %>%
+    dplyr::semi_join(df %>%
+                       dplyr::distinct(!!!.group_vars) %>%
+                       utils::head(n_head),
+                     by = nm)
+}
