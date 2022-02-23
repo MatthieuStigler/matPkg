@@ -107,7 +107,9 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
   } else {
     res_yaml_df <- res_yaml_df %>%
       mutate(has_error_parse=map_lgl(.data$error, ~!is.null(.)),
-             error_parse=map_chr(.data$error, ~dplyr::if_else(is.null(.x), NA_character_, .x))) %>%
+             error_parse=map_chr(.data$error, ~dplyr::if_else(is.null(.x),
+                                                              NA_character_,
+                                                              as.character(.x)))) %>%
       select(-.data$error)
   }
 
