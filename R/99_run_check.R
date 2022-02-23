@@ -94,6 +94,7 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
     dplyr::mutate(yaml = purrr::map(.data$yaml, safely_clean)) %>%
     tidyr::unnest_wider(.data$yaml) %>%
     tidyr::unnest_wider(.data$result) %>%
+    tibble::add_column(!!!c(runMat=NA)[setdiff("runMat", colnames(.))]) %>% ## add if miss
     mutate(has_runMat = !is.na(.data$runMat),
            runMat_val = .data$runMat & !is.na(.data$runMat),
            yaml=  purrr::transpose(res$yaml) %>% purrr::pluck("result"),
