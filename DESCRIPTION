@@ -1,7 +1,7 @@
 Package: matPkg
 Title: Mat functions
-Version: 0.2.0.95
-Date: 2022-02-21
+Version: 0.2.0.96
+Date: 2022-03-17
 Authors@R: 
     person(given = "Matthieu",
            family = "Last",
@@ -20,7 +20,7 @@ Imports:
     magrittr,
     tibble,
     purrr,
-    rlang,
+    rlang (>= 1.0.0),
     tidyselect,
     tools,
     stringr,

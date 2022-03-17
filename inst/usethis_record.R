@@ -20,7 +20,7 @@ use_package("magrittr", "Imports")
 use_package("tibble", "Imports")
 use_package("tools", "Imports")
 use_package("purrr", "Imports")
-use_package("rlang", "Imports")
+use_package("rlang", "Imports", min_version = "1.0.0") # for prefix argument of rlang::cnd_message
 use_package("tidyselect", "Imports")
 use_package("stringr", "Imports")
 use_package("nlme", "Imports")
