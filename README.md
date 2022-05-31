@@ -10,3 +10,10 @@ You can install from
 remotes::install_github("MatthieuStigler/matPkg", upgrade = "never")
 ```
 
+If using `rev`:
+
+``` r
+renv::install("MatthieuStigler/matPkg")
+```
+
+
