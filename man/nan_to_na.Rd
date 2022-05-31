@@ -2,12 +2,17 @@
 % Please edit documentation in R/utilities.R
 \name{nan_to_na}
 \alias{nan_to_na}
+\alias{mat_nan_to_na}
 \title{Convert Nan to NA}
 \usage{
-nan_to_na(x)
+nan_to_na(x, na_val = NA_real_)
+
+mat_nan_to_na(x, na_val = NA_real_)
 }
 \arguments{
 \item{x}{Scalar/vector}
+
+\item{na_val}{Value used for NA, default: \code{NA_real_}}
 }
 \description{
 Convert Nan to NA

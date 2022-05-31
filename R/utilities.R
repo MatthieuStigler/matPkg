@@ -1,12 +1,21 @@
 #' Convert Nan to NA
 #' @param x Scalar/vector
+#' @param na_val Value used for NA, default: \code{NA_real_}
 #' @export
-nan_to_na <-  function(x) ifelse(!is.finite(x), NA, x)
+nan_to_na <-  function(x, na_val = NA_real_) ifelse(!is.finite(x), na_val, x)
+
+#' @rdname nan_to_na
+#' @export
+mat_nan_to_na <- nan_to_na
 
 #' is_true: vectorized isTRUE
 #' @param x vector
 #'@export
 is_true <-  function(x) map_lgl(x, isTRUE)
+
+#' @rdname is_true
+#' @export
+mat_is_true <- is_true
 
 #' Check 0 rows
 #' @param df data

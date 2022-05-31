@@ -2,9 +2,12 @@
 % Please edit documentation in R/utilities.R
 \name{is_true}
 \alias{is_true}
+\alias{mat_is_true}
 \title{is_true: vectorized isTRUE}
 \usage{
 is_true(x)
+
+mat_is_true(x)
 }
 \arguments{
 \item{x}{vector}
