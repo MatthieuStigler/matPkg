@@ -11,7 +11,7 @@ intrl_URLdecode_vec <- function(x) Vectorize(utils::URLdecode)(x)
 #' @export
 #' @examples
 #' mat_list_dir(path = ".", pattern = "R")
-mat_list_dir <- function(path, pattern = "\\.R", recursive = TRUE, add_ext = FALSE, ...) {
+mat_list_dir <- function(path, pattern = ".R", recursive = TRUE, add_ext = FALSE, ...) {
 
   ## check
   if(any(str_detect(path, "%20"))) path <- intrl_URLdecode_vec(path)
