@@ -4,7 +4,13 @@
 \alias{mat_pdf_to_png}
 \title{Convert pdf to png}
 \usage{
-mat_pdf_to_png(path, density = 150, quality = 90, echo = TRUE)
+mat_pdf_to_png(
+  path,
+  density = 150,
+  quality = 90,
+  echo = TRUE,
+  correct_grayscale = FALSE
+)
 }
 \arguments{
 \item{path}{path of file}
@@ -12,14 +18,22 @@ mat_pdf_to_png(path, density = 150, quality = 90, echo = TRUE)
 \item{density, quality}{parameters to convert}
 
 \item{echo}{should show command?}
+
+\item{correct_grayscale}{Should correct for \code{RGB color space not permitted on grayscale}}
 }
 \description{
 Convert pdf to png
 }
 \examples{
-  pdf("try.pdf")
-  plot(1, col = "green")
-  dev.off()
-  mat_pdf_to_png("try.pdf")
-  file.remove(c("try.pdf", "try.png"))
+tmp <- file.path(tempdir(), "try.pdf")
+pdf(tmp)
+plot(1, col = "green")
+dev.off()
+mat_pdf_to_png(tmp)
+
+## use `correct_grayscale = TRUE` for message "RGB color space not permitted on grayscale"
+pdf(tmp)
+plot(1)
+dev.off()
+mat_pdf_to_png(tmp, correct_grayscale = TRUE)
 }

@@ -145,20 +145,28 @@ table_to_pdf <-  function(x) .Deprecated("mat_table_to_pdf")
 #'
 #' @param path path of file
 #' @param density,quality parameters to convert
+#' @param correct_grayscale Should correct for \code{RGB color space not permitted on grayscale}
 #' @param echo should show command?
 #' @export
 #' @examples
-#'   pdf("try.pdf")
-#'   plot(1, col = "green")
-#'   dev.off()
-#'   mat_pdf_to_png("try.pdf")
-#'   file.remove(c("try.pdf", "try.png"))
-
-mat_pdf_to_png <-  function(path, density = 150, quality = 90, echo=TRUE) {
+#' tmp <- file.path(tempdir(), "try.pdf")
+#' pdf(tmp)
+#' plot(1, col = "green")
+#' dev.off()
+#' mat_pdf_to_png(tmp)
+#'
+#' ## use `correct_grayscale = TRUE` for message "RGB color space not permitted on grayscale"
+#' pdf(tmp)
+#' plot(1)
+#' dev.off()
+#' mat_pdf_to_png(tmp, correct_grayscale = TRUE)
+mat_pdf_to_png <-  function(path, density = 150, quality = 90, echo=TRUE,
+                            correct_grayscale = FALSE) {
   if(!file.exists(path)) stop("File not found")
   if(!stringr::str_detect(path, "\\.pdf")) stop("File not pdf?")
   path_out <- stringr::str_replace(path, "\\.pdf", ".png")
-  cmd <-  paste("convert -flatten -density",  density, path,  "-quality",  quality,  path_out)
+  colorspace <- if(correct_grayscale) "-colorspace RGB" else NULL
+  cmd <-  paste("convert -flatten -density",  density, colorspace, path,  "-quality",  quality,  path_out)
   if(echo) print(cmd)
   system(cmd)
 
