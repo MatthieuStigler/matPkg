@@ -200,8 +200,11 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
   run_function <- switch(match.arg(run_function),
                          "internal"=source_throw,
                          "external"=source_rcmd_batch)
-  if(runMat_true_only) scripts_file <- scripts_file %>%
+  if(runMat_true_only) {
+    scripts_file <- scripts_file %>%
       filter(.data$runMat_val)
+    if(nrow(scripts_file)==0) stop("No R scripts with field 'runMat_val=TRUE', set argument 'runMat_true_only=FALSE' ?")
+  }
 
   ## prep out data
   vars_out <- c("filename", "has_error", "error",
