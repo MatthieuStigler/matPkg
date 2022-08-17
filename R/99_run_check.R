@@ -386,10 +386,11 @@ mat_99_check_there <- function (dir_path="code_setup", overwrite=TRUE) {
 
 #' @param scripts_file_runned data from mat_99_run_Rfiles
 #' @param append Overwrite existing or append?
+#' @param cols_extra Extra columns to keep
 #' @export
 #' @rdname mat_99_run_Rfiles
 mat_99_write <- function(scripts_file_runned, dir_path="code_setup",
-                         append=NULL) {
+                         append=NULL, cols_extra = NULL) {
   file_out <- intrnl_dir_to_file(dir_path)
   if(is.null(append)) append <- file.exists(file_out)
   today <- Sys.Date() %>% as.character()
@@ -410,7 +411,7 @@ mat_99_write <- function(scripts_file_runned, dir_path="code_setup",
            folder = dirname(.data$full_path),
            subfolder = basename(dirname(.data$full_path)),
            user_node =user) %>%
-    select(tidyselect::all_of(intrnl_cols_need))
+    select(tidyselect::all_of(c(intrnl_cols_need, cols_extra)))
 
   readr::write_csv(df_new, file_out, append=append)
 

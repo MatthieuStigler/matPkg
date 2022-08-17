@@ -13,8 +13,8 @@ mat_table_to_pdf(
   clean_tex = TRUE,
   clean_rest = TRUE,
   copy.mode = TRUE,
- 
-    plus = "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}"
+  plus =
+    "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}"
 )
 
 table_to_pdf(x)

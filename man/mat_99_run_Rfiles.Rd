@@ -37,7 +37,12 @@ mat_99_check_there_update(dir_path = "code_setup", overwrite = TRUE)
 
 mat_99_check_there(dir_path = "code_setup", overwrite = TRUE)
 
-mat_99_write(scripts_file_runned, dir_path = "code_setup", append = NULL)
+mat_99_write(
+  scripts_file_runned,
+  dir_path = "code_setup",
+  append = NULL,
+  cols_extra = NULL
+)
 
 mat_99_add_info_last(scripts_file_runned, dir_path = "code_setup", warn = TRUE)
 
@@ -65,6 +70,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path = "code_setup")
 \item{overwrite}{should overwrite data?}
 
 \item{append}{Overwrite existing or append?}
+
+\item{cols_extra}{Extra columns to keep}
 
 \item{warn}{Should it warn if file is actually missing?}
 }
