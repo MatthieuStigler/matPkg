@@ -4,7 +4,7 @@
 \alias{mat_head_group}
 \title{Take first groups}
 \usage{
-mat_head_group(df, ..., n_head = 5)
+mat_head_group(df, ..., n_head = 5, slice = FALSE)
 }
 \arguments{
 \item{df}{data}
@@ -12,6 +12,8 @@ mat_head_group(df, ..., n_head = 5)
 \item{...}{grouping vars}
 
 \item{n_head}{Number of groups}
+
+\item{slice}{Whether \code{n_head} indicates row position}
 }
 \description{
 Take first groups
@@ -21,4 +23,8 @@ df <- data.frame(group_a = rep(LETTERS[1:3], each=4),
                  group_b = rep(letters[1:2], 6),dat = 1:12)
 mat_head_group(df, group_a, n_head=1)
 mat_head_group(df, group_a, group_b, n_head=1)
+
+## Use as slice: select second group only, not up to 2:
+mat_head_group(df, group_a, n_head=2, slice=TRUE)
+mat_head_group(df, group_a, n_head=c(2,3), slice=TRUE)
 }

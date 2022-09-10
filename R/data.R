@@ -464,19 +464,28 @@ mat_enframe_wide <- function(x, names=NULL){
 #' @param df data
 #' @param ... grouping vars
 #' @param n_head Number of groups
+#' @param slice Whether \code{n_head} indicates row position
 #' @examples
 #' df <- data.frame(group_a = rep(LETTERS[1:3], each=4),
 #'                  group_b = rep(letters[1:2], 6),dat = 1:12)
 #' mat_head_group(df, group_a, n_head=1)
 #' mat_head_group(df, group_a, group_b, n_head=1)
+#'
+#' ## Use as slice: select second group only, not up to 2:
+#' mat_head_group(df, group_a, n_head=2, slice=TRUE)
+#' mat_head_group(df, group_a, n_head=c(2,3), slice=TRUE)
 #' @export
-mat_head_group <- function(df, ..., n_head=5){
+mat_head_group <- function(df, ..., n_head=5, slice = FALSE){
   .group_vars <- rlang::enquos(...)
   nm = unname(sapply(rlang::enexprs(...), as.character))
 
+  if(slice==FALSE) {
+    if(length(n_head)>1) stop("'n_head' has length >1. Set 'slice=TRUE'?")
+    n_head <- 1:n_head
+  }
   df %>%
     dplyr::semi_join(df %>%
                        dplyr::distinct(!!!.group_vars) %>%
-                       utils::head(n_head),
+                       dplyr::slice(n_head),
                      by = nm)
 }
