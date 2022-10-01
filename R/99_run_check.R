@@ -397,7 +397,7 @@ mat_99_write <- function(scripts_file_runned, dir_path="code_setup",
   time <- Sys.time() %>%
     format(format="%H:%M:%S") %>%
     as.character()
-  user <- paste(Sys.info()[c("user", "nodename")], collapse = "_")
+  user <- paste(Sys.info()[c("user", "nodename")], collapse = "@")
 
   ## add session info, etc
   df_new <- scripts_file_runned %>%
