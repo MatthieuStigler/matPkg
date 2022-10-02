@@ -214,7 +214,7 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
   ## now RUN
   out <- scripts_file %>%
     # mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
-    mutate(try = map(.data$full_path, ~source_throw(., echo=echo))) %>%
+    mutate(try = map(.data$full_path, ~run_function(., echo=echo))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
            has_error= map_lgl(.data$error, ~!is.null(.)),
            error=map_chr(.data$error, ~ifelse(is.null(.), NA, intrnl_err_to_chr(.))),
