@@ -33,8 +33,14 @@ intrnl_time_format <- function(x) {
 
 intrnl_time_format_vec <- function(x) sapply(x, intrnl_time_format)
 intrnl_err_to_chr <- function(x){
-  rlang::cnd_message(x, prefix=FALSE) %>%
-    str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n")
+  if(inherits(x, "condition")){
+    res <- rlang::cnd_message(x, prefix=FALSE) %>%
+      str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n")
+  } else {
+    which_backtrace <- which(grepl("Backtrace", x))
+    res <- paste(x[1:(which_backtrace-1)], collapse = " ")
+  }
+  res
 }
 
 

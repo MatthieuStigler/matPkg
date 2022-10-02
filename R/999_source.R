@@ -96,12 +96,17 @@ source_rcmd_batch <- function(path, echo=TRUE){
     res$result <- mat_enframe_wide(times, names = c("user.self", "sys.self", "elapsed")) %>%
       mutate(user.child=NA_real_, sys.child=NA_real_,  memory_used_mb=NA_real_)
   } else {
-    error_line_pos <- grepl("^Error:", out_file)
-    backtrace_line_pos <- grepl("^Backtrace:", out_file)
-    if(!any(backtrace_line_pos)) backtrace_line_pos[length(out_file)+1] <- TRUE
-    error_lines_short <- out_file[which(error_line_pos):(which(backtrace_line_pos)-1)]
-    error_lines_all <- out_file[which(error_line_pos):length(out_file)]
-    res$error <- error_lines_all
+    error_line_pos <- grepl("^Error(:| in)", out_file)
+    if(all(!error_line_pos)) {
+      warning("Issue, did not detect string 'Error' in the output script")
+      res$error <- "UNDETECTED ERROR"
+    } else {
+      backtrace_line_pos <- grepl("^Backtrace:", out_file)
+      if(!any(backtrace_line_pos)) backtrace_line_pos[length(out_file)+1] <- TRUE
+      error_lines_short <- out_file[which(error_line_pos):(which(backtrace_line_pos)-1)]
+      error_lines_all <- out_file[which(error_line_pos):length(out_file)]
+      res$error <- error_lines_all
+    }
   }
 
   if(echo) {
