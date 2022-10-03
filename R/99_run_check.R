@@ -37,8 +37,9 @@ intrnl_err_to_chr <- function(x){
     res <- rlang::cnd_message(x, prefix=FALSE) %>%
       str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n")
   } else {
-    which_backtrace <- which(grepl("Backtrace", x))
-    res <- paste(x[1:(which_backtrace-1)], collapse = " ")
+    backtrace_line <- grepl("Backtrace", x)
+    end <- if(any(backtrace_line)) which_backtrace-1 else length(x)
+    res <- paste(x[1:end], collapse = " ")
   }
   res
 }
