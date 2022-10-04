@@ -38,7 +38,7 @@ intrnl_err_to_chr <- function(x){
       str_remove_all("\\n\\u001b\\[31mx\\u001b\\[39m|\\n")
   } else {
     backtrace_line <- grepl("Backtrace", x)
-    end <- if(any(backtrace_line)) which_backtrace-1 else length(x)
+    end <- if(any(backtrace_line)) backtrace_line-1 else length(x)
     res <- paste(x[1:end], collapse = " ")
   }
   res
