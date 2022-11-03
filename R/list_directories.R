@@ -28,6 +28,6 @@ mat_list_dir <- function(path, pattern = ".R", recursive = TRUE, add_ext = FALSE
 
   ## return
   res %>%
-    select(-.data$full_path, .data$full_path)
+    dplyr::relocate("full_path", .after = everything())
 
 }

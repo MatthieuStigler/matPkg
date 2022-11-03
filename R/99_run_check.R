@@ -99,8 +99,8 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
   }
   res_yaml_df <- res %>%
     dplyr::mutate(yaml = purrr::map(.data$yaml, safely_clean)) %>%
-    tidyr::unnest_wider(.data$yaml) %>%
-    tidyr::unnest_wider(.data$result) %>%
+    tidyr::unnest_wider("yaml") %>%
+    tidyr::unnest_wider("result") %>%
     tibble::add_column(!!!c(runMat=NA)[setdiff("runMat", colnames(.))]) %>% ## add if miss
     mutate(has_runMat = !is.na(.data$runMat),
            runMat_val = .data$runMat & !is.na(.data$runMat),
@@ -118,7 +118,7 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
              error_parse=map_chr(.data$error, ~dplyr::if_else(is.null(.x),
                                                               NA_character_,
                                                               as.character(.x)))) %>%
-      select(-.data$error)
+      select(-"error")
   }
 
   vars <- c("filename", "ext", "folder", "subfolder", "number_char", "number",
@@ -126,7 +126,7 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
             "runMat_val", "full_path", keep_field)
   res_yaml_df <- res_yaml_df %>%
     select(tidyselect::all_of(vars)) %>%
-    select(-.data$full_path, .data$full_path)
+    dplyr::relocate("full_path", .after = tidyselect::everything())
 
   if(no_old) res_yaml_df <-  res_yaml_df %>%
     filter(!stringr::str_detect(.data$full_path,
@@ -226,7 +226,7 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
            has_error= map_lgl(.data$error, ~!is.null(.)),
            error=map_chr(.data$error, ~ifelse(is.null(.), NA, intrnl_err_to_chr(.))),
            timing = map2(.data$try, .data$has_error, ~if(.y) df_null else .x$result)) %>%
-    unnest(.data$timing) %>%
+    unnest("timing") %>%
     dplyr::relocate(tidyselect::any_of(vars_out))
 
   ## small check
@@ -298,7 +298,7 @@ mat_99_showErr <- function(scripts_file_runned) {
     dplyr::filter(.data$has_error)
 
   print(df_probs %>%
-    dplyr::select(.data$filename, .data$error) )
+    dplyr::select("filename", "error") )
 
   print(df_probs %>%
           dplyr::pull(.data$error))
