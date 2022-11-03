@@ -6,11 +6,11 @@
 \usage{
 mat_plot_coefs_tidy(
   df,
-  fill_var = term,
+  fill_var = "term",
   fac1_var = NULL,
   fac2_var = NULL,
   angle = 0,
-  x_var = term,
+  x_var = "term",
   scales = "fixed",
   fac_space = "fixed",
   geom = c("bar", "point")

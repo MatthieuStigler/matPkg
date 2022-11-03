@@ -31,7 +31,7 @@ mat_cross_helper <- function(df, args, wide = TRUE, remove_NA=TRUE, replace_all 
 
   ## replace now
   args_df_add <- args_df %>%
-    mutate(values_new = map2(.data$variable, value , ~ check_replace(.y, filter(vals_table, .data$variable==.x) %>%
+    mutate(values_new = map2(.data$variable, .data$value , ~ check_replace(.y, filter(vals_table, .data$variable==.x) %>%
                                                                        pull(.data$values),
                                                                      remove_NA=remove_NA) %>%
                                tibble::enframe(value = "values_new"))) %>%

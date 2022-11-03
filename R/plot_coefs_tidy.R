@@ -17,7 +17,7 @@
 #' ## handle duplicates
 #' mat_plot_coefs_tidy(coefs_out_iris)
 #' @export
-mat_plot_coefs_tidy <- function(df, fill_var=term, fac1_var=NULL, fac2_var=NULL, angle = 0, x_var=term,
+mat_plot_coefs_tidy <- function(df, fill_var="term", fac1_var=NULL, fac2_var=NULL, angle = 0, x_var="term",
                                 scales = "fixed", fac_space = "fixed",
                                 geom= c("bar", "point")) {
 
