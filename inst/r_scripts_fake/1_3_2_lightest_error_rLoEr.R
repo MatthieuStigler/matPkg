@@ -10,4 +10,4 @@
 #'## Read data
 ################################
 log(-2)
-log("a")
+suppressWarnings(log("a"))
