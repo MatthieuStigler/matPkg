@@ -26,7 +26,8 @@ mat_99_run_Rfiles(
   scripts_file,
   echo = FALSE,
   runMat_true_only = TRUE,
-  run_function = c("internal", "external")
+  run_function = c("internal", "external"),
+  tmp_dir = NULL
 )
 
 mat_run_Rfiles(scripts_file, echo = FALSE)
@@ -64,6 +65,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path = "code_setup")
 \item{runMat_true_only}{run only the ones with runMat: TRUE}
 
 \item{run_function}{use either source (internal) or R CMD BATCH (external)}
+
+\item{tmp_dir}{temporary dir to hold file when using \code{run_function="external"}}
 
 \item{scripts_file_runned}{data from mat_99_run_Rfiles}
 

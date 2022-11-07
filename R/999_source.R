@@ -72,12 +72,13 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
 }
 
 
-source_rcmd_batch <- function(path, echo=TRUE){
+source_rcmd_batch <- function(path, echo=TRUE, tmp_dir=NULL){
 
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
 
   ## run file external
-  tmp_file <- tempfile()
+  if(is.null(tmp_dir)) tmp_dir <- tempdir()
+  tmp_file <- file.path(tmp_dir, paste0(basename(path), "out"))
   cmd <- paste("R CMD BATCH ", path, tmp_file)
   time_before <- Sys.time()
   out <- system(cmd)

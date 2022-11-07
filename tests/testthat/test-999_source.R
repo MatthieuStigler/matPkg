@@ -4,7 +4,11 @@ path_rscripts <- system.file("r_scripts_fake", package = "matPkg")
 dir_dat <- mat_99_list_Rfiles(path_rscripts) |>
   dplyr::select(-folder)
 
-## run witn internal
+dir_dat |>
+  dplyr::count(has_error_parse, error_parse)
+
+
+## run with internal
 out_int <- mat_99_run_Rfiles(dir_dat) |>
   dplyr::select(filename, has_error, error, error_parse)
 

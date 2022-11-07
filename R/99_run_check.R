@@ -115,11 +115,12 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
              error_parse=NA_character_)
   } else {
     res_yaml_df <- res_yaml_df %>%
-      mutate(has_error_parse=map_lgl(.data$error, ~!is.null(.)),
-             error_parse=map_chr(.data$error, ~dplyr::if_else(is.null(.x),
-                                                              NA_character_,
-                                                              as.character(.x)))) %>%
-      select(-"error")
+      mutate(has_error_parse=map_lgl(.data$error, ~!is.null(.) &!is.na(.)),
+             error_parse=map2_chr(.data$error, .data$has_error_parse,
+                                  ~dplyr::if_else(.y,
+                                                 NA_character_,
+                                                 as.character(.x)))) #%>%
+      # select(-"error")
   }
 
   vars <- c("filename", "ext", "folder", "subfolder", "number_char", "number",
@@ -174,6 +175,7 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' @param echo print which file done, and gc?
 #' @param runMat_true_only run only the ones with runMat: TRUE
 #' @param run_function use either source (internal) or R CMD BATCH (external)
+#' @param tmp_dir temporary dir to hold file when using `run_function="external"`
 #' @examples
 #' library(matPkg)
 #' library(readr)
@@ -204,10 +206,10 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' mat_99_check_there_update(path_temp, overwrite=TRUE)
 #' @export
 mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
-                              run_function=c("internal", "external")) {
+                              run_function=c("internal", "external"), tmp_dir=NULL) {
   run_function <- switch(match.arg(run_function),
                          "internal"=source_throw,
-                         "external"=source_rcmd_batch)
+                         "external"=function(x, ...) source_rcmd_batch(x, tmp_dir=tmp_dir, ...))
   if(runMat_true_only) {
     scripts_file <- scripts_file %>%
       filter(.data$runMat_val)
