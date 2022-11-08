@@ -21,7 +21,7 @@ mat_lm_means_tidy(
 
 \item{vcov.}{Specify vcov}
 
-\item{...}{arguments passed to lm}
+\item{weight}{weight argument passed to lm}
 }
 \description{
 This returns a clean df of means for each group
