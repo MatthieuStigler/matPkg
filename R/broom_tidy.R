@@ -5,7 +5,7 @@
 #' @param val_name name of value column
 #' @param clean Clean the broom colnames?
 #' @param vcov. Specify vcov
-#' @param ... arguments passed to lm
+#' @param weight weight argument passed to lm
 #' @examples
 #' library(magrittr)
 #' data(iris_tb)
@@ -13,11 +13,17 @@
 #'   tidyr::nest(data=-Species) %>%
 #'   mat_lm_means_tidy(Petal.Width)
 #' @export
-mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NULL, ...) {
+mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NULL, weight) {
   val_name_pr <-  rlang::enquo(val_name)
 
+  ## difficult to pass ... https://stackoverflow.com/questions/48215325/passing-ellipsis-arguments-to-map-function-purrr-package-r
+  if(missing(weight)) {
+    lm_fo <- function(f, data) lm(f, data = data)
+  } else {
+    lm_fo <- function(f, data) lm(f, data = data, weights=weight)
+  }
   res <- df_nest %>%
-    mutate(reg = map(.data$data, \(df, ...) lm(value ~ 1, data = rename(df, value = !!val_name_pr), ...), ...),
+    mutate(reg = map(.data$data,  ~lm_fo(value ~ 1, data = rename(., value = !!val_name_pr))),
            n = map_int(.data$data, nrow)) %>%
     ungroup() %>%
     mutate(reg_out = map(.data$reg, ~lmtest::coeftest(., vcov. = vcov.) %>%
