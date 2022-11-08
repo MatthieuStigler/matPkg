@@ -1,6 +1,6 @@
 #' matPkg: Internal functions I use
 #'
-#' to do... can I get a list of functions? Just document them!
+#' A personal package for functions I use often. Use at your own risk, no guarantee of being consistent.
 #'
 #' Should run:
 #'

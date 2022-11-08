@@ -5,7 +5,7 @@
 \alias{matPkg}
 \title{matPkg: Internal functions I use}
 \description{
-to do... can I get a list of functions? Just document them!
+A personal package for functions I use often. Use at your own risk, no guarantee of being consistent.
 }
 \details{
 Should run:
