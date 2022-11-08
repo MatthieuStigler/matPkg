@@ -22,8 +22,8 @@ mat_lm_means_tidy <-  function(df_nest, val_name = value, clean = TRUE, vcov.=NU
     ungroup() %>%
     mutate(reg_out = map(.data$reg, ~lmtest::coeftest(., vcov. = vcov.) %>%
                            tidy.coeftest(conf.int = TRUE))) %>%
-    unnest(.data$reg_out) %>%
-    select(-.data$reg, -.data$data, -.data$term)
+    unnest("reg_out") %>%
+    select(-"reg", -"data", -"term")
   if(clean) res <-  res %>%
     setNames(stringr::str_replace(colnames(.), "\\.", "_"))
   res
