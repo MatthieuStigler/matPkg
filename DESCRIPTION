@@ -1,7 +1,7 @@
 Package: matPkg
 Title: Mat functions
-Version: 0.2.1.907
-Date: 2022-11-07
+Version: 0.2.1.908
+Date: 2022-11-08
 Authors@R: 
     person(given = "Matthieu",
            family = "Last",
@@ -34,7 +34,7 @@ Imports:
     lmtest,
     pryr,
     readr,
-    pkgload
+    callr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Suggests: 

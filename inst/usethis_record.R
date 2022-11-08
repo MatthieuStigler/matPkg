@@ -35,7 +35,8 @@ use_package("pryr", "Imports")
 use_package("lmtest", "Imports")
 # use_package("utils", "Imports")
 use_package("readr", "Imports")
-use_package("pkgload", "Imports")
+# use_package("pkgload", "Imports")
+use_package("callr", "Imports")
 
 ## for the example
 use_package("sandwich", "Suggests")

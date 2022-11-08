@@ -9,5 +9,5 @@
 ################################
 #'## Read data
 ################################
-log(-2)
-suppressWarnings(log("a"))
+suppressWarnings(log(-2))
+log("a")

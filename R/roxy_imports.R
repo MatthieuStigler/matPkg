@@ -13,7 +13,7 @@ NULL
 #'@importFrom tibble tibble as_tibble
 NULL
 
-#' @importFrom stats quantile setNames
+#' @importFrom stats quantile setNames lm
 NULL
 
 #' @importFrom purrr safely quietly map_int map map_dbl map_chr map_lgl map2_lgl map2 map2_chr
