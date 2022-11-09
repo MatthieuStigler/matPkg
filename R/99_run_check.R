@@ -207,9 +207,12 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' @export
 mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
                               run_function=c("internal", "external"), tmp_dir=NULL) {
+
+  if(!is.null(tmp_dir)) tmp_dir <- normalizePath(tmp_dir, mustWork = FALSE)
   run_function <- switch(match.arg(run_function),
                          "internal"=source_throw,
                          "external"=function(x, ...) source_rcmd_batch(x, tmp_dir=tmp_dir, ...))
+
   if(runMat_true_only) {
     scripts_file <- scripts_file %>%
       filter(.data$runMat_val)

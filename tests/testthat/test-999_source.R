@@ -16,6 +16,17 @@ out_int <- mat_99_run_Rfiles(dir_dat) |>
 out_ext <- mat_99_run_Rfiles(dir_dat, run_function = "external") |>
   dplyr::select(filename, has_error, error, error_parse)
 
+## run with external and temp dir
+dir_temp <- tempdir()
+out_ext_dir <- mat_99_run_Rfiles(scripts_file = dir_dat, run_function = "external", tmp_dir = dir_temp) |>
+  dplyr::select(filename, has_error, error, error_parse)
+list.files(dir_temp)
+unlink(dir_temp)
+
+## check internals
+out1 <- matPkg:::source_throw(dir_dat$full_path[[1]])
+out2 <- matPkg:::source_rcmd_batch(dir_dat$full_path[[1]])
+
 ## compare outputs
 out_int
 out_ext
