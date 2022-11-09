@@ -79,22 +79,15 @@ source_rcmd_batch <- function(path, echo=TRUE, tmp_dir=NULL){
   ## run file external
   if(is.null(tmp_dir)) tmp_dir <- tempdir()
   tmp_file <- file.path(tmp_dir, paste0(basename(path), "out"))
-  tmp_file <- tempfile()
   # cmd <- paste("R CMD BATCH ", path, tmp_file)
   time_before <- Sys.time()
   out <- callr::rcmd_safe("BATCH",
                           cmdargs = c(infile  = path,
                                       outfile = tmp_file))
   # out <- system(cmd, intern = TRUE)
-  # warning(paste("CMD out is  ", out, "\n file exists:", file.exists(tmp_file)))
   time_after <- Sys.time()
 
   ## read
-  # warning("File is ", tmp_file)
-  # warning("CMD is ", cmd)
-  # warning("Dir is ", getwd())
-  # warning("File.exists ", file.exists(tmp_file))
-  # warning(paste("Dir has files: ", paste(list.files(dirname(tmp_file)), collapse = "\n")))
   out_file <- readLines(tmp_file)
   proc_line <- grepl("proc.time\\(\\)$", out_file)
   has_normal_end <- any(proc_line)
