@@ -102,8 +102,15 @@ source_rcmd_batch <- function(path, echo=TRUE, tmp_dir=NULL){
   } else {
     error_line_pos <- grepl("^Error(:| in)", out_file)
     if(all(!error_line_pos)) {
-      warning("Issue, did not detect string 'Error' in the output script")
-      res$error <- "UNDETECTED ERROR"
+      was_killed <- any(grepl("^Killed$", utils::tail(out_file)))
+      if(was_killed) {
+        res$error <- "KILLED"
+        warning("Script killed!")
+      } else {
+        warning("Unknown reason for script to stop, without error/kill")
+        res$error <- "UNDETECTED ERROR"
+      }
+      error_lines_short <- res$error
     } else {
       backtrace_line_pos <- grepl("^Backtrace:", out_file)
       if(!any(backtrace_line_pos)) backtrace_line_pos[length(out_file)+1] <- TRUE
