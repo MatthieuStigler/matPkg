@@ -16,11 +16,11 @@
 \alias{mat_gg_scale_X_isperc}
 \title{ggplot2 helpers}
 \format{
-An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 11.
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 12.
 
-An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 11.
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 12.
 
-An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 11.
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 12.
 
 An object of class \code{theme} (inherits from \code{gg}) of length 1.
 
