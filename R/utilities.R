@@ -144,3 +144,24 @@ if(FALSE){
   setNames(mat_check_even(sqrt(vec)^2), names(vec))
   abs(sqrt(vec)^2%%2-0)<0.0000001
 }
+
+
+################################
+### Print
+################################
+
+#' Set options for tibble printing
+#'
+#' @param min Arg to `pillar.print_min = min`
+#' @param max Arg to `pillar.print_min = max`
+#'
+#' @examples
+#' mat_print_tib(2, 4)
+#' as_tibble(iris) %>% head(3)
+#' as_tibble(iris) %>% head(4)
+#' as_tibble(iris) %>% head(5)
+#' @export
+mat_print_tib <- function(min=3, max=6) {
+  if(min>max) warning("min should be smaller than max")
+  options(pillar.print_max = max, pillar.print_min = min)
+}

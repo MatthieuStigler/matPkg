@@ -1,7 +1,7 @@
 Package: matPkg
 Title: Mat functions
-Version: 0.2.2
-Date: 2022-12-20
+Version: 0.2.3
+Date: 2023-01-06
 Authors@R: 
     person(given = "Matthieu",
            family = "Last",
@@ -36,7 +36,7 @@ Imports:
     readr,
     callr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0),
     sandwich
