@@ -32,7 +32,7 @@ table_to_pdf(x)
 
 \item{copy.mode}{Argument passed to \code{\link{file.copy}} to override or not permissions}
 
-\item{plus}{additional lattex stuff}
+\item{plus}{additional LaTeX stuff}
 }
 \description{
 Use tools::texi2pdf
@@ -52,5 +52,5 @@ file.remove("filename_test2.pdf")
 }
 }
 \seealso{
-\code{\link{mat_pdf_to_png}}
+\code{\link{mat_pdf_to_png}}, \code{\link{mat_tex_to_png}}
 }

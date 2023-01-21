@@ -6,9 +6,9 @@
 #'@param filename output name
 #'@param quiet passed to tools::texi2pdf
 #'@param clean_tex,clean_rest Should remove other files, and tex too?
-#'@param plus additional lattex stuff
+#'@param plus additional LaTeX stuff
 #'@param copy.mode Argument passed to \code{\link{file.copy}} to override or not permissions
-#'@seealso  \code{\link{mat_pdf_to_png}}
+#'@seealso  \code{\link{mat_pdf_to_png}}, \code{\link{mat_tex_to_png}}
 #'@examples
 #'\dontrun{
 #'tab <-  data.frame(variable= c("A", "B"), stat = c("mean"), value = 1:2)
@@ -44,7 +44,7 @@ mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
     }
   }
   if(stringr::str_detect(filename, "\\.tex$"))  warning("Old code!?")
-  if(!stringr::str_detect(filename, "\\.pdf$"))  warning("No pdf output?")
+  if(!stringr::str_detect(filename, "\\.pdf$"))  warning("'filename' does not contain 'pdf' extension?")
 
   ## read x if is path
   if(is_path_x) {
@@ -148,6 +148,7 @@ table_to_pdf <-  function(x) .Deprecated("mat_table_to_pdf")
 #' @param correct_grayscale Should correct for \code{RGB color space not permitted on grayscale}
 #' @param echo should show command?
 #' @export
+#' @seealso \code{\link{mat_table_to_pdf}}, \code{\link{mat_tex_to_png}}
 #' @examples
 #' tmp <- file.path(tempdir(), "try.pdf")
 #' pdf(tmp)
@@ -178,4 +179,47 @@ if(FALSE) {
   dev.off()
   mat_pdf_to_png("try.pdf")
   file.remove(c("try.pdf", "try.png"))
+}
+
+
+################################
+#'## tex to pdf
+################################
+
+
+#' Convert tex to png
+#'
+#' This is a wrapper for mat_table_to_pdf and mat_pdf_to_png
+#'
+#' @param path Path for the .tex on disk
+#' @param path_out Where to save .png
+#' @param correct_grayscale,... Arguments passed to \code{\link{mat_pdf_to_png}}
+#'
+#'@seealso  \code{\link{mat_table_to_pdf}}, \code{\link{mat_pdf_to_png}}
+#'@examples
+#'\dontrun{
+#'tab <-  data.frame(variable= c("A", "B"), stat = c("mean"), value = 1:2)
+#'tab_xt <- print(xtable::xtable(tab), print.results = FALSE)
+#'
+#'##
+#'tmp_file <- tempfile()
+#'print(xtable::xtable(tab), file = tmp_file)
+#'mat_tex_to_png(tmp_file, "table_as_image.png")
+#'file.remove("table_as_image")
+#'}
+mat_tex_to_png <- function(path, path_out = gsub("\\.tex$", ".png", path),
+                           correct_grayscale = TRUE, ...){
+
+  ## tex to pdf, pdf in temp
+  tmp_file_pdf <- paste0(tempfile(), ".pdf")
+  tmp_file_png <- gsub("\\.pdf$", ".png", tmp_file_pdf)
+
+  mat_table_to_pdf(x=path, is_path_x = TRUE, filename=tmp_file_pdf)
+
+  ## now pdf to png
+  mat_pdf_to_png(tmp_file_pdf, correct_grayscale=correct_grayscale)
+  file.copy(tmp_file_png, path_out)
+
+  ## remove files
+  silent <- file.remove(c(tmp_file_png, tmp_file_pdf))
 }

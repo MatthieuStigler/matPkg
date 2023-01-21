@@ -37,3 +37,6 @@ plot(1)
 dev.off()
 mat_pdf_to_png(tmp, correct_grayscale = TRUE)
 }
+\seealso{
+\code{\link{mat_table_to_pdf}}, \code{\link{mat_tex_to_png}}
+}
