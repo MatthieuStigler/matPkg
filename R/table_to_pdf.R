@@ -207,6 +207,7 @@ if(FALSE) {
 #'mat_tex_to_png(tmp_file, "table_as_image.png")
 #'file.remove("table_as_image")
 #'}
+#'@export
 mat_tex_to_png <- function(path, path_out = gsub("\\.tex$", ".png", path),
                            correct_grayscale = TRUE, ...){
 

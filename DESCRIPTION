@@ -1,6 +1,6 @@
 Package: matPkg
 Title: Mat functions
-Version: 0.2.4
+Version: 0.2.41
 Date: 2023-01-21
 Authors@R: 
     person(given = "Matthieu",
