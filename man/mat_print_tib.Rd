@@ -16,7 +16,7 @@ Set options for tibble printing
 }
 \examples{
 mat_print_tib(2, 4)
-as_tibble(iris) \%>\% head(3)
-as_tibble(iris) \%>\% head(4)
-as_tibble(iris) \%>\% head(5)
+tibble::as_tibble(iris) |> head(3)
+tibble::as_tibble(iris) |> head(4)
+tibble::as_tibble(iris) |> head(5)
 }
