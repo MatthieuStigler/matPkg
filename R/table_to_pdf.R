@@ -6,7 +6,7 @@
 #'@param filename output name
 #'@param quiet passed to tools::texi2pdf
 #'@param clean_tex,clean_rest Should remove other files, and tex too?
-#'@param plus additional LaTeX stuff
+#'@param plus additional LaTeX stuff. If contains %ADD, %ADD will be replaced by default
 #'@param copy.mode Argument passed to \code{\link{file.copy}} to override or not permissions
 #'@seealso  \code{\link{mat_pdf_to_png}}, \code{\link{mat_tex_to_png}}
 #'@examples
@@ -64,6 +64,8 @@ mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
   if(length(x)>1) x <-  paste(x, collapse = "\n")
   first <- c("\\documentclass[varwidth=\\maxdimen]{standalone}[2011/12/21]",  "\\begin{document}")
   last <- "\\end{document}"
+  ## format preamble, with %stars just add default
+  if(grepl("%ADD", plus)) plus <- paste("\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}", gsub("%ADD", "", plus))
   text <- paste(first[1], plus, first[2], x, last, sep="\n")
 
   ## write down formatted file in temp file
