@@ -219,7 +219,8 @@ mat_tex_to_png <- function(path, path_out = gsub("\\.tex$", ".png", path),
 
   ## now pdf to png
   mat_pdf_to_png(tmp_file_pdf, correct_grayscale=correct_grayscale)
-  file.copy(tmp_file_png, path_out)
+  copy_out <- file.copy(tmp_file_png, path_out, overwrite = TRUE)
+  if(!copy_out) warning("was unable to copy output?")
 
   ## remove files
   silent <- file.remove(c(tmp_file_png, tmp_file_pdf))
