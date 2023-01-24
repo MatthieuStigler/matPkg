@@ -11,7 +11,8 @@ mat_tex_to_png(
   path,
   path_out = gsub("\\\\.tex$", ".png", path),
   correct_grayscale = TRUE,
-  ...
+  step1_args = list(),
+  step2_args = list()
 )
 }
 \arguments{
@@ -19,7 +20,9 @@ mat_tex_to_png(
 
 \item{path_out}{Where to save .png}
 
-\item{correct_grayscale, ...}{Arguments passed to \code{\link{mat_pdf_to_png}}}
+\item{correct_grayscale}{Arguments passed to \code{\link{mat_pdf_to_png}}}
+
+\item{step1_args, step2_args}{Lists of arguments passed to  \code{\link{mat_table_to_pdf}} and \code{\link{mat_pdf_to_png}}.}
 }
 \description{
 This is a wrapper for mat_table_to_pdf and mat_pdf_to_png
@@ -33,6 +36,12 @@ tab_xt <- print(xtable::xtable(tab), print.results = FALSE)
 tmp_file <- tempfile()
 print(xtable::xtable(tab), file = tmp_file)
 mat_tex_to_png(tmp_file, "table_as_image.png")
+
+## Pass other argumetns to mat_table_to_pdf or mat_pdf_to_png
+mat_tex_to_png(tmp_file, "table_as_image.png", step1_args = list(quiet=FALSE))
+mat_tex_to_png(tmp_file, "table_as_image.png", step2_args = list(echo=FALSE))
+
+## remove file
 file.remove("table_as_image")
 }
 }

@@ -195,7 +195,8 @@ if(FALSE) {
 #'
 #' @param path Path for the .tex on disk
 #' @param path_out Where to save .png
-#' @param correct_grayscale,... Arguments passed to \code{\link{mat_pdf_to_png}}
+#' @param step1_args,step2_args Lists of arguments passed to  \code{\link{mat_table_to_pdf}} and \code{\link{mat_pdf_to_png}}.
+#' @param correct_grayscale Arguments passed to \code{\link{mat_pdf_to_png}}
 #'
 #'@seealso  \code{\link{mat_table_to_pdf}}, \code{\link{mat_pdf_to_png}}
 #'@examples
@@ -207,20 +208,32 @@ if(FALSE) {
 #'tmp_file <- tempfile()
 #'print(xtable::xtable(tab), file = tmp_file)
 #'mat_tex_to_png(tmp_file, "table_as_image.png")
+#'
+#'## Pass other argumetns to mat_table_to_pdf or mat_pdf_to_png
+#'mat_tex_to_png(tmp_file, "table_as_image.png", step1_args = list(quiet=FALSE))
+#'mat_tex_to_png(tmp_file, "table_as_image.png", step2_args = list(echo=FALSE))
+#'
+#'## remove file
 #'file.remove("table_as_image")
 #'}
 #'@export
 mat_tex_to_png <- function(path, path_out = gsub("\\.tex$", ".png", path),
-                           correct_grayscale = TRUE, ...){
+                           correct_grayscale = TRUE,
+                           step1_args = list(), step2_args = list()){
 
   ## tex to pdf, pdf in temp
   tmp_file_pdf <- paste0(tempfile(), ".pdf")
   tmp_file_png <- gsub("\\.pdf$", ".png", tmp_file_pdf)
 
-  mat_table_to_pdf(x=path, is_path_x = TRUE, filename=tmp_file_pdf)
+  ## Step 1: tex to pdf
+  step1_args <- append(list(x=path, is_path_x = TRUE, filename=tmp_file_pdf),
+                       step1_args)
+  do.call(mat_table_to_pdf, step1_args)
 
-  ## now pdf to png
-  mat_pdf_to_png(tmp_file_pdf, correct_grayscale=correct_grayscale)
+  ## Step 2: now pdf to png
+  step2_args <- append(list(path = tmp_file_pdf, correct_grayscale=correct_grayscale),
+                       step2_args)
+  do.call(mat_pdf_to_png, step2_args)
   copy_out <- file.copy(tmp_file_png, path_out, overwrite = TRUE)
   if(!copy_out) warning("was unable to copy output?")
 

@@ -32,7 +32,7 @@ table_to_pdf(x)
 
 \item{copy.mode}{Argument passed to \code{\link{file.copy}} to override or not permissions}
 
-\item{plus}{additional LaTeX stuff}
+\item{plus}{additional LaTeX stuff. If contains \%ADD, \%ADD will be replaced by default}
 }
 \description{
 Use tools::texi2pdf
