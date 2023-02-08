@@ -49,7 +49,7 @@ mat_tidy_clean <- function(df) {
     setNames(stringr::str_replace_all(colnames(df), "\\.", "_"))
 
   ## rename (Intercept)
-  if("term" %in% colnames(df_out) && any(str_detect(df_out$term, "\\(Intercept\\)"))){
+  if("term" %in% colnames(df_out) && any(isTRUE(str_detect(df_out$term, "\\(Intercept\\)")))){
     if(is.factor(df_out$term)) {
       levels(df_out$term) <- str_replace(levels(df_out$term), "\\(Intercept\\)", "Intercept")
     } else {
