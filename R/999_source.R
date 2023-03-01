@@ -82,7 +82,8 @@ source_rcmd_batch <- function(path, echo=TRUE, tmp_dir=NULL){
   # cmd <- paste("R CMD BATCH ", path, tmp_file)
   time_before <- Sys.time()
   out <- callr::rcmd_safe("BATCH",
-                          cmdargs = c(infile  = path,
+                          cmdargs = c("--no-save", "--no-restore",
+                                      infile  = path,
                                       outfile = tmp_file))
   # out <- system(cmd, intern = TRUE)
   time_after <- Sys.time()
