@@ -45,23 +45,20 @@ intrnl_err_to_chr <- function(x){
   res
 }
 
-
-#' @importFrom utils getFromNamespace
-read_utf8 = getFromNamespace("read_utf8", "rmarkdown")
-parse_yaml_front_matter = getFromNamespace("parse_yaml_front_matter", "rmarkdown")
-
 #' Read YAML header to list
 #' @param file_path The file path
 #' @export
 mat_parse_yaml <- function(file_path){
-  input_lines <- read_utf8(file_path)
-  # input_lines <- rmarkdown:::read_lines_utf8(file_path, encoding)
-  if (identical(tolower(tools::file_ext(file_path)), "r"))
-    input_lines <- knitr::spin(text = input_lines, knit = FALSE)
-  yaml_front_matter <- parse_yaml_front_matter(input_lines)
-  yaml_front_matter
+  ## remove #' to have standard YAMl header
+  input_lines <- readLines(file_path)
+  input_lines <- knitr::spin(text = input_lines, knit = FALSE)
+  tmp <- tempfile()
+  writeLines(input_lines, tmp)
 
+  ## now use rmarkdown::yaml_front_matter
+  rmarkdown::yaml_front_matter(tmp)
 }
+
 
 ################################
 ### Step 1: list R scripts
