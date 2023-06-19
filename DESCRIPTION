@@ -27,7 +27,7 @@ Imports:
     raster,
     sf,
     nlme,
-    rmarkdown,
+    rmarkdown (>= 1.1),
     knitr,
     data.table,
     methods,
