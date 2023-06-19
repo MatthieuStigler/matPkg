@@ -1,3 +1,7 @@
+# matPkg 0.5.6
+
+* fix issue with YAML header parsing
+
 # matPkg 0.2.3
 
 - New mat_print_tib
