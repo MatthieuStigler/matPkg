@@ -1,4 +1,4 @@
-# matPkg 0.5.6
+# matPkg 0.2.46
 
 * fix issue with YAML header parsing
 

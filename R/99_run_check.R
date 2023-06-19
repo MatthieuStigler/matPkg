@@ -50,7 +50,7 @@ intrnl_err_to_chr <- function(x){
 #' @export
 mat_parse_yaml <- function(file_path){
   ## remove #' to have standard YAMl header
-  input_lines <- readLines(file_path)
+  input_lines <- readLines(file_path, warn=FALSE)
   input_lines <- knitr::spin(text = input_lines, knit = FALSE)
   tmp <- tempfile()
   writeLines(input_lines, tmp)
