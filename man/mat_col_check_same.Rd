@@ -4,7 +4,7 @@
 \alias{mat_col_check_same}
 \title{Compare if col_1 and col_2 equal}
 \usage{
-mat_col_check_same(df, col_1, col_2, tol = 1e-08)
+mat_col_check_same(df, col_1, col_2, tol = 1e-08, filter = FALSE)
 }
 \arguments{
 \item{df}{data}
@@ -12,13 +12,15 @@ mat_col_check_same(df, col_1, col_2, tol = 1e-08)
 \item{col_1, col_2}{The columns}
 
 \item{tol}{tolerance level}
+
+\item{filter}{should keep only rows with diff?}
 }
 \description{
 Add a col diff
 }
 \examples{
-library(dplyr)
 data(iris_tb)
-mutate(iris_tb, Sepal.Length2 =Sepal.Length+rep(c(0.000001, 0), 75)) \%>\%
-  mat_col_check_same(Sepal.Length2, Sepal.Length)
+iris_tb$Sepal.Length2 <- iris_tb$Sepal.Length+rep(c(0.000001, 0), 75)
+mat_col_check_same(iris_tb, Sepal.Length2, Sepal.Length)
+mat_col_check_same(iris_tb, Sepal.Length2, Sepal.Length, filter=TRUE)
 }

@@ -426,15 +426,19 @@ mat_join_compare <- function(df1, df2, by=NULL, join_fun = dplyr::inner_join, to
 #' @param df data
 #' @param col_1,col_2 The columns
 #' @param tol tolerance level
+#' @param filter should keep only rows with diff?
 #' @examples
-#' library(dplyr)
 #' data(iris_tb)
-#' mutate(iris_tb, Sepal.Length2 =Sepal.Length+rep(c(0.000001, 0), 75)) %>%
-#'   mat_col_check_same(Sepal.Length2, Sepal.Length)
+#' iris_tb$Sepal.Length2 <- iris_tb$Sepal.Length+rep(c(0.000001, 0), 75)
+#' mat_col_check_same(iris_tb, Sepal.Length2, Sepal.Length)
+#' mat_col_check_same(iris_tb, Sepal.Length2, Sepal.Length, filter=TRUE)
 #' @export
-mat_col_check_same <- function(df, col_1, col_2, tol = 0.00000001) {
-  df %>%
-    mutate(is_same = abs({{col_1}}- {{col_2}}) < tol)
+mat_col_check_same <- function(df, col_1, col_2, tol = 0.00000001, filter=FALSE) {
+  df <- df %>%
+    mutate(diff = abs({{col_1}}- {{col_2}}) ,
+           is_same = diff < tol)
+  if(filter) df <- filter(df, !is_same)
+  df
 }
 
 
