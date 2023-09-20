@@ -4,10 +4,12 @@
 \alias{st_as_sf.Extent}
 \title{Extent to sf}
 \usage{
-\method{st_as_sf}{Extent}(x)
+\method{st_as_sf}{Extent}(x, ...)
 }
 \arguments{
 \item{x}{raster Extent object}
+
+\item{...}{passed on to st_sf}
 }
 \description{
 Extent to sf
