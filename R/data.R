@@ -437,7 +437,7 @@ mat_col_check_same <- function(df, col_1, col_2, tol = 0.00000001, filter=FALSE)
   df <- df %>%
     mutate(diff = abs({{col_1}}- {{col_2}}) ,
            is_same = diff < tol)
-  if(filter) df <- filter(df, !is_same)
+  if(filter) df <- filter(df, !is_same |is.na(is_same))
   df
 }
 
