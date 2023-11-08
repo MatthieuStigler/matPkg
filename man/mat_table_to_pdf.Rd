@@ -13,6 +13,7 @@ mat_table_to_pdf(
   clean_tex = TRUE,
   clean_rest = TRUE,
   copy.mode = TRUE,
+  stop_on_error = FALSE,
   plus =
     "\\\\usepackage{booktabs}\\n\\\\usepackage{dcolumn}\\n\\\\usepackage{underscore}"
 )
@@ -31,6 +32,8 @@ table_to_pdf(x)
 \item{clean_tex, clean_rest}{Should remove other files, and tex too?}
 
 \item{copy.mode}{Argument passed to \code{\link{file.copy}} to override or not permissions}
+
+\item{stop_on_error}{should it sotp on each error?}
 
 \item{plus}{additional LaTeX stuff. If contains \%ADD, \%ADD will be replaced by default}
 }

@@ -5,6 +5,7 @@
 #'@param is_path_x whether x is a file on disk
 #'@param filename output name
 #'@param quiet passed to tools::texi2pdf
+#'@param stop_on_error should it sotp on each error?
 #'@param clean_tex,clean_rest Should remove other files, and tex too?
 #'@param plus additional LaTeX stuff. If contains %ADD, %ADD will be replaced by default
 #'@param copy.mode Argument passed to \code{\link{file.copy}} to override or not permissions
@@ -26,7 +27,7 @@
 mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
                              is_path_x = FALSE,
                              clean_tex = TRUE, clean_rest = TRUE,
-                             copy.mode = TRUE,
+                             copy.mode = TRUE, stop_on_error = FALSE,
                              plus= "\\usepackage{booktabs}\n\\usepackage{dcolumn}\n\\usepackage{underscore}") {
 
   if(inherits(x, "xtable") ) {
@@ -79,7 +80,11 @@ mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
   old_wd <- getwd()
   setwd(tmp_dir)
   if(!file.exists(tmp_file)) warning("Oups")
-  try(tools::texi2pdf(tmp_file, quiet=quiet, clean=FALSE))
+  texi2pdf_out <- try(tools::texi2pdf(tmp_file, quiet=quiet, clean=FALSE), silent = TRUE)
+  has_TeX_error <- inherits(texi2pdf_out, "try-error")
+  if(has_TeX_error){
+    if(stop_on_error) stop(texi2pdf_out) else warning(texi2pdf_out)
+  }
   setwd(old_wd)
 
   ## copy now
@@ -97,6 +102,9 @@ mat_table_to_pdf <- function(x, filename = NULL,  quiet=TRUE,
     if(clean_rest) file.remove(all_files[!stringr::str_detect(all_files, "\\.pdf$|\\.tex$")])
     if(clean_tex) file.remove(all_files[stringr::str_detect(all_files, "\\.tex$")])
   }
+
+  ## return res
+  has_TeX_error
 }
 
 
