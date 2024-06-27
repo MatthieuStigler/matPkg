@@ -173,6 +173,7 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' @param runMat_true_only run only the ones with runMat: TRUE
 #' @param run_function use either source (internal) or R CMD BATCH (external)
 #' @param tmp_dir temporary dir to hold file when using `run_function="external"`
+#' @param run_cmd_vanilla when `run_function="external"`, should `--vanilla` be added?
 #' @examples
 #' library(matPkg)
 #' library(readr)
@@ -203,12 +204,12 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 #' mat_99_check_there_update(path_temp, overwrite=TRUE)
 #' @export
 mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
-                              run_function=c("internal", "external"), tmp_dir=NULL) {
+                              run_function=c("internal", "external"), tmp_dir=NULL, run_cmd_vanilla = FALSE) {
 
   if(!is.null(tmp_dir)) tmp_dir <- normalizePath(tmp_dir, mustWork = FALSE)
   run_function <- switch(match.arg(run_function),
-                         "internal"=source_throw,
-                         "external"=function(x, ...) source_rcmd_batch(x, tmp_dir=tmp_dir, ...))
+                         "internal"= function(x) source_throw(x, echo =echo),
+                         "external"= function(x) source_rcmd_batch(x, tmp_dir=tmp_dir, cmd_vanilla=run_cmd_vanilla))
 
   if(runMat_true_only) {
     scripts_file <- scripts_file %>%
@@ -224,7 +225,7 @@ mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
   ## now RUN
   out <- scripts_file %>%
     # mutate(try = map(.data$full_path, ~purrr::safely(~source_throw(., echo=echo))(.))) %>%
-    mutate(try = map(.data$full_path, ~run_function(., echo=echo))) %>%
+    mutate(try = map(.data$full_path, ~run_function(.))) %>%
     mutate(error=map(.data$try, ~.[["error"]]),
            has_error= map_lgl(.data$error, ~!is.null(.)),
            error=map_chr(.data$error, ~ifelse(is.null(.), NA, intrnl_err_to_chr(.))),

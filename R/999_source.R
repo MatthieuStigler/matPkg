@@ -72,7 +72,7 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
 }
 
 
-source_rcmd_batch <- function(path, echo=TRUE, tmp_dir=NULL){
+source_rcmd_batch <- function(path, echo=TRUE, tmp_dir=NULL, cmd_vanilla = FALSE){
 
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
 
@@ -80,9 +80,11 @@ source_rcmd_batch <- function(path, echo=TRUE, tmp_dir=NULL){
   if(is.null(tmp_dir)) tmp_dir <- tempdir()
   tmp_file <- file.path(tmp_dir, paste0(basename(path), "out"))
   # cmd <- paste("R CMD BATCH ", path, tmp_file)
+  cmd_args <- c("--no-save", "--no-restore",
+                if(cmd_vanilla) "--vanila" else NULL)
   time_before <- Sys.time()
   out <- callr::rcmd_safe("BATCH",
-                          cmdargs = c("--no-save", "--no-restore",
+                          cmdargs = c(cmd_args,
                                       infile  = path,
                                       outfile = tmp_file))
   # out <- system(cmd, intern = TRUE)
