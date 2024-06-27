@@ -27,7 +27,8 @@ mat_99_run_Rfiles(
   echo = FALSE,
   runMat_true_only = TRUE,
   run_function = c("internal", "external"),
-  tmp_dir = NULL
+  tmp_dir = NULL,
+  run_cmd_vanilla = FALSE
 )
 
 mat_run_Rfiles(scripts_file, echo = FALSE)
@@ -67,6 +68,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path = "code_setup")
 \item{run_function}{use either source (internal) or R CMD BATCH (external)}
 
 \item{tmp_dir}{temporary dir to hold file when using \code{run_function="external"}}
+
+\item{run_cmd_vanilla}{when \code{run_function="external"}, should \code{--vanilla} be added?}
 
 \item{scripts_file_runned}{data from mat_99_run_Rfiles}
 

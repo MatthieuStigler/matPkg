@@ -28,13 +28,13 @@ An object of class \code{theme} (inherits from \code{gg}) of length 1.
 
 An object of class \code{theme} (inherits from \code{gg}) of length 2.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
 }
 \usage{
 mat_gg_abline_01
