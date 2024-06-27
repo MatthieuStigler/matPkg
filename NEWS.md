@@ -1,3 +1,8 @@
+# matPkg 0.2.50
+
+* add new argument `cmd_vanilla` in `source_rcmd_batch` to run with vanilla
+* update doc with roxy 7.3.1
+
 # matPkg 0.2.46
 
 * fix issue with YAML header parsing
