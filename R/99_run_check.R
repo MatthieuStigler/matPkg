@@ -251,6 +251,7 @@ mat_run_Rfiles <- function(scripts_file, echo=FALSE) {
 ## utilities (from: )
 df_null <-  data.frame("user.self" = NA, "sys.self" = NA, "elapsed" = NA, "user.child" = NA, "sys.child" = NA)
 
+#'@export
 as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.frame(...)
 
 
