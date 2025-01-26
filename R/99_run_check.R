@@ -206,8 +206,12 @@ mat_list_Rfiles <- function(dir_path, no_old = TRUE, recursive=FALSE) {
 mat_99_run_Rfiles <- function(scripts_file, echo=FALSE, runMat_true_only=TRUE,
                               run_function=c("internal", "external"), tmp_dir=NULL, run_cmd_vanilla = FALSE) {
 
-  if(!is.null(tmp_dir)) tmp_dir <- normalizePath(tmp_dir, mustWork = FALSE)
-  run_function <- switch(match.arg(run_function),
+  run_function <- match.arg(run_function)
+  if(!is.null(tmp_dir)) {
+    tmp_dir <- normalizePath(tmp_dir, mustWork = FALSE)
+    if(run_function=="internal") warning("Argument 'tmp_dir' not relevant when run_function=='internal'")
+  }
+  run_function <- switch(run_function,
                          "internal"= function(x) source_throw(x, echo =echo),
                          "external"= function(x) source_rcmd_batch(x, tmp_dir=tmp_dir, cmd_vanilla=run_cmd_vanilla))
 
