@@ -1,3 +1,10 @@
+# matPkg 0.2.60
+
+on 2024-07-04
+
+* add new argument `tools` in mat_pdf_to_png to allow to use pdftoppm
+
+
 # matPkg 0.2.50
 
 * add new argument `cmd_vanilla` in `source_rcmd_batch` to run with vanilla
