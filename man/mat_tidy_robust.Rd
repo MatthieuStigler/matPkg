@@ -19,7 +19,7 @@ mat_tidy_robust(
 
 \item{conf.int}{return confindence interval? Determined by level}
 
-\item{df, parm, level, vcov.}{arguments to \code{\link{coeftest}}}
+\item{df, parm, level, vcov.}{arguments to \code{\link[sandwhich]{coeftest}}}
 
 \item{\ldots}{passed to vcov (well to coeftest who does the jo)}
 }

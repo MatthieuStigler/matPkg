@@ -276,7 +276,7 @@ as.character.bytes <- function (x, digits = 1, unit=NULL, ...) {
 #' As numeric for bytes, add argument unit
 #'
 #' @noRd
-as.numeric.bytes <- function (x, unit = c("B", "kB", "MB", "GB", "TB")) {
+as.numeric.bytes <- function (x, unit = c("B", "kB", "MB", "GB", "TB"), ...) {
   unit <-  match.arg(unit)
   power <-  match(unit, c("B", "kB", "MB", "GB", "TB")) -1
   as.numeric(x/(1000^power))

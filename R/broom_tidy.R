@@ -112,7 +112,7 @@ mat_tidy_coef_plot <- function(df, x_var, fill_var, fac_1=NULL, fac_2=NULL) {
 #' Use tidy() with robust vcov directly
 #' @param x object for which hopfully there is a coeftst/vcov method
 #' @param conf.int return confindence interval? Determined by level
-#' @param df,parm,level,vcov. arguments to \code{\link{coeftest}}
+#' @param df,parm,level,vcov. arguments to \code{\link[sandwhich]{coeftest}}
 #' @param \ldots passed to vcov (well to coeftest who does the jo)
 #' @examples
 #' library(sandwich)
