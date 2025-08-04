@@ -157,6 +157,7 @@ table_to_pdf <-  function(x) .Deprecated("mat_table_to_pdf")
 #' @param density,quality parameters to convert
 #' @param correct_grayscale Should correct for \code{RGB color space not permitted on grayscale}
 #' @param echo should show command?
+#' @param tool Should the function use convert from ImageMagick, or pdftoppm from poppler-utils?
 #' @export
 #' @seealso \code{\link{mat_table_to_pdf}}, \code{\link{mat_tex_to_png}}
 #' @examples
@@ -172,12 +173,20 @@ table_to_pdf <-  function(x) .Deprecated("mat_table_to_pdf")
 #' dev.off()
 #' mat_pdf_to_png(tmp, correct_grayscale = TRUE)
 mat_pdf_to_png <-  function(path, density = 150, quality = 90, echo=TRUE,
-                            correct_grayscale = FALSE) {
+                            correct_grayscale = FALSE, tool= c("convert", "pdftoppm")) {
+  tool <- match.arg(tool)
+
   if(!file.exists(path)) stop("File not found")
   if(!stringr::str_detect(path, "\\.pdf")) stop("File not pdf?")
   path_out <- stringr::str_replace(path, "\\.pdf", ".png")
   colorspace <- if(correct_grayscale) "-colorspace RGB" else NULL
-  cmd <-  paste("convert -flatten -density",  density, colorspace, path,  "-quality",  quality,  path_out)
+
+  ## command
+  if(tool=="convert"){
+    cmd <-  paste("convert -flatten -density",  density, colorspace, path,  "-quality",  quality,  path_out)
+  } else if(tool=="pdftoppm") {
+    cmd <-  paste("pdftoppm -png -r",  density, path,   path_out)
+  }
   if(echo) print(cmd)
   system(cmd)
 

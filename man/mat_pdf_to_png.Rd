@@ -9,7 +9,8 @@ mat_pdf_to_png(
   density = 150,
   quality = 90,
   echo = TRUE,
-  correct_grayscale = FALSE
+  correct_grayscale = FALSE,
+  tool = c("convert", "pdftoppm")
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ mat_pdf_to_png(
 \item{echo}{should show command?}
 
 \item{correct_grayscale}{Should correct for \code{RGB color space not permitted on grayscale}}
+
+\item{tool}{Should the function use convert from ImageMagick, or pdftoppm from poppler-utils?}
 }
 \description{
 Convert pdf to png
