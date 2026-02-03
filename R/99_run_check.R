@@ -69,10 +69,13 @@ mat_parse_yaml <- function(file_path){
 #' @param no_old Avoid scripts in directory old?
 #' @param recursive Look into recursive folders?
 #' @param keep_field Additional YAML fields to keep
+#' @param check_numbers Whether to check if numbers are ambiguous?
 #' @export
 #' @rdname mat_99_run_Rfiles
 mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=FALSE,
-                                keep_field=NULL) {
+                                keep_field=NULL,
+                               check_numbers= TRUE) {
+
   dir_df <- mat_list_dir(dir_path, pattern="\\.R$", add_ext = TRUE, recursive = recursive) %>%
     mutate(full_path = str_replace_all(.data$full_path, "//", "/"),
            folder = dirname(.data$full_path),
@@ -80,13 +83,22 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
 
   ## get yaml
   res <- dir_df %>%
-    mutate(number_char = str_extract(.data$filename, "([0-9]_)+") %>%
+    mutate(number_char = str_extract(.data$filename, "([0-9]+_)+") %>%
              str_replace("_$", ""),
            number = .data$number_char %>%
              str_replace("_", "\\.") %>%
              str_replace_all("_", "") %>%
              as.numeric(),
            yaml = map(.data$full_path, ~purrr::safely(mat_parse_yaml)(.)))
+
+  ## check numbers
+  if(check_numbers && anyDuplicated(res$number)){
+    warning("Ambiguous numbers! Check with:\n
+        add_count(number, subfolder, name = 'n_num') %>%
+        filter(n_num>1) %>%
+        arrange(subfolder, number) %>%
+        select(filename, folder, subfolder, number_char, number)")
+  }
 
   ## process yaml
   safely_clean <- function(x) {

@@ -16,25 +16,25 @@
 \alias{mat_gg_scale_X_isperc}
 \title{ggplot2 helpers}
 \format{
-An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 12.
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 14.
 
-An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 12.
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 14.
 
-An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 12.
+An object of class \code{LayerInstance} (inherits from \code{Layer}, \code{ggproto}, \code{gg}) of length 14.
 
-An object of class \code{theme} (inherits from \code{gg}) of length 1.
+An object of class \code{theme} (inherits from \code{ggplot2::theme}, \code{gg}, \code{S7_object}) of length 1.
 
-An object of class \code{theme} (inherits from \code{gg}) of length 1.
+An object of class \code{theme} (inherits from \code{ggplot2::theme}, \code{gg}, \code{S7_object}) of length 1.
 
-An object of class \code{theme} (inherits from \code{gg}) of length 2.
+An object of class \code{theme} (inherits from \code{ggplot2::theme}, \code{gg}, \code{S7_object}) of length 2.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
 
-An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 18.
+An object of class \code{ScaleContinuousPosition} (inherits from \code{ScaleContinuous}, \code{Scale}, \code{ggproto}, \code{gg}) of length 19.
 }
 \usage{
 mat_gg_abline_01

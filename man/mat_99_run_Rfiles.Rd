@@ -17,7 +17,8 @@ mat_99_list_Rfiles(
   dir_path = "code_setup",
   no_old = TRUE,
   recursive = FALSE,
-  keep_field = NULL
+  keep_field = NULL,
+  check_numbers = TRUE
 )
 
 mat_list_Rfiles(dir_path, no_old = TRUE, recursive = FALSE)
@@ -58,6 +59,8 @@ mat_99_arrange_by_last(scripts_file_runned, dir_path = "code_setup")
 \item{recursive}{Look into recursive folders?}
 
 \item{keep_field}{Additional YAML fields to keep}
+
+\item{check_numbers}{Whether to check if numbers are ambiguous?}
 
 \item{scripts_file}{file of R scripts with path to run, from mat_99_list_Rfiles()}
 
