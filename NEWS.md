@@ -1,3 +1,10 @@
+# matPkg 0.2.61
+
+on 2026-02-03
+
+* add new argument `check_numbers` in `mat_99_list_Rfiles()` to handle numbers such as 5_10 and warn if same as 5_1
+* Fix bad time info with 999
+
 # matPkg 0.2.60
 
 on 2024-07-04

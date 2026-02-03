@@ -19,16 +19,24 @@ intrnl_cols_need <- c("session", "session_time",
 
 intrnl_time_format <- function(x) {
   if(is.na(x)) return(NA_character_)
+
+  # Convert difftime safely to seconds
+  if (inherits(x, "difftime")) {
+    x <- as.numeric(x, units = "secs")
+  }
   if(x<1) return("<1 Sec")
-  x <-  x/60
-  if(x<1) return("<1 Min")
-  if(x >60) {
-    H <- x %/% 60
-    Min <- x %% 60
+
+  mins <-  x/60
+  if(mins<1) return("<1 Min")
+
+  if(mins >60) {
+    H <- mins %/% 60
+    Min <- mins %% 60
     H_Min <- paste0(H, ":", stringr::str_pad(round(Min),width = 2, pad = "0"))
     return(paste0(H_Min, " Hour"))
   }
-  return(paste(round(x), "Min"))
+  dig <- ifelse(mins<5, 1,0)
+  return(paste(round(mins, dig), "Min"))
 }
 
 intrnl_time_format_vec <- function(x) sapply(x, intrnl_time_format)
@@ -92,7 +100,7 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
            yaml = map(.data$full_path, ~purrr::safely(mat_parse_yaml)(.)))
 
   ## check numbers
-  if(check_numbers && anyDuplicated(res$number)){
+  if(check_numbers && anyDuplicated(res$number) & !all(is.na(res$number))){
     warning("Ambiguous numbers! Check with:\n
         add_count(number, subfolder, name = 'n_num') %>%
         filter(n_num>1) %>%
@@ -107,16 +115,22 @@ mat_99_list_Rfiles <- function(dir_path="code_setup", no_old = TRUE, recursive=F
     }
     x
   }
+  ## unnest
   res_yaml_df <- res %>%
     dplyr::mutate(yaml = purrr::map(.data$yaml, safely_clean)) %>%
-    tidyr::unnest_wider("yaml") %>%
-    tidyr::unnest_wider("result") %>%
+    tidyr::unnest_wider("yaml")
+
+  ## check if any yaml header
+  if(!all(is.na(res_yaml_df$result))) {
+    res_yaml_df <- res_yaml_df%>%
+      tidyr::unnest_wider("result")
+  }
+  res_yaml_df <- res_yaml_df %>%
     tibble::add_column(!!!c(runMat=NA)[setdiff("runMat", colnames(.))]) %>% ## add if miss
     mutate(has_runMat = !is.na(.data$runMat),
            runMat_val = .data$runMat & !is.na(.data$runMat),
            yaml=  purrr::transpose(res$yaml) %>% purrr::pluck("result"),
            has_yaml=map_lgl(.data$yaml, ~ !rlang::is_empty(.)))
-           # has_yaml = map_lgl(yaml, ~length(.$result)>0|!is.null(.$result)))
 
   if(!"error" %in% colnames(res_yaml_df)){
     res_yaml_df <- res_yaml_df %>%
