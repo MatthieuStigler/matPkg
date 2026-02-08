@@ -402,6 +402,11 @@ mat_slice_by <- function(df, N=100, ...) {
 #' iris_new <- mutate(iris_orig, Sepal.Length =Sepal.Length+0.000001)
 #' mat_join_compare(df1=iris_orig, df2=iris_new, by = c("row_num", "Species"))
 #' mat_join_compare(df1=iris_orig, df2=iris_new, by =c("row_num", "Species"), tol = 0.00001)
+#'
+#' ## Works with non-numerical values too
+#' iris_new_char <- mutate(iris_orig, Sepal.Length =as.character(Sepal.Length))
+#' mat_join_compare(df1=iris_new_char, df2=iris_new_char, by =c("row_num", "Species"))
+#'
 #' ## compare identical but smaller subset with inner_join:
 #' iris_smaller <- subset(iris_orig, Species!="setosa")
 #' mat_join_compare(df1=iris_orig, df2=iris_smaller, by = c("row_num", "Species"),
@@ -412,12 +417,38 @@ mat_join_compare <- function(df1, df2, by=NULL, join_fun = dplyr::inner_join, to
   new_cols <- setdiff(commonCols, by)
   if(length(new_cols)==0) warning("New remaining common columns?")
 
-  df1 %>%
-    join_fun(df2, by = by) %>%
+  ## join dat
+  df12 <- df1 %>%
+    join_fun(df2, by = by)
+
+  ## check all numeric?
+  all_num <- df12 |>
+    select(matches("\\.x$|\\.y$")) |>
+    sapply(is.numeric) |> all()
+
+  ## set argument for livot long
+  if(all_num) {
+    values_transform <- NULL
+  } else {
+    values_transform <- list(x = as.character,
+                             y=as.character)
+  }
+
+  ## now pivot long
+  out <- df12 %>%
     tidyr::pivot_longer(tidyselect::matches("\\.x$|\\.y$"),
                         names_to = c("variable", ".value"),
-                        names_pattern = "(.+)\\.(x$|y$)") %>%
-    filter(abs(.data$x-.data$y) >tol|!sum(c(is.na(.data$x), is.na(.data$y)))%in% c(0,2))
+                        names_pattern = "(.+)\\.(x$|y$)",
+                        values_transform = values_transform)
+  ## add DIFF
+  if(all_num){
+    out <- out  %>%
+      filter(abs(.data$x-.data$y) >tol|xor(is.na(x), is.na(y)))
+  } else {
+    out <- out  %>%
+      filter(.data$x !=.data$y|xor(is.na(x), is.na(y)))
+  }
+  out
 }
 
 #' Compare if col_1 and col_2 equal
