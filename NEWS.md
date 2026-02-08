@@ -1,3 +1,10 @@
+# matPkg 0.2.62
+
+on 2026-02-08
+
+* mat_join_compare(): allow now comparisons across character/mixed variables, correct small bug
+
+
 # matPkg 0.2.61
 
 on 2026-02-03
