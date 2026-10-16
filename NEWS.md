@@ -1,3 +1,10 @@
+# matPkg 0.2.7
+
+on 2026-10-16
+
+* Replace package pryr (archived) with lobstr, functions are almost the same
+* Update roxygen
+
 # matPkg 0.2.62
 
 on 2026-02-08
