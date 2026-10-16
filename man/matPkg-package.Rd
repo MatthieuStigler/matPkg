@@ -14,5 +14,10 @@ remotes::install_github("MatthieuStigler/matPkg", upgrade = "never")
 \author{
 \strong{Maintainer}: Matthieu Last \email{Matthieu.Stigler@gmail.com} [copyright holder]
 
+Authors:
+\itemize{
+  \item Matthieu Last \email{Matthieu.Stigler@gmail.com} [copyright holder]
+}
+
 }
 \keyword{internal}
