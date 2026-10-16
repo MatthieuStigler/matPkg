@@ -289,7 +289,7 @@ as.data.frame.proc_time <-  function(x, ...) t(data.matrix(x)) %>%  as.data.fram
 #'
 #' Simply copied from pryr:::print.bytes
 #' @noRd
-as.character.bytes <- function (x, digits = 1, unit=NULL, ...) {
+intrnl_bytes_to_chr <- function(x, digits = 1, unit=NULL) {
 
   if(is.null(unit)) {
     power <- min(floor(log(abs(x), 1000)), 4)
@@ -297,7 +297,7 @@ as.character.bytes <- function (x, digits = 1, unit=NULL, ...) {
   } else {
     unit <- match.arg(unit, choices=c("B", "kB", "MB", "GB", "TB"))
   }
-  x <-  as.numeric.bytes(x, unit=unit)
+  x <-  intrnl_bytes_to_num(x, unit=unit)
   formatted <- map_chr(x, ~format(signif(., digits = digits), big.mark = ",",
                      scientific = FALSE))
   paste(formatted,  unit)
@@ -306,7 +306,7 @@ as.character.bytes <- function (x, digits = 1, unit=NULL, ...) {
 #' As numeric for bytes, add argument unit
 #'
 #' @noRd
-as.numeric.bytes <- function (x, unit = c("B", "kB", "MB", "GB", "TB"), ...) {
+intrnl_bytes_to_num <- function(x, unit = c("B", "kB", "MB", "GB", "TB")) {
   unit <-  match.arg(unit)
   power <-  match(unit, c("B", "kB", "MB", "GB", "TB")) -1
   as.numeric(x/(1000^power))
@@ -314,14 +314,11 @@ as.numeric.bytes <- function (x, unit = c("B", "kB", "MB", "GB", "TB"), ...) {
 
 ## Cechk bytes
 if(FALSE) {
-  val_bytes <- 122661728
-  class(val_bytes) <- "bytes"
+  val_bytes <- lobstr::mem_used()
   val_bytes
-  as.character(val_bytes)
-  as.numeric(val_bytes)
 
-  sapply(c("B", "kB",  "MB", "GB"), function(unit) as.numeric.bytes(val_bytes, unit))
-  sapply(c("B", "kB",  "MB", "GB"), function(unit) as.character.bytes(val_bytes, unit=unit))
+  sapply(c("B", "kB",  "MB", "GB"), function(unit) intrnl_bytes_to_num(val_bytes, unit))
+  sapply(c("B", "kB",  "MB", "GB"), function(unit) intrnl_bytes_to_chr(val_bytes, unit=unit))
 
 }
 

@@ -24,7 +24,7 @@ mat_show_mem <-  function(df_input, is_ls=FALSE, all.names=TRUE) {
   if(missing(df_input)|is_ls) {
     if(missing(df_input)) df_input <- ls(.GlobalEnv, all.names=all.names)
     df_size <- tibble(object = df_input) %>%
-      mutate(obj_size = map(.data$object, ~pryr::object_size(get(., envir = .GlobalEnv)))) %>%
+      mutate(obj_size = map(.data$object, ~lobstr::obj_size(get(., envir = .GlobalEnv)))) %>%
       mutate(class_first = map_chr(.data$object, ~ class(get(., envir = .GlobalEnv))[1]))
   } else {
     if(is.data.frame(df_input)) {
@@ -35,12 +35,12 @@ mat_show_mem <-  function(df_input, is_ls=FALSE, all.names=TRUE) {
     }
     df_size <- tibble(object = nam,
                       class_first = map_chr(df_input, ~class(.)[1]),
-                      obj_size = map(df_input , pryr::object_size))
+                      obj_size = map(df_input , lobstr::obj_size))
   }
 
   df_size %>%
     mutate(object_size = map_dbl(.data$obj_size, ~.),
-           unit = map_chr(.data$obj_size, ~class(.)),
+           unit = "bytes",
            size = map_chr(.data$obj_size, ~utils::capture.output(.))) %>%
     arrange(desc(.data$object_size)) %>%
     select(.data$object, .data$size, .data$object_size, .data$unit, .data$class_first)

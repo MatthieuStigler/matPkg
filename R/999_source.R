@@ -3,7 +3,7 @@
 source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
   if(echo) cat(paste("\nDoing file: ", basename(path), "\n"))
   gc()
-  mem_before <- pryr::mem_used()
+  mem_before <- lobstr::mem_used()
   pkgs_before <- .packages()
   env_random <-  new.env(parent = .GlobalEnv)
   ## main oline: source file, measuring time and memory!
@@ -21,7 +21,7 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
                                                  keep.parse.data=FALSE)))(path)
   }
   time_after <- Sys.time()
-  mem_after <- pryr::mem_used()
+  mem_after <- lobstr::mem_used()
   pkgs_after <- .packages()
   ls_env <- ls(envir = env_random, all.names = all.names)
 
@@ -40,12 +40,12 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
   gc()
 
   # memory count
-  mem_final <- pryr::mem_used()
+  mem_final <- lobstr::mem_used()
   mems_info <- c(mem_before=mem_before, mem_after=mem_after,
                  mem_diff=mem_after-mem_before,
                  mem_final=mem_final)
   if(echo) {
-    mems_info_char <- as.character.bytes(x=mems_info, unit="MB")
+    mems_info_char <- intrnl_bytes_to_chr(x=mems_info, unit="MB")
     mems_info_char2 <- paste(stringr::str_remove(names(mems_info), "mem_"), mems_info_char, sep=": ")
     cat("\t-Memory: ", paste(mems_info_char2, collapse = ", "), "\n")
     cat("\t-Approx time: ", intrnl_time_format(time_after-time_before), "\n")
@@ -65,7 +65,7 @@ source_throw <- function(path, echo=TRUE, all.names=TRUE, debug=FALSE) {
     sys$result <- t(data.matrix(sys$result)) %>%
       as.data.frame() %>%
       as_tibble() %>%
-      mutate(memory_used_mb = as.numeric.bytes(mems_info["mem_diff"], unit = "MB")) %>%
+      mutate(memory_used_mb = intrnl_bytes_to_num(mems_info["mem_diff"], unit = "MB")) %>%
       mutate_at(c("memory_used_mb", "elapsed"), round, 1)
   }
   sys
